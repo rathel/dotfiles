@@ -1,7 +1,15 @@
 #!/bin/bash
 
+get_charging(){
+	if [ "$(acpi -b | awk '{print $5}')" = charging ]; then
+	echo ""
+	else
+	echo " < $(acpi -b | awk '{print $5}')"
+	fi
+}
+
 get_battery(){
-	echo "BAT: $(acpi -b | awk '{gsub(/,/, ""); print $3}') < $(acpi -b | awk '{gsub(/,/, ""); print $4}') < $(acpi -b | awk '{print $5}')"
+	echo "BAT: $(acpi -b | awk '{gsub(/,/, ""); print $3}') < $(acpi -b | awk '{gsub(/,/, ""); print $4}')$(get_charging)"
 }
 
 get_date(){
@@ -25,7 +33,8 @@ test_headphone(){
 	else
 		echo "Volume_S:"
 	fi
-	}
+}
+
 while true; do
 	xsetroot -name "$(test_headphone)$(get_volume) | $(get_battery) | $(get_date)"
 	sleep 2
