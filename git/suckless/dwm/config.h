@@ -4,6 +4,8 @@
 
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
+
+static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -19,7 +21,7 @@ static const char col_darkpurple[]  = "#630cba";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_darken, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_darkpurple,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_darkpruple,  col_cyan  },
 };
 
 /* tagging */
@@ -97,6 +99,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	{ NULL,                  XF86XK_AudioRaiseVolume, spawn, {.v = volup } },
 	{ NULL,                  XF86XK_AudioLowerVolume, spawn, {.v = voldown } },
 	{ NULL,                  XF86XK_AudioMute, spawn, {.v = volmute } },
