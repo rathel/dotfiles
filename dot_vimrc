@@ -26,7 +26,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
-Plugin 'scrooloose/nerdtree'
+" Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-surround'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'fatih/vim-go'
@@ -36,7 +36,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'xuhdev/vim-latex-live-preview'
 " Plugin 'rust-lang/rust.vim'
 Plugin 'dracula/vim', { 'name': 'dracula' }
-Plugin 'vifm/vifm'
+Plugin 'vifm/vifm.vim'
 Plugin 'ap/vim-css-color'
 Plugin 'Matt-Deacalion/vim-systemd-syntax'
 " Plugin 'valloric/youcompleteme'
