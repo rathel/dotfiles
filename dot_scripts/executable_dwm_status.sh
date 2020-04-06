@@ -17,14 +17,14 @@ get_date(){
 }
 
 get_volume(){
-mute="$(pactl list sinks | grep Mute | awk '{print $2}')"
+	mute="$(pactl list sinks | grep Mute | awk '{print $2}')"
 	if [ $mute = yes ]; then
 		echo "Muted"
 	else
 		echo "$(pactl list sinks | grep '^[[:space:]]Volume:' | \
 		head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')%"
 	fi
-	    }
+}
 
 test_headphone(){
 	headphone_test="$(pactl list sinks | grep Active | awk '{print $3}')"
