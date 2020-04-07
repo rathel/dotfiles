@@ -35,12 +35,16 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 	{ "Thunderbird", NULL,    NULL,       1 << 7,       0,           -1 },
 	{ "Steam", 	  NULL, 	  NULL, 	  1 << 3,	    0,			 -1 },
 	{ "Code", 	  NULL, 	  NULL, 	  1 << 2,	    0,			 -1 },
+	{ "Geany", 	  NULL, 	  NULL, 	  1 << 2,	    0,			 -1 },
+	{ "Atom", 	  NULL, 	  NULL, 	  1 << 2,	    0,			 -1 },
 	{ "Surf", 	  NULL, 	  NULL, 	  1 << 1,	    0,			 -1 },
-	{ "st-256color", 	  NULL, 	  NULL, 	  1 << 0,	    0,			 -1 },
-	{ "Lutris", NULL, NULL, 1 << 3, 0, -1 },
+	{ "st-256color", NULL, 	  NULL, 	  1 << 0,	    0,			 -1 },
+	{ "Lutris", NULL,         NULL,       1 << 3,       0,           -1 },
+	{ "Firefox", "Toolkit",   "Picture-in-Picture", 0,  0,           -1 },
 };
 
 /* layout(s) */
@@ -133,4 +137,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
