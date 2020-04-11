@@ -35,7 +35,20 @@ test_headphone(){
 	fi
 }
 
+madam_nazar_location(){
+	file_json="$HOME/.cache/madamnazar.json"
+	file_date="$(date -r $file_json) | awk '{print $2}'"
+	current_date="$(date +%d)"
+
+	if [[ $file_date != $current_date ]]; then
+	curl --location --request GET 'https://madam-nazar-location-api.herokuapp.com/location/current' > $file_json
+	fi
+
+	jq '.data | .location | .region' $file_json | tr -d '\n' | sed -e 's/"//g;s/{//;s/}//;s/name://;s/precise://'
+	
+}
+
 while true; do
-	xsetroot -name "$(test_headphone)$(get_volume) | $(get_battery) | $(get_date)"
+	xsetroot -name "$(madam_nazar_location) | $(test_headphone)$(get_volume) | $(get_battery) | $(get_date)"
 	sleep 2
 done
