@@ -4,11 +4,11 @@
 
 # terminal emulator
 super + Return
-	st
+	alacritty
 
 # program launcher
 super + @space
-	rofi -show combi
+	rofi -show run
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -131,3 +131,7 @@ XF86AudioRaiseVolume
 # volume mute
 XF86AudioMute
 	pactl set-sink-mute alsa_output.pci-0000_00_1b.0.analog-stereo toggle
+
+# Focus/move window to the biggest space
+super + {_,shift + }m
+	bspc node --{focus,swap} biggest
