@@ -1,8 +1,0 @@
-# Host that runs Transmission daemon
-set connect.host rathel.no-ip.org
-set connect.path transmission/rpc
-set connect.port 443
-set connect.tls yes
-set connect.user rathel
-set connect.password t413n4
-set sort.torrents !ratio
