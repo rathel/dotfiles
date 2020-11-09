@@ -2,8 +2,9 @@ import XMonad
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.EZConfig (additionalKeysP)
+import qualified Data.Map as M
 import XMonad.Layout.Spacing
 import System.IO
 --- Layouts
@@ -23,8 +24,25 @@ main = do
       , ppTitle = xmobarColor "green" "" . shorten 50 }
     , terminal = myTerminal
     , modMask = myModMask
-    , borderWidth = myBorderWidth }
+    , borderWidth = myBorderWidth
+    } `additionalKeysP` myKeys
 
+myTerminal :: String
 myTerminal = "alacritty"
-myModMask = mod4Mask
+
+myBorderWidth :: Dimension
 myBorderWidth = 3
+
+myDmenu :: String
+myDmenu = "dmenu_run -fn 'FiraCode-10'"
+
+-- Keys
+myModMask :: KeyMask
+myModMask = mod4Mask
+
+myKeys :: [(String, X ())]
+myKeys =
+    [
+      (("M-p"), spawn myDmenu)
+
+    ]
