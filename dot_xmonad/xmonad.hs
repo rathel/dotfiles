@@ -17,7 +17,7 @@ import XMonad.Layout.Dwindle
 main = do
   xmproc <- spawnPipe "xmobar"
   xmonad $ docks def
-    { layoutHook = spacing 15 $ avoidStruts $ layoutHook def
+    { layoutHook = spacing 5 $ avoidStruts $ layoutHook def
     , logHook = dynamicLogWithPP xmobarPP
       { ppOutput = hPutStrLn xmproc
       , ppTitle = xmobarColor "green" "" . shorten 50 }
