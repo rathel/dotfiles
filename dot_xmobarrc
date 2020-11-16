@@ -6,7 +6,7 @@ Config { font = "xft:FiraCode-10"
        , commands = [ Run Weather "KABI" ["-t"," <tempF>F","-L","64","-H","77","--normal","green","--high","red","--low","lightblue"] 36000
                     , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
-                    , Run Date "%a %b %_d %l:%M" "date" 10
+                    , Run Date "%a %b %_d %k:%M" "date" 10
                     , Run Battery ["-t", "<acstatus>: <left>% - <timeleft>"
                     , "--"
                     --"-c"
