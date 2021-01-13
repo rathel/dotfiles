@@ -1,12 +1,12 @@
 #!/usr/bin/sh
 
+wal -i ~/Syncthing/Backgrounds &
+
+redshift &
 sxhkd &
 polybar example &
 compton &
 dunst &
-variety &
-nm-applet &
-steam &
 seapplet &
 
 

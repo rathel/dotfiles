@@ -1,0 +1,3 @@
+configuration {
+              theme: "/home/rathel/.cache/wal/colors-rofi-dark.rasi";
+}
