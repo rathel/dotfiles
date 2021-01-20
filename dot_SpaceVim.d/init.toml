@@ -11,7 +11,7 @@
     # set spacevim theme. by default colorscheme layer is not loaded,
     # if you want to use more colorscheme, please load the colorscheme
     # layer
-    colorscheme = "dracula"
+    colorscheme = "gruvbox"
     colorscheme_bg = "dark"
     # Disable guicolors in basic mode, many terminal do not support 24bit
     # true colors
@@ -19,12 +19,12 @@
     # Disable statusline separator, if you want to use other value, please
     # install nerd fonts
     statusline_separator = "nil"
-    statusline_inactive_separator = "bar"
+    statusline_iseparator = "bar"
     buffer_index_type = 4
     windows_index_type = 3
-    enable_tabline_filetype_icon = true
-    enable_statusline_mode = true
-    statusline_unicode_symbols = true
+    enable_tabline_filetype_icon = false
+    enable_statusline_mode = false
+    statusline_unicode_symbols = false
     # Enable vim compatible mode, avoid changing origin vim key bindings
     vimcompatible = true
 
@@ -36,26 +36,13 @@ auto_completion_tab_key_behavior = "cycle"
 
 [[layers]]
 name = 'shell'
-default_position = 'top'
+default_position = 'bottom'
 default_height = 30
 
 [[layers]]
-name = 'colorscheme'
-
-[[custom_plugins]]
-repo = "dracula/vim"
-merged = 0
+name = 'lang#rust'
+enable = true
 
 [[layers]]
-name = 'fzf'
-
-[[layers]]
-name = "lang#rust"
-
-[[layers]]
-  name = "lsp"
-  filetypes = [
-    "rust"
-  ]
- [layers.override_cmd]
-    rust = ["rls"]
+name = 'lang#toml'
+enable = true
