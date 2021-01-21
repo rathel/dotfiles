@@ -1,0 +1,33 @@
+neofetch
+# Created by newuser for 5.8
+# History
+export HISTFILE="~/.cache/zshistory"
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+setopt INC_APPEND_HISTORY
+export HISTTIMEFORMAT="[%F %T] "
+
+setopt HIST_IGNORE_ALL_DUPS
+setopt EXTENDED_HISTORY
+
+# Functions
+function set_win_title(){
+  echo -ne "\033]0; $(pwd) \007"
+  }
+# Options
+autoload -Uz compinit && compinit
+
+# Aliases
+source ~/.aliases
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
+
+# Starship
+precmd_functions+=(set_win_title)
+
+
+eval "$(starship init zsh)"
