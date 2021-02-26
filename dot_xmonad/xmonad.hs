@@ -14,7 +14,7 @@ myTerminal = "alacritty"
 myStartupHook :: X ()
 myStartupHook = do
         spawnOnce "variety &"
-        spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 16 &"
+        spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 20 &"
         spawnOnce "nm-applet &"
         spawnOnce "blueberry-tray &"
         spawnOnce "picom &"
