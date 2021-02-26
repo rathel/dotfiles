@@ -1,48 +1,39 @@
 import XMonad
-import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run (spawnPipe)
-import XMonad.Util.EZConfig (additionalKeysP)
-import qualified Data.Map as M
+import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.EZConfig(additionalKeysP)
+import XMonad.Util.SpawnOnce
+import XMonad.Config.Desktop
 import XMonad.Layout.Spacing
-import System.IO
---- Layouts
--- Resizable tile layout
-import XMonad.Layout.ResizableTile
--- Simple two pane layout.
-import XMonad.Layout.TwoPane
-import XMonad.Layout.BinarySpacePartition
-import XMonad.Layout.Dwindle
-
-main = do
-  xmproc <- spawnPipe "xmobar"
-  xmonad $ docks def
-    { layoutHook = spacing 5 $ avoidStruts $ layoutHook def
-    , logHook = dynamicLogWithPP xmobarPP
-      { ppOutput = hPutStrLn xmproc
-      , ppTitle = xmobarColor "green" "" . shorten 50 }
-    , terminal = myTerminal
-    , modMask = myModMask
-    , borderWidth = myBorderWidth
-    } `additionalKeysP` myKeys
+import System.IO(hPutStrLn)
 
 myTerminal :: String
 myTerminal = "alacritty"
 
-myBorderWidth :: Dimension
-myBorderWidth = 3
+myStartupHook :: X ()
+myStartupHook = do
+        spawnOnce "variety &"
+        spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 16 &"
+        spawnOnce "nm-applet &"
+        spawnOnce "blueberry-tray &"
+        spawnOnce "picom &"
 
-myDmenu :: String
-myDmenu = "dmenu_run -fn 'FiraCode-10'"
 
--- Keys
-myModMask :: KeyMask
-myModMask = mod4Mask
+main :: IO ()
+main = do
+  xmproc <- spawnPipe ("xmobar")
 
-myKeys :: [(String, X ())]
-myKeys =
-    [
-      (("M-p"), spawn myDmenu)
-
-    ]
+  xmonad $ desktopConfig
+        { manageHook = manageDocks <+> manageHook desktopConfig
+        , layoutHook = spacing 10 $ avoidStruts $  layoutHook desktopConfig
+        , logHook = dynamicLogWithPP $ xmobarPP
+                        { ppOutput = hPutStrLn xmproc
+                        , ppTitle = xmobarColor "green" "" . shorten 100
+                        }
+        , borderWidth = 2
+        , modMask = mod4Mask
+        , terminal = myTerminal
+        , startupHook = myStartupHook
+        , normalBorderColor = "#cccccc"
+        , focusedBorderColor = "#cd8b00" }
