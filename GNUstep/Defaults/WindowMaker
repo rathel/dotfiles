@@ -1,0 +1,72 @@
+{
+  FrameBorderColor = "#000000";
+  MenuDisabledColor = gray60;
+  PixmapPath = (
+    "/home/tim/GNUstep/Library/WindowMaker/Pixmaps",
+    "/home/tim/GNUstep/Library/WindowMaker/Backgrounds",
+    "/home/tim/GNUstep/Library/WindowMaker/CachedPixmaps",
+    "~/pixmaps",
+    "/usr/share/WindowMaker/Pixmaps",
+    "/usr/share/WindowMaker/Backgrounds",
+    "/usr/share/pixmaps"
+  );
+  IconTitleBack = "#18191f";
+  FTitleBack = (
+    mdgradient,
+    "#18191f",
+    "#939abd",
+    "#616185",
+    "#616185",
+    "#5f5f83",
+    "#555575",
+    "#59597a",
+    "#555575",
+    "#939abd"
+  );
+  ToggleKbdModeKey = None;
+  ClipTitleFont = "Verdana:bold:pixelsize=10";
+  IconTitleFont = "Arial,sans serif:pixelsize=9";
+  MenuTextBack = (mhgradient, "#384246", "#707080", "#4a4a61");
+  LargeDisplayFont = "Trebuchet MS,sans serif:pixelsize=24";
+  MenuTextColor = white;
+  IconBack = (
+    mdgradient,
+    gray40,
+    "#6d6aa4",
+    "#564e8c",
+    "#41436c",
+    "#464771",
+    "#595090"
+  );
+  AntialiasedText = YES;
+  MenuTitleFont = "Trebuchet MS,sans serif:bold:pixelsize=12";
+  EnableWorkspacePager = YES;
+  MoveTo6to12Head = None;
+  MenuTextFont = "Trebuchet MS,sans serif:pixelsize=12";
+  NoWindowOverDock = YES;
+  WorkspaceBack = (mvgradient, "rgb:50/50/75", "#6a6f9e", "#4b4f70", "#28293c");
+  AdvanceToNewWorkspace = YES;
+  MenuTitleBack = (mvgradient, "#18191f", "#474967", "#413b6d");
+  EnforceIconMargin = NO;
+  AutoArrangeIcons = YES;
+  ClipTitleColor = white;
+  MoveTo12to6Head = None;
+  FrameFocusedBorderColor = "#000000";
+  WindowTitleFont = "Trebuchet MS,sans serif:bold:pixelsize=12";
+  CClipTitleColor = gray60;
+  ResizebarBack = (solid, "#989aa6");
+  IconPath = (
+    "/home/tim/GNUstep/Library/Icons",
+    "/home/tim/GNUstep/Library/WindowMaker/Pixmaps",
+    "/home/tim/GNUstep/Library/WindowMaker/CachedPixmaps",
+    "~/pixmaps",
+    "/usr/share/WindowMaker/Icons",
+    "/usr/share/WindowMaker/Pixmaps",
+    "/usr/share/pixmaps"
+  );
+  KbdModeLock = NO;
+  PTitleBack = (mhgradient, "#5a5c66", "rgb:70/72/7e", "rgb:45/47/4e");
+  UTitleColor = gray20;
+  UTitleBack = (mhgradient, "#989aa6", "#9fa1b5", "#86879b");
+  FrameSelectedBorderColor = "#ffffff";
+}
