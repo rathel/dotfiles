@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Tim Haines"
+      user-mail-address "rathel@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -21,12 +21,12 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "UbuntuMono Nerd Font" :size 14))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-dracula)
+(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -34,7 +34,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type `relative)
 
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -53,3 +53,20 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(set-email-account!
+ "gmail"
+ '((mu4e-sent-folder       . "/[Gmail]/Sent Mail")
+   (mu4e-trash-folder      . "/[Gmail]/Bin")
+   (smtpmail-smtp-user     . "rathel@gmail.com"))
+ t)
+(setq mu4e-get-mail-command "mbsync gmail"
+      ;; get emails and index every 5 minutes
+      mu4e-update-interval 300
+	  ;; send emails with format=flowed
+	  mu4e-compose-format-flowed t
+	  ;; no need to run cleanup after indexing for gmail
+	  mu4e-index-cleanup nil
+	  mu4e-index-lazy-check t
+      ;; more sensible date format
+      mu4e-headers-date-format "%d.%m.%y")

@@ -1,6 +1,0 @@
-alias dnfu="sudo dnf update -y"
-alias dnfs="dnf search"
-alias dnfi="sudo dnf install -y"
-alias ls="exa -l"
-alias yay="paru"
-alias cat="bat"
