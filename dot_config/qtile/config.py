@@ -47,8 +47,7 @@ def init_colors():
             ["#4c566a"],
             ["#d8dee9"],
             ["#e5e9f0"],
-            ["#eceff4"]
-            ]
+            ["#eceff4"] ,]
 
 
 colors = init_colors()
@@ -70,8 +69,8 @@ keys = [
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key([mod, "control"], "h", lazy.layout.shrink(), desc="Grow window to the left"),
+    Key([mod, "control"], "l", lazy.layout.grow(), desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
@@ -95,16 +94,22 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
 ]
 
-groups = [Group(""),
-          Group("", matches=[Match(wm_class=["firefoxdeveloperedition", "brave-browser"])]),
-          Group("", matches=[Match(wm_class=["VSCodium"])]),
-          Group("4"),
+groups = [
+          Group(""),
+          Group("", matches=[Match(wm_class=["firefoxdeveloperedition", "brave-browser", "vivaldi-stable", "microsoft-edge",  "Opera", "Chromium"])]),
+          Group("", matches=[Match(wm_class=["VSCodium", "Emacs"])]),
+          Group("", matches=[Match(wm_class=["VirtualBox Manager", "VirtualBox Machine"])]),
           Group("5"),
           Group("6"),
           Group("7"),
           Group("8"),
-          Group("9"),]
+          Group("", matches=[Match(wm_class=["Steam"])]),
+          ]
 
+def latest_group(qtile):
+    qtile.current_screen.set_group(qtile.current_screen.previous_group)
+
+keys += [Key(["mod4"], "s", lazy.function(latest_group))]
 
 layouts = [
     # layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
@@ -113,7 +118,8 @@ layouts = [
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(ratio=0.6,
+    layout.MonadTall(
+                     ratio=0.6,
                      margin=16,
                      border_focus=colors[3]
                      ),
@@ -132,9 +138,8 @@ widget_defaults = dict(
     background=colors[0],
     foreground=colors[4],
 )
-extension_defaults = widget_defaults.copy(
 
-)
+extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
@@ -228,7 +233,6 @@ reconfigure_screens = True
 # If things like steam games want to auto-minimize themselves when losing
 # focus, should we respect this or not?
 auto_minimize = True
-
 
 @hook.subscribe.startup_once
 def autostart():
