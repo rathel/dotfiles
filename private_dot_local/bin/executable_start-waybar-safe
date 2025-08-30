@@ -1,0 +1,4 @@
+#!/bin/sh
+~/.local/bin/waybar_timer serve &
+sleep 0.5
+exec waybar &

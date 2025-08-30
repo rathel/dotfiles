@@ -1,0 +1,30 @@
+#!/bin/bash
+
+TSIPS="$(tailscale status | awk '{print $1}')"
+HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
+TERMINAL="kitty @ launch --type=tab"
+
+for i in $TSIPS; do
+	case $i in
+		{{ .tailscale.ip.deck }})
+			$TERMINAL ssh deck@"$i" >/dev/null 2>&1 &
+			continue
+			;;
+		{{ .tailscale.ip.phone }})
+			$TERMINAL ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
+			continue
+			;;
+		$HOSTIP)	
+			echo "Skipping Tailscale IP: $i."
+			continue
+			;;
+	esac
+
+	notify-send -t 1000 "Connecting to $i."
+	# ssh-copy-id rathel@$i
+	# alacritty ssh rathel@$i &
+	$TERMINAL ssh "$i" >/dev/null 2>&1 &
+	# kalacrittyitty --detach kitten ssh rathel@$i &
+	# wezterm ssh "$i" &
+	sleep 1
+done

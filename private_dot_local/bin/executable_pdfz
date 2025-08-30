@@ -1,0 +1,7 @@
+#!/bin/bash
+
+BOOK="$(fd . $HOME/eBooks -e pdf -e epub -e cbr -e cbz | sk)" 
+
+notify-send "Launching $(basename $BOOK) in zathura."
+
+nohup zathura "$BOOK" >/dev/null 2>&1 & 
