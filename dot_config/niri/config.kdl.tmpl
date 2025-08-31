@@ -255,19 +255,19 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "~/.local/bin/start-waybar-safe"
+spawn-at-startup "home/rathel/.local/bin/start-waybar-safe"
 // spawn-at-startup "waybar"
 
-// spawn-at-startup "~/.local/bin/swww.sh"
+// spawn-at-startup "home/rathel/.local/bin/swww.sh"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "~/Applications/Obsidian.AppImage"
-spawn-at-startup "~/.local/bin/streamers.sh"
+spawn-at-startup "home/rathel/Applications/Obsidian.AppImage"
+spawn-at-startup "home/rathel/.local/bin/streamers.sh"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "thunderbird"
-spawn-at-startup "~/.local/bin/volume-notify.sh"
-spawn-at-startup "~/.local/bin/wallpaper.sh"
+spawn-at-startup "home/rathel/.local/bin/volume-notify.sh"
+spawn-at-startup "home/rathel/.local/bin/wallpaper.sh"
 spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
 // spawn-at-startup "dunst"
 
@@ -292,9 +292,9 @@ environment {
 prefer-no-csd
 
 // You can change the path where screenshots are saved.
-// A ~ at the front will be expanded to the home directory.
+// A home/rathel at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "home/rathel/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -580,21 +580,21 @@ binds {
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
 	Mod+T { spawn "kitty"; }
-	Mod+P { spawn "kitty" "--title=scratch" "~/.local/bin/projects.sh"; }
+	Mod+P { spawn "kitty" "--title=scratch" "home/rathel/.local/bin/projects.sh"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "sh"; }
-	// Alt+Tab { spawn "kitty" "--title=scratch" "~/.local/bin/niri-focus-windows.sh"; }
-	Alt+Tab { spawn "kitty" "--title=scratch" "~/.local/bin/niri-focus-windows.sh"; }
+	// Alt+Tab { spawn "kitty" "--title=scratch" "home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn "kitty" "--title=scratch" "home/rathel/.local/bin/niri-focus-windows.sh"; }
 	// Mod+D { spawn "fuzzel"; }
-	Mod+D { spawn "kitty" "--title=scratch" "~/.local/bin/fdmenu_desktop.sh"; }
-	// Mod+D { spawn "kitty" "--title=scratch" "-e" "~/.local/bin/menu_picker.sh"; }
-	Super+Shift+T { spawn "~/.local/bin/niri-thunderbird-focus.sh"; }
-	Mod+B { spawn "~/.local/bin/niri-browser-focus.sh"; }
+	Mod+D { spawn "kitty" "--title=scratch" "home/rathel/.local/bin/fdmenu_desktop.sh"; }
+	// Mod+D { spawn "kitty" "--title=scratch" "-e" "home/rathel/.local/bin/menu_picker.sh"; }
+	Super+Shift+T { spawn "home/rathel/.local/bin/niri-thunderbird-focus.sh"; }
+	Mod+B { spawn "home/rathel/.local/bin/niri-browser-focus.sh"; }
 	// Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
-	// Mod+G { spawn "~/.local/bin/launch-geforcenow.sh"; }
-	// Mod+G { spawn "kitty" "--title=scratch" "-e" "~/.local/bin/launch-geforcenow.sh"; }
-	Mod+G { spawn "kitty" "--title=scratch" "-e" "~/.local/bin/launch-shadowtech.sh"; }
-	// Mod+Shift+G { spawn "kitty" "--title=scratch" "-e" "~/.local/bin/launch-shadowtech.sh"; }
+	// Mod+G { spawn "home/rathel/.local/bin/launch-geforcenow.sh"; }
+	// Mod+G { spawn "kitty" "--title=scratch" "-e" "home/rathel/.local/bin/launch-geforcenow.sh"; }
+	Mod+G { spawn "kitty" "--title=scratch" "-e" "home/rathel/.local/bin/launch-shadowtech.sh"; }
+	// Mod+Shift+G { spawn "kitty" "--title=scratch" "-e" "home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
