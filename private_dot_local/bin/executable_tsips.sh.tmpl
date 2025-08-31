@@ -24,12 +24,13 @@ for i in $TSIPS; do
 	notify-send -t 1000 "Connecting to $i."
 	# ssh-copy-id rathel@$i
 	# alacritty ssh rathel@$i &
-	$TERMINAL ssh " $i" >/dev/null 2>&1 &
-	# kalacrittyitty --detach kitten ssh rathel@$i &
+	"$TERMINAL" ssh " $i" >/dev/null 2>&1 &
+	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
-	sleep 0.3
+	sleep 0.5
 	niri msg action consume-window-into-column
 done
+
 niri msg action toggle-column-tabbed-display
 
 # vim: filetype=bash
