@@ -28,8 +28,8 @@ for i in $TSIPS; do
 	# kalacrittyitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 0.3
-	niri msg consume-window-into-column
+	niri msg action consume-window-into-column
 done
-niri msg toggle-column-tabbed-display
+niri msg action toggle-column-tabbed-display
 
 # vim: filetype=bash
