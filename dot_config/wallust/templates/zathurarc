@@ -1,0 +1,3 @@
+set recolor true
+set default-fg "{{foreground}}"
+set default-bg "{{background}}"
