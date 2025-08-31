@@ -1,0 +1,34 @@
+{
+  "layer": "top",
+  "position": "top",
+  "modules-center": ["custom/clock", "custom/timer"],
+  "modules-right": ["tray"],
+
+  "custom/clock": {
+    "exec": "date '+%H:%M'",
+    "interval": 60
+  },
+
+  "custom/timer": {
+    "exec": "/home/rathel/.local/bin/waybar_timer hook",
+    "exec-on-event": false,
+    "return-type": "json",
+    "format": "{icon} {0}",
+    "format-icons": {
+      "standby": "⏱",
+      "running": "⏳",
+      "paused": "⏸"
+    },
+    "on-click": "/home/rathel/.local/bin/waybar_timer new 25 'notify-send \"Pomodoro done\"'",
+    "on-click-middle": "/home/rathel/.local/bin/waybar_timer cancel",
+    "on-click-right": "/home/rathel/.local/bin/waybar_timer togglepause",
+    "on-scroll-up": "/home/rathel/.local/bin/waybar_timer increase 60 || /home/rathel/.local/bin/waybar_timer new 1 'notify-send \"Timer expired\"'",
+    "on-scroll-down": "/home/rathel/.local/bin/waybar_timer decrease 60"
+  },
+
+  "tray": {
+  	"icon-size": 18,
+	"spacing": 10
+  }
+}
+
