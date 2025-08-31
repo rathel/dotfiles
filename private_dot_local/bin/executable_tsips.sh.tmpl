@@ -27,11 +27,11 @@ for i in $TSIPS; do
 	$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
 	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
-	sleep 1
+	sleep 0.3
 	niri msg action consume-window-into-column
 done
 
-niri msg toggle-column-tabbed-display
+niri msg action toggle-column-tabbed-display
 
 
 # vim: filetype=bash
