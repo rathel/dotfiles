@@ -1,6 +1,7 @@
 #!/bin/env bash
 
-chezmoi managed -p absolute \
-	| sk -p "What file would you like to edit?" \
-	| xargs -I {} chezmoi edit {} &
+selection=$(chezmoi managed -p absolute | sk)
+
+setsid -f chezmoi edit "$selection" > /dev/null 2>&1 &
+
 sleep 0.5
