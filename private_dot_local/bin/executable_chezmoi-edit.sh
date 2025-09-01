@@ -1,4 +1,5 @@
 #!/bin/env bash
+set -euo pipefail
 
 selection=$(chezmoi managed -p absolute | sk)
 
