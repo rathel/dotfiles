@@ -28,14 +28,7 @@ for i in $TSIPS; do
 	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 0.5
-	if (( n == 1 )); then
-		$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
-	fi
 	$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
-	niri msg action focus-column-left
-	niri msg action consume-window-into-column
-	((n++))
 done
-	niri msg action toggle-column-tabbed-display	
 
 # vim: filetype=bash
