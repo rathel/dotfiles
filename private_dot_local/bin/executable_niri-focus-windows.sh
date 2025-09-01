@@ -4,7 +4,7 @@
 json=$(niri msg -j windows)
 
 # Use skim to pick a window by title (prefix with ID to ensure uniqueness)
-selected=$(echo "$json" | jq -r '.[] | "\(.id): \(.app_id) - \(.title)"' | sk -p "Switch to which window?")
+selected=$(echo "$json" | jq -r '.[] | "\(.id): \(.app_id) - \(.title)"' | sk -p "Switch to which window? ")
 
 # Exit if nothing selected
 [ -z "$selected" ] && exit 1
