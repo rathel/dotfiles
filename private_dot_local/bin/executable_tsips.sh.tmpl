@@ -34,6 +34,7 @@ for i in $TSIPS; do
 	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 1
+	niri msg action focus-column-left
 	niri msg action consume-window-into-column
 
 done
