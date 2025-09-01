@@ -4,7 +4,7 @@ TSIPS="$(tailscale status | awk '{print $1}')"
 HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
 #TERMINAL="kitty @ launch --type=tab"
 TERMINAL="alacritty"
-run_once=false
+n=0
 
 for i in $TSIPS; do
 	case $i in
@@ -25,12 +25,16 @@ for i in $TSIPS; do
 	notify-send -t 1000 "Connecting to $i."
 	# ssh-copy-id rathel@$i
 	# alacritty ssh rathel@$i &
-	$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
 	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 0.5
+	if (( n == 1 )); then
+		$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
+	fi
+	$TERMINAL -e ssh "$i" >/dev/null 2>&1 &
 	niri msg action focus-column-left
 	niri msg action consume-window-into-column
+	((n++))
 done
 	niri msg action toggle-column-tabbed-display	
 
