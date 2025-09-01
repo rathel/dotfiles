@@ -8,11 +8,11 @@ TERMINAL="alacritty"
 for i in $TSIPS; do
 	case $i in
 		{{ .tailscale.ip.deck }})
-			$TERMINAL ssh deck@"$i" >/dev/null 2>&1 &
+			$TERMINAL -e ssh deck@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		{{ .tailscale.ip.phone }})
-			$TERMINAL ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
+			$TERMINAL -e ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		$HOSTIP)	
