@@ -1,7 +1,7 @@
 #!/bin/env bash
 set -euo pipefail
 
-selection=$(chezmoi managed -p absolute -x dirs | sk --delimiter=$'\t')
+selection=$(chezmoi managed -p absolute -x dirs | sk)
 
 [ -z "$selection" ] && exit 1
 
