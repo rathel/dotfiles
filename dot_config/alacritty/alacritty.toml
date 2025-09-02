@@ -1,7 +1,7 @@
 # ~/.config/alacritty/alacritty.toml
 
 [general]
-import = ["colors.toml",] 
+import = ["colors.toml"] 
 
 [window]
 opacity = 0.9
