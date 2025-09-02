@@ -50,5 +50,5 @@ kitty = { template = 'kitty-colors.conf', target = '~/.config/kitty/colors.conf'
 waybar = { template = 'waybar-colors.css', target = '~/.config/waybar/colors.css' }
 foot = { template = 'foot.ini', target = '~/.config/foot/foot.ini' }
 fuzzel = { template = 'fuzzel.ini', target = '~/.config/fuzzel/fuzzel.ini' }
-starship = { template = "starship.toml", target   = "~/.config/starship/starship.toml" }
+starship = { template = 'starship.toml', target   = '~/.config/starship/starship.toml' }
 # dunst = { template = 'dunstrc', target = '~/.config/dunst/dunstrc' }
