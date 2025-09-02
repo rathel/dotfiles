@@ -5,7 +5,7 @@ import = ["colors.toml"]
 
 [window]
 opacity = 0.9
-decorations = "Full"
+decorations = "none"
 
 [window.padding]
 x = 4
