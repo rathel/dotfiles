@@ -1,6 +1,7 @@
 #!/bin/env bash
 
-# WALLPAPER="$HOME/Downloads/light-blue-abstract-3840x2160-23153.jpg"
+sleep 5
+
 WALLPAPER="$HOME/Wallpapers/mobiusstripdracula.png"
 
 swaybg -i $WALLPAPER &
