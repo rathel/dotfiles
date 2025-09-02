@@ -1,7 +1,0 @@
-# make sure we load the wallust-generated file
-# (Starship reads a single config file; simplest is to keep everything in it.)
-# Option A: copy the lines below into your main starship.toml:
-palette = "wallust"
-
-[palettes.wallust]
-# if you already imported/copied the generated section, this will be overwritten by Wallust next run
