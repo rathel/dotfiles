@@ -1,13 +1,13 @@
 # Use the palette below in your main starship.toml: `palette = "wallust"`
 [palettes.wallust]
-bg     = "{{ bg }}"
-fg     = "{{ fg }}"
-dim_bg = "{{ dim_bg }}"
-dim_fg = "{{ dim_fg }}"
-accent = "{{ accent }}"
-good   = "{{ good }}"
-warn   = "{{ warn }}"
-err    = "{{ err }}"
+bg     = "{{background}}"
+fg     = "{{foreground}}"
+dim_bg = "{{background | darken(0.1)}}"
+dim_fg = "{{foreground | darken(0.1)}}"
+accent = "{{color0}}"
+good   = "{{color1}}"
+warn   = "{{color2}}"
+err    = "{{red}}"
 
 # Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
 add_newline = true
