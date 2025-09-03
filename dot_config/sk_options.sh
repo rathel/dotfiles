@@ -3,5 +3,5 @@ sk_options=(
 	--with-nth=1 
 	--delimiter=$'\t'
 	--preview="bat --color=always {}"
-	--preview-window="right:10%:wrap"
+	--preview-window="right:15%:wrap"
 )
