@@ -1,7 +1,7 @@
 #!/bin/env bash
 set -euo pipefail
 
-selection=$(chezmoi managed -p absolute -x dirs grep -vE "^$HOME/?$" | sk)
+selection=$(chezmoi managed -p absolute -x dirs | grep -vE "^$HOME/?$" | sk)
 
 [ -z "$selection" ] && exit 1
 
