@@ -33,5 +33,8 @@ fi
 
 notify-send "Editing $target."
 # Launch editor detached; chezmoi edit works whether newly-added or already-managed
+
 setsid -f chezmoi edit "$target" >/dev/null 2>&1 &
+
+sleep 0.5
 
