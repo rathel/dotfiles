@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source ~/.config/sk_options.sh
+
 # Ensure required commands are available
 for cmd in sk fd; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -66,7 +68,7 @@ fi
 selection=$(
   printf '%s\n' "${entries[@]}" |
   awk -F'\t' '!seen[$1]++' |
-  sk --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' || true
+  sk --prompt="Run: " "${sk_options[@]}" || true
 )
 
 # User escaped or sk had no input
