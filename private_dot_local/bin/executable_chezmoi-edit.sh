@@ -1,9 +1,15 @@
 #!/bin/env bash
 set -euo pipefail
 
-selection=$(chezmoi managed -p absolute -x dirs | sk)
+selection=$(chezmoi managed -p absolute -x dirs grep -vE "^$HOME/?$" | sk)
 
 [ -z "$selection" ] && exit 1
+
+if [ ! -e "$selection" ]; then
+	mkdir -p "$(dirname "$selection")"
+	touch "$selection"
+	chezmoi add "$selection"
+fi
 
 notify-send "Editing $selection."
 
