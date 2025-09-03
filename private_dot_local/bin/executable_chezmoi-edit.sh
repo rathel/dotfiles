@@ -7,7 +7,7 @@ selection=$(chezmoi managed -p absolute -x dirs | grep -vE "^$HOME/?$" | sk)
 
 if [ ! -e "$selection" ]; then
 	mkdir -p "$(dirname "$selection")"
-	touch "$selection"
+	touch "$(basename "$selection")"
 	chezmoi add "$selection"
 fi
 
