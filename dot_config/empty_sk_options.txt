@@ -1,3 +1,4 @@
 --ansi 
 --with-nth=1 
 --delimiter=$'\t'
+--preview
