@@ -1,0 +1,5 @@
+{
+{{- range $i, $color := .Colors -}}
+  "color{{$i}}": "{{$color}}"{{if ne (add $i 1) (len .Colors)}},{{end}}
+{{- end }}
+}
