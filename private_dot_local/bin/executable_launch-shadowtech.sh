@@ -30,7 +30,7 @@ if [ -n "$browser" ]; then
 		sleep 0.5
 		exit 0
 	elif [ "$browser" == Iron ]; then
-		notify-send "Launching ShadowTech with Vivaldi..."
+		notify-send "Launching ShadowTech with Iron..."
 		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
 		nohup sh -c "$HOME/Applications/iron-linux-64/chrome $common_options" >/dev/null 2>&1 &
 		sleep 0.5
