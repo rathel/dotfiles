@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sk_options="$(cat $HOME/.config/sk_options.txt)"
+mapfile -t sk_options < $HOME/.config/sk_options.txt
 
 # Let sk print the query (what you typed) and the actual selection (what you chose).
 # If you choose nothing but type a path, we'll use the query as the target.
-mapfile -t lines < <(chezmoi managed -p absolute -x dirs | sk $sk_options --print-query)
+mapfile -t lines < <(chezmoi managed -p absolute -x dirs | sk ${sk_options[@]} --print-query)
 query="${lines[0]:-}"
 pick="${lines[1]:-}"
 
