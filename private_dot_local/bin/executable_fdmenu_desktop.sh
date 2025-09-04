@@ -68,7 +68,7 @@ fi
 selection=$(
   printf '%s\n' "${entries[@]}" |
   awk -F'\t' '!seen[$1]++' |
-  sk --prompt="Run: " --with-nth1 --delimiter=$'\t' || true
+  sk --prompt="Run: " --with-nth=1 --delimiter=$'\t' || true
 )
 
 # User escaped or sk had no input
