@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source ~/.config/sk_options.sh
-
 # Ensure required commands are available
 for cmd in sk fd; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
