@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source ~/.config/sk_options.sh
-
 # Let sk print the query (what you typed) and the actual selection (what you chose).
 # If you choose nothing but type a path, we'll use the query as the target.
 mapfile -t lines < <(chezmoi managed -p absolute -x dirs | sk --ansi --with-nth=-2,-1 --delimiter='/' --print-query --prompt="Edit: ")
