@@ -1,7 +1,5 @@
 #!/bin/env bash
 
-sleep 5
-
 WALLPAPER="$HOME/Wallpapers/mobiusstripdracula.png"
 
 swaybg -i $WALLPAPER &
