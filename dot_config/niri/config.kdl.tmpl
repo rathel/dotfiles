@@ -344,6 +344,11 @@ animations {
 // }
 
 window-rule {
+	match is-focused=false
+	opaticy 0.5
+}
+
+window-rule {
 	// This regular expression is intentionally made as specific as possible,
 	// since this is the default config, and we want no false positives.
 	// You can get away with just app-id="wezterm" if you want.
