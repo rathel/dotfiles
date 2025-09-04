@@ -52,4 +52,4 @@ foot = { template = 'foot.ini', target = '~/.config/foot/foot.ini' }
 fuzzel = { template = 'fuzzel.ini', target = '~/.config/fuzzel/fuzzel.ini' }
 starship = { template = 'starship.toml', target   = '~/.config/starship/starship.toml' }
 dunst = { template = 'dunstrc', target = '~/.config/dunst/dunstrc' }
-json = { template = 'json.tmpl', target = '~/.cache/wallust/json.json' }
+json = { template = 'json.tmpl', target = '~/.cache/wallust/colors.json' }
