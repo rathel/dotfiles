@@ -12,11 +12,11 @@ for cmd in sk fd; do
 done
 
 search_dirs=(
-  "$HOME/.local/share/applications"
-  "/usr/share/applications"
-  "$HOME/Applications"
   "$HOME/.local/bin"
+  "$HOME/.local/share/applications"
+  "$HOME/Applications"
   "$HOME/pg4uk-f7ecq/Scripts"
+  "/usr/share/applications"
 )
 
 # Filter to existing dirs so fd doesn't fail under `set -e`
@@ -68,7 +68,7 @@ fi
 selection=$(
   printf '%s\n' "${entries[@]}" |
   awk -F'\t' '!seen[$1]++' |
-  sk --prompt="Run: " --with-nth=1 --delimiter=$'\t' || true
+  sk --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' || true
 )
 
 # User escaped or sk had no input
