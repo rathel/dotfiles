@@ -81,7 +81,7 @@ printf '%s\n' "$selection" | cut -f2 | while IFS= read -r cmd; do
   prog_base=$(basename "$prog")
 
   case "$prog_base" in
-    google-chrome*|vivaldi-stable|brave|chromium)
+    google-chrome*|vivaldi-stable|brave|chromium|opera)
       cmd="$cmd --ozone-platform=wayland"
       ;;
     ShadowPC.AppImage)
