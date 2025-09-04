@@ -12,5 +12,5 @@ sites=(
 selection=$(printf "%s\n" "${sites[@]}" | sk --with-nth=1 --delimiter=$'\t')
 cmd="${selection#*$'\t'}"
 
-# firefox -P kiosk --kiosk "$cmd"
-microsoft-edge-stable --app="$cmd"
+firefox -P kiosk --kiosk "$cmd"
+# microsoft-edge-stable --app="$cmd"
