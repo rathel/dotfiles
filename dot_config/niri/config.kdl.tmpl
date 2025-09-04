@@ -599,9 +599,9 @@ binds {
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+Grave { spawn "alacritty" "--title=scratch" "-e" "sh"; }
 	// Alt+Tab { spawn "alacritty" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
-	Alt+Tab { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	// Mod+D { spawn "fuzzel"; }
-	Mod+D { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/fdmenu_desktop.sh"; }
+	Mod+D { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/fdmenu_desktop.sh"; }
 	// Mod+D { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/menu_picker.sh"; }
 	Super+Shift+T { spawn "/home/rathel/.local/bin/niri-thunderbird-focus.sh"; }
 	Mod+B { spawn "/home/rathel/.local/bin/niri-browser-focus.sh"; }
@@ -609,7 +609,7 @@ binds {
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	// Mod+G { spawn "/home/rathel/.local/bin/launch-geforcenow.sh"; }
 	// Mod+G { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-geforcenow.sh"; }
-	Mod+G { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
+	Mod+G { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
 	// Mod+Shift+G { spawn "alacritty" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
