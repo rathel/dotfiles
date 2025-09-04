@@ -597,6 +597,7 @@ binds {
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
 	Mod+T { spawn "alacritty"; }
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
+	Mod+M { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
 	Mod+Grave { spawn "alacritty" "--title=scratch" "-e" "sh"; }
 	// Alt+Tab { spawn "alacritty" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Alt+Tab { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
