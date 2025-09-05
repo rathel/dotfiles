@@ -1,6 +1,3 @@
-{{- $raw := printf "%s/.cache/wallust/colors.json" .chezmoi.homeDir -}}
-{{- $colors := (output "cat" $raw | fromJson) -}}
-
 // This config is in the KDL format: https://kdl.dev
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
@@ -164,10 +161,10 @@ layout {
 		// - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
 		// Color of the ring on the active monitor.
-		active-color "{{ $colors.colors.color5 }}"
+		active-color "#ffffff"
 
 		// Color of the ring on inactive monitors.
-		inactive-color "{{ $colors.colors.color4 }}"
+		inactive-color "#000000"
 
 		// You can also use gradients. They take precedence over solid colors.
 		// Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -192,8 +189,8 @@ layout {
 		// off
 
 		width 1
-		active-color "{{ $colors.colors.color14 }}"
-		inactive-color "{{ $colors.colors.color15 }}"
+		active-color "#ffffff"
+		inactive-color "#000000"
 
 		// Color of the border around windows that request your attention.
 		urgent-color "#9b0000"
