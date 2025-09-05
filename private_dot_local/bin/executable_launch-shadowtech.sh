@@ -39,7 +39,7 @@ if [ -n "$browser" ]; then
 	elif [ "$browser" == Firefox ]; then
 		notify-send "Launching ShadowTech with Firefox..."
 		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		nohup sh -c "firefox https://pc.shadow.tech" >/dev/null 2>&1 &
+		nohup sh -c "firefox --new-window https://pc.shadow.tech" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
 
