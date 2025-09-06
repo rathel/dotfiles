@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-center": ["custom/clock", "custom/timer"],
+  "modules-center": ["custom/clock"],
   "modules-right": ["tray"],
 
   "custom/clock": {
