@@ -1,13 +1,16 @@
 @import url("colors.css");
 
 * {
-  font-family: Iosevka Nerd Font, monospace;
-  font-size: 18px;
+    font-family:
+        Iosevka Nerd Font,
+        monospace;
+    font-size: 18px;
 }
 
 #waybar {
-	background-color: @background;
-	color: @foreground;
+    background-color: @background;
+    color: @foreground;
 }
 
-#custom-clock
+#custom-clock {
+}
