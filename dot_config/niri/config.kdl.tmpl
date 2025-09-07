@@ -211,13 +211,13 @@ layout {
 		// radius. It has to assume that windows have square corners, leading to
 		// shadow artifacts inside the CSD rounded corners. This setting fixes
 		// those artifacts.
-		// 
+		//
 		// However, instead you may want to set prefer-no-csd and/or
 		// geometry-corner-radius. Then, niri will know the corner radius and
 		// draw the shadow correctly, without having to draw it behind the
 		// window. These will also remove client-side shadows if the window
 		// draws any.
-		// 
+		//
 		// draw-behind-window true
 
 		// You can change how shadows look. The values below are in logical
@@ -269,7 +269,8 @@ spawn-at-startup "waybar"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 // spawn-at-startup "xwayland-satellite"
 spawn-at-startup "/home/rathel/Applications/Obsidian.AppImage"
-spawn-at-startup "firefox"
+// spawn-at-startup "firefox"
+spawn-at-startup "/home/rathel/Applications/zen-x86_64.AppImage"
 spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
@@ -408,7 +409,7 @@ window-rule {
 
 window-rule {
 	match title="Shadow PC"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -416,7 +417,7 @@ window-rule {
 
 window-rule {
 	match app-id="chrome-play.geforcenow.com__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -424,7 +425,7 @@ window-rule {
 
 window-rule {
 	match app-id="msedge-play.geforcenow.com__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -432,7 +433,7 @@ window-rule {
 
 window-rule {
 	match app-id="vivaldi-play.geforcenow.com__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -440,7 +441,7 @@ window-rule {
 
 window-rule {
 	match app-id="chrome-pc.shadow.tech__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -448,7 +449,7 @@ window-rule {
 
 window-rule {
 	match app-id="msedge-pc.shadow.tech__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -456,7 +457,7 @@ window-rule {
 
 window-rule {
 	match app-id="vivaldi-pc.shadow.tech__-Default"
-	open-fullscreen true 
+	open-fullscreen true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
 	open-on-output "DP-2"
 	{{- end }}
@@ -468,7 +469,7 @@ window-rule {
 }
 
  window-rule {
- 	match app-id="imv" 
+ 	match app-id="imv"
  	default-floating-position x=1 y=1 relative-to="bottom-right"
  	default-column-width { proportion 0.2; }
  	default-window-height { proportion 0.2; }
@@ -482,7 +483,7 @@ window-rule {
 
 
  window-rule {
- 	match app-id="mpv" 
+ 	match app-id="mpv"
  	default-floating-position x=1 y=1 relative-to="bottom-right"
 	exclude title="^Streamers$"
 	exclude title="^otmpv$"
@@ -498,7 +499,7 @@ window-rule {
  }
 
 window-rule {
-	match app-id="mpv" title="otmpv" 
+	match app-id="mpv" title="otmpv"
 	exclude title="^Streamers$"
 	default-floating-position x=1 y=220 relative-to="bottom-right"
 	default-column-width { proportion 0.2; }
@@ -513,7 +514,7 @@ window-rule {
 }
 
 window-rule {
-	match app-id="mpv" title="Streamers" 
+	match app-id="mpv" title="Streamers"
 	exclude title="^otmpv$"
 	variable-refresh-rate true
 	// open-on-workspace "streamers"
@@ -529,7 +530,7 @@ window-rule {
 }
 
 window-rule {
-	match app-id="thunderbird" 
+	match app-id="thunderbird"
 	// open-on-workspace "one"
 	open-maximized true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
@@ -538,7 +539,7 @@ window-rule {
 }
 
 window-rule {
-	match app-id="thunderbird" title="^Write:" 
+	match app-id="thunderbird" title="^Write:"
 	// open-on-workspace "one"
 	open-maximized false
 	open-floating true
@@ -548,7 +549,7 @@ window-rule {
 }
 
 window-rule {
-	match app-id="obsidian" 
+	match app-id="obsidian"
 	// open-on-workspace "one"
 	// open-maximized true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
