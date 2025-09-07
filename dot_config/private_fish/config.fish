@@ -6,7 +6,6 @@ if status is-interactive
     set fish_greeting
     # wallust_ssh
     tmux_ssh
-    fastfetch
     /home/rathel/pg4uk-f7ecq/Scripts/upgrade.sh
     direnv hook fish | source
     zoxide init fish | source
