@@ -352,6 +352,17 @@ window-rule {
 window-rule {
 	match app-id="zen"
 	open-maximized true
+	{{- if eq .chezmoi.hostname "archlinux-z170" }}
+	open-on-output "DP-2"
+	{{- end }}
+}
+
+window-rule {
+	match app-id="alacritty" title="^main-term$"
+	open-maximized true
+	{{- if eq .chezmoi.hostname "archlinux-z170" }}
+	open-on-output "DP-1"
+	{{- end }}
 }
 
 window-rule {
