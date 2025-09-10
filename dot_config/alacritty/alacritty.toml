@@ -1,7 +1,7 @@
 # ~/.config/alacritty/alacritty.toml
 
 [general]
-import = ["colors.toml"] 
+import = ["catppuccin-mocha.toml"] 
 
 [window]
 opacity = 0.9

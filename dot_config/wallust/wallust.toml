@@ -45,7 +45,7 @@ check_contrast = true
 # ¡ If either one is a directory, then both SHOULD be one. !
 # zathura = { template = 'zathura', target = '~/.config/zathura/zathurarc' }
 zathura = { template = 'zathurarc', target = '~/.config/zathura/zathurarc' }
-alacritty = { template = 'alacritty-colors.toml', target = '~/.config/alacritty/colors.toml' }
+# alacritty = { template = 'alacritty-colors.toml', target = '~/.config/alacritty/colors.toml' }
 kitty = { template = 'kitty-colors.conf', target = '~/.config/kitty/colors.conf' }
 waybar = { template = 'waybar-colors.css', target = '~/.config/waybar/colors.css' }
 foot = { template = 'foot.ini', target = '~/.config/foot/foot.ini' }
