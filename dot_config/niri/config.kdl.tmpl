@@ -359,14 +359,6 @@ window-rule {
 // }
 
 window-rule {
-	match app-id="Alacritty" title="^main-term$"
-	open-maximized true
-	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-	open-on-output "DP-1"
-	{{- end }}
-}
-
-window-rule {
 	// This regular expression is intentionally made as specific as possible,
 	// since this is the default config, and we want no false positives.
 	// You can get away with just app-id="wezterm" if you want.
@@ -400,13 +392,6 @@ window-rule {
 //     open-floating true
 //     open-focused true
 // }
-//
-// window-rule {
-//     match app-id="alacritty" title="scratch"
-//     open-floating true
-//     open-focused true
-// }
-//
 
 window-rule {
 	match title="^scratch$"
