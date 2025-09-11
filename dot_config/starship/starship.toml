@@ -1,0 +1,82 @@
+# Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
+add_newline = true
+palette = "catpuccin_mocha"
+
+format = """
+[](fg:dim_bg)$username$directory$git_branch$git_status$cmd_duration$nodejs$rust$python$time[](fg:dim_bg)
+$character
+"""
+
+[username]
+show_always = true
+style_user  = "fg:fg bg:dim_bg"
+style_root  = "fg:err bg:dim_bg"
+format = "[ $user ]($style)"
+
+[directory]
+style = "fg:accent bg:dim_bg"
+truncation_length = 3
+truncation_symbol = "…/"
+format = "[ $path ]($style)"
+
+[git_branch]
+style = "fg:fg bg:dim_bg"
+format = "[ $symbol$branch ]($style)"
+symbol = " "
+
+[git_status]
+style = "fg:dim_fg bg:dim_bg"
+format = "[ $all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+min_time = 150
+format = "[  $duration ](fg:warn bg:dim_bg)"
+
+[character]
+success_symbol = "[➜](fg:good)"
+error_symbol   = "[✗](fg:err)"
+vimcmd_symbol  = "[](fg:accent)"
+format = "$symbol "
+
+[time]
+disabled = false
+time_format = "%H:%M"
+format = "[  $time ](fg:dim_fg bg:dim_bg)"
+
+# Optional language/module styles (inherit palette)
+[nodejs]
+format = "[  $version ](fg:good bg:dim_bg)"
+
+[rust]
+format = "[  $version ](fg:warn bg:dim_bg)"
+
+[python]
+format = "[  $version $virtualenv ](fg:accent bg:dim_bg)"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
