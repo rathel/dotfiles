@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+set +u
 source "$HOME/.myenv"
+set -u
 
 # Optional: force cache rebuild
 force_rebuild="${1-}"
