@@ -1,4 +1,4 @@
-@import url("colors.css");
+@import "mocha.css";
 
 * {
     font-family:
@@ -8,8 +8,8 @@
 }
 
 #waybar {
-    background-color: @background;
-    color: @foreground;
+    background-color: @base;
+    color: @text;
 }
 
 #custom-clock {
