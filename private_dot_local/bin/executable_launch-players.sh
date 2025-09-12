@@ -9,9 +9,17 @@ sites=(
 	"Spotify	https://spotify.com"	
 )
 
+browser=(
+	"Firefox	firefox"
+	"Chrome	google-chrome"
+	"Microsoft Edge	microsoft-edge-stable"
+	"Vivaldi	vivaldi"
+)
+
 selection=$(printf "%s\n" "${sites[@]}" | sk --with-nth=1 --delimiter=$'\t')
-cmd="${selection#*$'\t'}"
+browser=$(printf "%s\n" "${browser[@]}" | sk --with-nth=1 --delimiter=$'\t')
+cmd="${browser#*$'\t'} ${selection#*$'\t'}"
 
 # firefox -P kiosk --kiosk "$cmd"
-setsid -f microsoft-edge-stable --app="$cmd" >/dev/null 2>&1 &
+setsid -f "$cmd" &>/dev/null &
 sleep 2
