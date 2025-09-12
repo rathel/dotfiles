@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source $HOME/.skenv
+source "$HOME/.skenv"
 
 # Optional: force cache rebuild
 force_rebuild="${1-}"
