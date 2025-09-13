@@ -5,7 +5,7 @@ if status is-interactive
     set -ax PATH /home/rathel/.local/bin
     set fish_greeting
     # wallust_ssh
-    tmux_ssh
+    # tmux_ssh
     /home/rathel/pg4uk-f7ecq/Scripts/upgrade.sh
     direnv hook fish | source
     zoxide init fish | source
