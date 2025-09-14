@@ -1,10 +1,11 @@
 #!/bin/env bash
 
 sleep 5
-pkill dunst
 
-WALLPAPER="$HOME/Wallpapers/mobiusstripdracula.png"
+#WALLPAPER="$HOME/Wallpapers/mobiusstripdracula.png"
+#
+#swaybg -i $WALLPAPER &
+#
+#wallust run  $WALLPAPER
 
-swaybg -i $WALLPAPER &
-
-wallust run  $WALLPAPER
+$HOME/Wallpapers/swww.sh
