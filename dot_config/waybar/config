@@ -5,7 +5,7 @@
   "modules-right": ["tray"],
 
   "custom/clock": {
-    "exec": "date '+%m/%d_%H:%M'",
+    "exec": "date '+%m/%d %H:%M'",
     "interval": 60
   },
 
