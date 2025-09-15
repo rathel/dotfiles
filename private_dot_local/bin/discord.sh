@@ -2,4 +2,4 @@
 
 sleep 5
 cd $HOME/Applications/Discord
-./Discord
+./Discord &
