@@ -8,4 +8,4 @@ sleep 5
 #
 #wallust run  $WALLPAPER
 
-$HOME/Wallpapers/swww.sh
+nohup "$HOME/Wallpapers/swww.sh" >/dev/null 2>&1 &
