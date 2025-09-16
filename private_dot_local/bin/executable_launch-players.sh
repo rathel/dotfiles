@@ -16,7 +16,7 @@ sites=(
 
 browsers=(
   $'Firefox\tfirefox'
-  $'Chrome\tgoogle-chrome'
+  $'Chrome\tgoogle-chrome-stable'
   $'Microsoft Edge\tmicrosoft-edge-stable'
   $'Vivaldi\tvivaldi'
 )
