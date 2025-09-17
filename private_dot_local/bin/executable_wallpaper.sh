@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+sleep 2
+
 wallpapers="$HOME/Wallpapers"
 
 if command -v swww &> /dev/null; then
