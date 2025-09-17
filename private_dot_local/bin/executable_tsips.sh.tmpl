@@ -2,22 +2,23 @@
 
 TSIPS="$(tailscale status | awk '{print $1}')"
 HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
+OFFLINE="$(tailscale status | grep -i offline | awk '{print $1}')"
 #TERMINAL="kitty @ launch --type=tab"
 TERMINAL="ghostty"
 n=0
 
 for i in $TSIPS; do
 	case $i in
+		$HOSTIP|$OFFLINE)	
+			echo "Skipping Tailscale IP: $i."
+			continue
+			;;
 		{{ .tailscale.ip.deck }})
 			$TERMINAL -e ssh deck@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		{{ .tailscale.ip.phone }})
 			$TERMINAL -e ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
-			continue
-			;;
-		$HOSTIP)	
-			echo "Skipping Tailscale IP: $i."
 			continue
 			;;
 	esac
