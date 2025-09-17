@@ -147,7 +147,7 @@ printf '%s\n' "$selection" | cut -f2 | while IFS= read -r cmd; do
   esac
 
   # Launch detached from the picker terminal
-  nohup setsid -f sh -c "$cmd" >/dev/null 2>&1 &
+  setsid -f sh -c "$cmd" >/dev/null 2>&1 &
   sleep 0.2
 done
 
