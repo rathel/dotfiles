@@ -21,9 +21,17 @@ for i in $TSIPS; do
 			$TERMINAL -e ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
 			continue
 			;;
+		{{ .tailscale.ip.pixelxl }})
+			$TERMINAL -e ssh -p8022 u0_a213@"$i" >/dev/null 2>&1 &
+			continue
+			;;
+		{{ .tailscale.ip.pixel6a }})
+			$TERMINAL -e ssh -p8022 u0_a410@"$i" >/dev/null 2>&1 &
+			continue
+			;;
 	esac
 
-	notify-send -t 1000 "Connecting to $i."
+	notify-send "Connecting to" "$i"
 	# ssh-copy-id rathel@$i
 	# alacritty ssh rathel@$i &
 	# kitty --detach kitten ssh rathel@$i &
