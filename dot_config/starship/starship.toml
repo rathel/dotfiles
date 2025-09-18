@@ -53,6 +53,12 @@ format = "[  $version ](fg:warn bg:dim_bg)"
 [python]
 format = "[  $version $virtualenv ](fg:accent bg:dim_bg)"
 
+[battery]
+disabled = false
+[[battery.display]]
+threshold = 30
+style 'bold red'
+
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
 flamingo = "#f2cdcd"
