@@ -15,7 +15,7 @@ if [ -n "$browser" ]; then
 	if [ "$browser" == Edge ]; then
 		notify-send "Launching ShadowTech with Microsoft Edge..."
 		# setsid -f sh -c "microsoft-edge-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		nohup sh -c "microsoft-edge-stable $common_options" >/dev/null 2>&1 &
+		setsid -w sh -c "microsoft-edge-stable $common_options" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
 	elif [ "$browser" == Chrome ]; then
