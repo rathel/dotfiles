@@ -4,7 +4,6 @@ browsers=(
 	"Chrome"
 	"Edge"
 	"Firefox"
-	"Iron"
 	"Vivaldi"
 )
 
@@ -22,19 +21,12 @@ if [ -n "$browser" ]; then
 		notify-send "Launching ShadowTech with Google Chrome..."
 		# setsid -f sh -c "google-chrome-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
 		setsid -w sh -c "google-chrome-stable $common_options" >/dev/null 2>&1 &
-		sleep 1
 		exit 0
 	elif [ "$browser" == Vivaldi ]; then
 		notify-send "Launching ShadowTech with Vivaldi..."
 		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
 		nohup sh -c "vivaldi-stable $common_options" >/dev/null 2>&1 &
 		sleep 0.5
-		exit 0
-	elif [ "$browser" == Iron ]; then
-		notify-send "Launching ShadowTech with Iron..."
-		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		setsid -w sh -c "$HOME/Applications/iron-linux-64/chrome $common_options" >/dev/null 2>&1 &
-		sleep 1
 		exit 0
 	elif [ "$browser" == Firefox ]; then
 		notify-send "Launching ShadowTech with Firefox..."
