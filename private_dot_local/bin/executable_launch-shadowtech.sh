@@ -13,7 +13,6 @@ printf "%s\n" "${browsers[@]}" | sk --prompt "Select browser to launch ShadowTec
 if [ -n "$browser" ]; then
 	if [ "$browser" == Edge ]; then
 		notify-send "Launching ShadowTech with Microsoft Edge..."
-		# setsid -f sh -c "microsoft-edge-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
 		setsid -w sh -c "microsoft-edge-stable $common_options" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
@@ -25,14 +24,12 @@ if [ -n "$browser" ]; then
 		exit 0
 	elif [ "$browser" == Vivaldi ]; then
 		notify-send "Launching ShadowTech with Vivaldi..."
-		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		nohup sh -c "vivaldi-stable $common_options" >/dev/null 2>&1 &
+		setsid -w sh -c "vivaldi-stable $common_options" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
 	elif [ "$browser" == Firefox ]; then
 		notify-send "Launching ShadowTech with Firefox..."
-		# setsid -f sh -c "vivaldi-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		nohup sh -c "firefox --new-window https://pc.shadow.tech" >/dev/null 2>&1 &
+		setsid -w sh -c "firefox --new-window https://pc.shadow.tech" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
 
