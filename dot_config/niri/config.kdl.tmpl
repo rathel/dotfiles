@@ -267,23 +267,25 @@ layout {
 spawn-at-startup "steam" "-tenfoot"
 spawn-at-startup "/home/rathel/.local/bin/connectspeaker.sh"
 {{- end }}
+{{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
+spawn-at-startup "/home/rathel/Applications/Obsidian.AppImage"
+spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
+spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
+{{- end }}
 spawn-at-startup "waybar"
 spawn-at-startup "dunst"
 // spawn-at-startup "alacritty" "--title=main-term"
 
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 // spawn-at-startup "xwayland-satellite"
-spawn-at-startup "/home/rathel/Applications/Obsidian.AppImage"
 // spawn-at-startup "firefox"
 // spawn-at-startup "vivaldi-stable"
-spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
 // spawn-at-startup "thunderbird"
 spawn-at-startup "/home/rathel/.local/bin/volume-notify.sh"
 spawn-at-startup "/home/rathel/.local/bin/wallpaper.sh"
-spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
 
 environment {
 	CHROME_USE_OZONE "1"
