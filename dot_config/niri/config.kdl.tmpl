@@ -265,7 +265,7 @@ layout {
 // spawn-at-startup "/home/rathel/.local/bin/start-waybar-safe"
 {{- if eq .chezmoi.hostname "archlinux-beelink" -}}
 spawn-at-startup "steam" "-tenfoot"
-spawn-at-startup "connectspeaker.sh"
+spawn-at-startup "/home/rathel/.local/bin/connectspeaker.sh"
 {{- end -}}
 spawn-at-startup "waybar"
 spawn-at-startup "dunst"
