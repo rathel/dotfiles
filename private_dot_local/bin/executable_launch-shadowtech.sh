@@ -7,6 +7,11 @@ browsers=(
 	"Vivaldi"
 )
 
+set +u
+source "$HOME/.myenv"
+set -u
+
+
 common_options="--ozone-platform=wayland --app=https://pc.shadow.tech"
 
 printf "%s\n" "${browsers[@]}" | sk --prompt "Select browser to launch ShadowTech: " --height 10 --ansi | while read -r browser; do
