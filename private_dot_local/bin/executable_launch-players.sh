@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+set +u
+source "$HOME/.myenv"
+set -u
+
 # Ensure required tools exist
 for cmd in sk setsid; do
   command -v "$cmd" >/dev/null 2>&1 || { printf '%s not found.\n' "$cmd" >&2; exit 1; }
