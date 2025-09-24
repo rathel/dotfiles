@@ -5,6 +5,14 @@ set +u
 source "$HOME/.myenv"
 set -u
 
+# --- Args ---------------------------------------------------------------------
+force_rebuild=false
+for arg in "$@"; do
+  case "$arg" in
+    -r|--rebuild) force_rebuild=true ;;
+  esac
+done
+
 # Ensure required commands are available
 for cmd in sk fd awk sha256sum stat; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -68,23 +76,22 @@ if [[ -f "$cache_entries" ]]; then
   cache_mtime=$(stat -c %Y "$cache_entries" 2>/dev/null || echo 0)
 fi
 
-need_rebuild=true
-force_rebuild="${force_rebuild:-}"
 
-# 1) Fast path: cache still "fresh" by age → instant start
-if [[ -s "$cache_entries" && -n "$cache_mtime" && $(( current_time - cache_mtime )) -lt $MAX_AGE_SEC && "$force_rebuild" != "--rebuild" ]]; then
-  need_rebuild=false
-else
-  # 2) Otherwise, compare signature for non-NFS dirs only
-  current_sig="$(build_sig | sort)"
-  current_sig_hash="$(printf '%s' "$current_sig" | sha256sum | cut -d' ' -f1)"
-  if [[ -f "$cache_sig" && -s "$cache_sig" && -s "$cache_entries" && "$force_rebuild" != "--rebuild" ]]; then
+need_rebuild=true
+
+# Only consider cache freshness/signature when NOT forced
+if [[ $force_rebuild == false ]]; then
+  if [[ -f "$cache_entries" && -s "$cache_entries" && -f "$cache_sig" && -s "$cache_sig" ]]; then
     saved_hash="$(cut -d' ' -f1 < "$cache_sig" 2>/dev/null || true)"
+    # compute current_sig/current_sig_hash only if we might skip a rebuild
+    current_sig="$(build_sig | sort)"
+    current_sig_hash="$(printf '%s' "$current_sig" | sha256sum | cut -d' ' -f1)"
     if [[ "$saved_hash" == "$current_sig_hash" ]]; then
       need_rebuild=false
     fi
   fi
 fi
+
 
 # --- Load from cache ---------------------------------------------------------
 if [[ ! -s "$cache_entries" ]]; then
