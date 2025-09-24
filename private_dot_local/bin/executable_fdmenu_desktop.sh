@@ -1,8 +1,10 @@
+
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Allow missing variables while sourcing user env, then re-enable -u
 set +u
-source "$HOME/.myenv"
+[[ -f "$HOME/.myenv" ]] && source "$HOME/.myenv"
 set -u
 
 # --- Args ---------------------------------------------------------------------
@@ -13,14 +15,15 @@ for arg in "$@"; do
   esac
 done
 
-# Ensure required commands are available
-for cmd in sk fd awk sha256sum stat; do
+# --- Requirements -------------------------------------------------------------
+for cmd in sk fd awk sha256sum stat findmnt; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     printf '%s command not found. Please install %s to use this script.\n' "$cmd" "$cmd" >&2
     exit 1
   fi
 done
 
+# --- Search roots -------------------------------------------------------------
 search_dirs=(
   "$HOME/.local/bin"
   "$HOME/.local/share/applications"
@@ -41,7 +44,7 @@ if ((${#find_args[@]} == 0)); then
   exit 1
 fi
 
-# --- Cache setup -------------------------------------------------------------
+# --- Cache setup --------------------------------------------------------------
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/sk-launch"
 cache_entries="$cache_dir/entries.tsv"
 cache_sig="$cache_dir/sig.txt"
@@ -52,8 +55,7 @@ mkdir -p "$cache_dir"
 
 # Detect whether a path is on NFS (fast)
 is_nfs() {
-  # findmnt is quicker than parsing /proc/mounts repeatedly
-  local p fs
+  local fs
   fs=$(findmnt -n -o FSTYPE --target "$1" 2>/dev/null || echo "")
   [[ "$fs" == nfs* ]]
 }
@@ -70,50 +72,104 @@ build_sig() {
   done
 }
 
+# --- Rebuild cache ------------------------------------------------------------
+rebuild_cache() {
+  tmp="$(mktemp)"
+  trap 'rm -f "$tmp"' EXIT
+
+  # 1) .desktop entries → "Label<TAB>Exec"
+  #    - Use first Name= and Exec= in [Desktop Entry]
+  #    - Strip %f/%u/%U/%F etc from Exec
+  #    - Skip NoDisplay=true
+  fd -H -a -t f -e desktop . -- "${find_args[@]}" \
+  | awk '
+    BEGIN{ RS=""; FS="\n" }
+    {
+      path=$0
+      # Only look at [Desktop Entry] blocks
+      name=""; exec=""; nodisp="false"
+      n=split($0, lines, "\n")
+      inDE=0
+      for(i=1;i<=n;i++){
+        line=lines[i]
+        if(line ~ /^\[Desktop Entry\]/){ inDE=1; continue }
+        if(inDE){
+          if(line ~ /^Name=/ && name==""){ sub(/^Name=/,"",line); name=line }
+          if(line ~ /^Exec=/ && exec==""){ sub(/^Exec=/,"",line); exec=line }
+          if(line ~ /^NoDisplay=/){ sub(/^NoDisplay=/,"",line); nodisp=tolower(line) }
+        }
+      }
+      if(name!="" && exec!="" && nodisp!="true"){
+        gsub(/%[fFuUikcDdNvm]/,"",exec)    # strip desktop exec placeholders
+        gsub(/[[:space:]]+$/,"",exec)      # trim trailing spaces
+        printf "%s\t%s\n", name, exec
+      }
+    }
+  ' >> "$tmp"
+
+  # 2) Executables in user bins/scripts → "Label<TAB>Path"
+  #    (fd -t x only lists executable files; avoids piling from /usr/share/applications)
+  fd -H -a -t x . -- "$HOME/.local/bin" "$HOME/pg4uk-f7ecq/Scripts" 2>/dev/null \
+    | awk '{cmd=$0; sub(/^.*\//,"",cmd); printf "%s\t%s\n", cmd, $0}' >> "$tmp" || true
+
+  # 3) Dedup on label (first field), keep first occurrence
+  awk -F '\t' '!seen[$1]++' "$tmp" > "$cache_entries"
+
+  # 4) Save current signature hash (for non-NFS dirs)
+  current_sig="$(build_sig | sort)"
+  printf '%s  -\n' "$(printf '%s' "$current_sig" | sha256sum | cut -d" " -f1)" > "$cache_sig"
+}
+
+# --- Rebuild decision ---------------------------------------------------------
+need_rebuild=true
 current_time=$(date +%s)
 cache_mtime=0
 if [[ -f "$cache_entries" ]]; then
   cache_mtime=$(stat -c %Y "$cache_entries" 2>/dev/null || echo 0)
 fi
 
-
-need_rebuild=true
-
-# Only consider cache freshness/signature when NOT forced
 if [[ $force_rebuild == false ]]; then
-  if [[ -f "$cache_entries" && -s "$cache_entries" && -f "$cache_sig" && -s "$cache_sig" ]]; then
-    saved_hash="$(cut -d' ' -f1 < "$cache_sig" 2>/dev/null || true)"
-    # compute current_sig/current_sig_hash only if we might skip a rebuild
+  # Fast path: age fresh -> skip sig/hash
+  if [[ -s "$cache_entries" && $(( current_time - cache_mtime )) -lt $MAX_AGE_SEC ]]; then
+    need_rebuild=false
+  else
+    # Compare signature for non-NFS dirs only
     current_sig="$(build_sig | sort)"
     current_sig_hash="$(printf '%s' "$current_sig" | sha256sum | cut -d' ' -f1)"
-    if [[ "$saved_hash" == "$current_sig_hash" ]]; then
-      need_rebuild=false
+    if [[ -f "$cache_sig" && -s "$cache_sig" && -s "$cache_entries" ]]; then
+      saved_hash="$(cut -d' ' -f1 < "$cache_sig" 2>/dev/null || true)"
+      if [[ "$saved_hash" == "$current_sig_hash" ]]; then
+        need_rebuild=false
+      fi
     fi
   fi
 fi
 
+if [[ $need_rebuild == true ]]; then
+  [[ $force_rebuild == true ]] && printf '[fdmenu] Forced rebuild.\n' >&2
+  rebuild_cache
+fi
 
-# --- Load from cache ---------------------------------------------------------
+# --- Load from cache ----------------------------------------------------------
 if [[ ! -s "$cache_entries" ]]; then
   printf 'No launchable entries found.\n' >&2
   exit 0
 fi
 
-# Present choices (already deduped, but keep --with-nth for safety)
+# --- Picker -------------------------------------------------------------------
 selection=$(
-  cat "$cache_entries" |
-  sk --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' || true
+  cat "$cache_entries" \
+  | sk --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' --no-sort || true
 )
 
 # User escaped or sk had no input
 [[ -z "$selection" ]] && exit 0
 
-# Extract command(s) from selection (supports multi-select if enabled in sk config)
+# --- Launch selected commands -------------------------------------------------
 printf '%s\n' "$selection" | cut -f2 | while IFS= read -r cmd; do
   # Decide tweaks based on the program basename (first token)
   prog=${cmd%% *}
   prog_base=$(basename "$prog")
-
   case "$prog_base" in
     google-chrome*|vivaldi-stable|brave|chromium|opera)
       cmd="$cmd --ozone-platform=wayland"
@@ -125,10 +181,7 @@ printf '%s\n' "$selection" | cut -f2 | while IFS= read -r cmd; do
       cmd="alacritty --title=scratch $cmd"
       ;;
   esac
-
-  # Launch detached from the picker terminal
   nohup setsid -f sh -c "$cmd" >/dev/null 2>&1 &
   sleep 0.2
 done
-
 
