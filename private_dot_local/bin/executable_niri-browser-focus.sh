@@ -9,7 +9,7 @@ if [ -n "$win_id" ]; then
 else
 	case "$browser" in
 		"zen")
-			/home/rathel/Applications/zen-x86_64.AppImage
+			/home/rathel/Applications/zen/zen
 			;;
 		"firefox")
 			firefox
