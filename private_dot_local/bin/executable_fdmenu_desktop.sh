@@ -79,7 +79,7 @@ rebuild_cache() {
 
   # 1) .desktop entries → "Label<TAB>Exec"
   #    - Iterate files (NUL-delimited) and parse [Desktop Entry] content
-  fd -H -a -t f -e desktop . -- "${find_args[@]}" -0 \
+  fd -H -a -t f -e desktop -0 . -- "${find_args[@]}" \
   | while IFS= read -r -d '' f; do
       awk '
         BEGIN { inDE=0; name=""; exec=""; nodisp="false" }
