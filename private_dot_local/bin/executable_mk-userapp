@@ -78,7 +78,11 @@ if [[ -n "${icon}" ]]; then
   fi
 fi
 
-terminal_val="$($terminal && echo true || echo false)"
+if [[ "$terminal" == true ]]; then
+  terminal_val=true
+else
+  terminal_val=false
+fi
 
 # MimeType line
 mime_line=""
