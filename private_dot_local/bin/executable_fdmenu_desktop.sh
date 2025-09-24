@@ -78,34 +78,29 @@ rebuild_cache() {
   trap 'rm -f "$tmp"' EXIT
 
   # 1) .desktop entries → "Label<TAB>Exec"
-  #    - Use first Name= and Exec= in [Desktop Entry]
-  #    - Strip %f/%u/%U/%F etc from Exec
-  #    - Skip NoDisplay=true
-  fd -H -a -t f -e desktop . -- "${find_args[@]}" \
-  | awk '
-    BEGIN{ RS=""; FS="\n" }
-    {
-      path=$0
-      # Only look at [Desktop Entry] blocks
-      name=""; exec=""; nodisp="false"
-      n=split($0, lines, "\n")
-      inDE=0
-      for(i=1;i<=n;i++){
-        line=lines[i]
-        if(line ~ /^\[Desktop Entry\]/){ inDE=1; continue }
-        if(inDE){
-          if(line ~ /^Name=/ && name==""){ sub(/^Name=/,"",line); name=line }
-          if(line ~ /^Exec=/ && exec==""){ sub(/^Exec=/,"",line); exec=line }
-          if(line ~ /^NoDisplay=/){ sub(/^NoDisplay=/,"",line); nodisp=tolower(line) }
+  #    - Iterate files (NUL-delimited) and parse [Desktop Entry] content
+  fd -H -a -t f -e desktop . -- "${find_args[@]}" -0 \
+  | while IFS= read -r -d '' f; do
+      awk '
+        BEGIN { inDE=0; name=""; exec=""; nodisp="false" }
+        # Enter Desktop Entry section; leave on next [Section]
+        /^\[Desktop Entry\]/ { inDE=1; next }
+        /^\[/ && $0 !~ /^\[Desktop Entry\]/ { inDE=0; next }
+
+        inDE && /^Name=/ && name==""     { sub(/^Name=/,""); name=$0 }
+        inDE && /^Exec=/ && exec==""     { sub(/^Exec=/,""); exec=$0 }
+        inDE && /^NoDisplay=/            { sub(/^NoDisplay=/,""); nodisp=tolower($0) }
+
+        END {
+          if (name != "" && exec != "" && nodisp != "true") {
+            gsub(/%[fFuUikcDdNvm]/, "", exec);   # strip placeholders
+            sub(/[[:space:]]+$/, "", exec);      # trim trailing spaces
+            printf "%s\t%s\n", name, exec
+          }
         }
-      }
-      if(name!="" && exec!="" && nodisp!="true"){
-        gsub(/%[fFuUikcDdNvm]/,"",exec)    # strip desktop exec placeholders
-        gsub(/[[:space:]]+$/,"",exec)      # trim trailing spaces
-        printf "%s\t%s\n", name, exec
-      }
-    }
-  ' >> "$tmp"
+      ' "$f"
+    done >> "$tmp"
+
 
   # 2) Executables in user bins/scripts → "Label<TAB>Path"
   #    (fd -t x only lists executable files; avoids piling from /usr/share/applications)
