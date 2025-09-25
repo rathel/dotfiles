@@ -104,7 +104,7 @@ rebuild_cache() {
 
   # 2) Executables in user bins/scripts → "Label<TAB>Path"
   #    (fd -t x only lists executable files; avoids piling from /usr/share/applications)
-  fd -H -a -t x . -- "$HOME/.local/bin" "$HOME/pg4uk-f7ecq/Scripts" 2>/dev/null \
+  fd -H -a -t x . -- "$HOME/Applications" "$HOME/.local/bin" "$HOME/pg4uk-f7ecq/Scripts" 2>/dev/null \
     | awk '{cmd=$0; sub(/^.*\//,"",cmd); printf "%s\t%s\n", cmd, $0}' >> "$tmp" || true
 
   # 3) Dedup on label (first field), keep first occurrence
