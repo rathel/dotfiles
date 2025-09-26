@@ -21,7 +21,7 @@ sites=(
 browsers=(
   $'Chrome\tgoogle-chrome-stable'
   $'Firefox\tfirefox'
-  $'Iron\t$HOME/Applications/iron/iron'
+  $'Iron\tsrware-iron'
   $'Microsoft Edge\tmicrosoft-edge-stable'
   $'Vivaldi\tvivaldi'
 )
