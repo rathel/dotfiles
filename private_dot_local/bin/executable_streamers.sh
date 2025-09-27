@@ -16,7 +16,7 @@ lock_path() {
 }
 
 while :; do
-	notify-send -t 5000 "Starting streamers cycle" || true
+	# notify-send -t 5000 "Starting streamers cycle" || true
   # Load/clean list each cycle: strip comments/blank lines and optional surrounding quotes
   mapfile -t streamers < <(
     awk '
