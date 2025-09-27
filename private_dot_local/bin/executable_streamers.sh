@@ -44,7 +44,7 @@ while :; do
 					yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(webpage_url_domain)s_%(title)s.%(ext)s" -- "$url"
 					) &
 			fi
-   fi
+		done
 
    sleep 5
 
