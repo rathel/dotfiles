@@ -53,6 +53,11 @@ while :; do
 
   for raw in "${streamers[@]}"; do
     url="$raw"; [[ "$url" =~ ^https?:// ]] || url="https://$url"
+	if ! yt-dlp -J --skip-download -- "$url" >/dev/null 2>&1; then
+	  log "OFFLINE: $url"
+	  sleep 1
+	  continue
+	fi
     lock="$(lock_path "$url")"
 
     # Show why we skip
