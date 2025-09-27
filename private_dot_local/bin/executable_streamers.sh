@@ -4,6 +4,8 @@ sleep 10
 
 set -Eeuo pipefail
 IFS=$'\n\t'
+max_jobs=2
+job_count=0
 
 LIST="$HOME/.config/streamers.txt"
 
@@ -43,6 +45,11 @@ while :; do
 	# nohup mpv --no-terminal --title="Streamers" -- "$url" &
 	yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(webpage_url_domain)s_%(title)s.%(ext)s" -- "$url"
       ) &
+      ((job_count++))
+      if (( job_count >= max_jobs )); then
+	wait -n
+	((job_count--))
+      fi
     fi
 
     sleep 5
