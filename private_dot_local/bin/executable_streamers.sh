@@ -40,8 +40,8 @@ while :; do
         # on exit, remove lock no matter what
         trap 'rm -fr "$lock" 2>/dev/null || true' EXIT
 	echo "$url" > "$lock/streaming_url.txt"
-	nohup mpv --no-terminal --title="Streamers" -- "$url" &
-	# yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(title)s.%(ext)s" -- "$url"
+	# nohup mpv --no-terminal --title="Streamers" -- "$url" &
+	yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(title)s.%(ext)s" -- "$url"
       ) &
     fi
 
