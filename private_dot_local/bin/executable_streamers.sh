@@ -72,6 +72,8 @@ while :; do
           -S "res:720,ext" \
           -o "$OUTDIR/%(webpage_url_domain)s_%(title)s.%(ext)s" \
           --no-continue --no-part \
+	  -i --ignore-no-formats-error \
+	  --retries 3 --fragment-retries 3 \
           --print before_dl:"DL: %(webpage_url_domain)s | %(title).80s" \
           --print after_move:"SAVED: %(filepath)s" \
           --no-warnings --restrict-filenames \
