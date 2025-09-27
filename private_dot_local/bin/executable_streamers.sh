@@ -54,6 +54,7 @@ while :; do
 
     sleep 5
   done
+  wait
 
   sleep 60m
 done
