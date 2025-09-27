@@ -1,53 +1,106 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+IFS=$'\n\t'
 
-# ...keep your header and variables...
+max_jobs=${MAX_JOBS:-2}
+LIST=${LIST:-"$HOME/.config/streamers.txt"}
+OUTDIR=${OUTDIR:-"$HOME/plex/Streamers"}
+LOG=${LOG:-"$HOME/.local/share/streamers.log"}
 
-# helper unchanged...
+sleep 2 || true
+mkdir -p "$OUTDIR" "$(dirname "$LOG")"
+
+log(){ printf '%s %s\n' "$(date -Is)" "$*" | tee -a "$LOG" >&2; }
+
+lock_path() {
+  local key="${1//\//_}"; key="${key//:/_}"
+  printf '/tmp/streamlock_%s.lock' "$key"
+}
+
+# 1) Clean stale locks (older than 2h) so we don't silently skip URLs forever
+find /tmp -maxdepth 1 -type d -name 'streamlock_*.lock' -mmin +120 -print -exec rm -rf {} + 2>/dev/null || true
 
 while :; do
-  notify-send -t 5000 "Starting streamers cycle" || true
+  log "== New cycle start (max_jobs=$max_jobs) =="
 
-  # strip comments/blank lines, trim, remove optional quotes, and remove trailing CR
+  if [[ ! -e "$LIST" ]]; then
+    log "List '$LIST' missing; sleeping 60s"
+    sleep 60
+    continue
+  fi
+
+  # 2) Load + sanitize list and strip trailing CRs
   mapfile -t streamers < <(
     awk '
-      /^[[:space:]]*(#|$)/ { next }                    # skip comments/blank
-      { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0) }  # trim
-      { sub(/^"/, "", $0); sub(/"$/, "", $0) }         # strip outer quotes
-      { sub(/\r$/, "", $0) }                           # drop trailing CR
+      /^[[:space:]]*(#|$)/ { next }
+      { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0) }
+      { sub(/^"/, "", $0); sub(/"$/, "", $0) }
+      { sub(/\r$/, "", $0) }
       NF { print }
     ' "$LIST"
   )
 
-  job_count=0  # reset each cycle
+  if ((${#streamers[@]}==0)); then
+    log "No entries in '$LIST' after cleaning; sleeping 60s"
+    sleep 60
+    continue
+  fi
 
-  for i in "${streamers[@]}"; do
-    url="$i"
-    [[ "$url" =~ ^https?:// ]] || url="https://$url"
+  log "Loaded ${#streamers[@]} URLs:"
+  for u in "${streamers[@]}"; do log "  - $u"; done
 
+  job_count=0
+
+  for raw in "${streamers[@]}"; do
+    url="$raw"; [[ "$url" =~ ^https?:// ]] || url="https://$url"
     lock="$(lock_path "$url")"
+
+    # Show why we skip
+    if [[ -e "$lock" ]]; then
+      log "SKIP (locked): $url -> $lock"
+      continue
+    fi
+
     if mkdir "$lock" 2>/dev/null; then
+      log "START: $url (lock=$lock) | active=$job_count"
       (
         trap 'rm -rf "$lock" 2>/dev/null || true' EXIT
         printf '%s\n' "$url" > "$lock/streaming_url.txt"
-        yt-dlp -S "res:720,ext" \
-               -o "$HOME/plex/Streamers/%(webpage_url_domain)s_%(title)s.%(ext)s" \
-               --no-continue --no-part -- "$url"
-      ) &
+
+        # 3) Print the resolved file name to the log even if download fails
+        yt-dlp \
+          -S "res:720,ext" \
+          -o "$OUTDIR/%(webpage_url_domain)s_%(title)s.%(ext)s" \
+          --no-continue --no-part \
+          --print before_dl:"DL: %(webpage_url_domain)s | %(title).80s" \
+          --print after_move:"SAVED: %(filepath)s" \
+          --no-warnings --restrict-filenames \
+          -- "$url"
+      ) >>"$LOG" 2>&1 &
+
       ((job_count++))
       if (( job_count >= max_jobs )); then
-        # Always free a slot, even if the child failed
+        log "CAP reached ($job_count). Waiting for a slot…"
+        # 4) Always free a slot regardless of child exit code
         wait -n || true
         ((job_count--))
+        log "Slot freed. active=$job_count"
       fi
+    else
+      log "SKIP (mkdir lock failed): $url (lock exists?)"
     fi
-    sleep 5
+
+    sleep 1
   done
 
-  # Drain remaining jobs — always decrement
+  # Drain remaining jobs
   while (( job_count > 0 )); do
+    log "Draining… active=$job_count"
     wait -n || true
     ((job_count--))
   done
 
-  sleep 60m
+  log "Cycle complete. Sleeping 5m…"
+  sleep 5m
 done
 
