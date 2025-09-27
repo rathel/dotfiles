@@ -28,34 +28,27 @@ while :; do
 		)
 
 		for i in "${streamers[@]}"; do
-			max_jobs=2
-			job_count=0
+			# Prepend scheme if missing
+			url="$i"
+			[[ "$url" =~ ^https?:// ]] || url="https://$url"
 
-   # Prepend scheme if missing
-   url="$i"
-   [[ "$url" =~ ^https?:// ]] || url="https://$url"
-
-   lock="$(lock_path "$url")"
-   # atomic lock using mkdir
-   if mkdir "$lock" 2>/dev/null; then
-	   # notify-send -t 5000 "Streaming: ${url##*/}" || true
-	   (
-		   # on exit, remove lock no matter what
-		   trap 'rm -fr "$lock" 2>/dev/null || true' EXIT
-		   echo "$url" > "$lock/streaming_url.txt"
-		   # nohup mpv --no-terminal --title="Streamers" -- "$url" &
-		   yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(webpage_url_domain)s_%(title)s.%(ext)s" -- "$url"
-		   ) &
-		   ((job_count++))
-		   if (( job_count >= max_jobs )); then
-			   wait -n
-			   ((job_count--))
-		   fi
+			lock="$(lock_path "$url")"
+			# atomic lock using mkdir
+			if mkdir "$lock" 2>/dev/null; then
+				# notify-send -t 5000 "Streaming: ${url##*/}" || true
+				(
+					# on exit, remove lock no matter what
+					trap 'rm -fr "$lock" 2>/dev/null || true' EXIT
+					echo "$url" > "$lock/streaming_url.txt"
+					# nohup mpv --no-terminal --title="Streamers" -- "$url" &
+					yt-dlp -S "res:720" -o "$HOME/plex/Streamers/%(webpage_url_domain)s_%(title)s.%(ext)s" -- "$url"
+					) &
+			fi
    fi
 
    sleep 5
+
 done
-wait
 
 sleep 60m
 done
