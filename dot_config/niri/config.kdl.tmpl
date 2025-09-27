@@ -539,23 +539,23 @@ window-rule {
 	// open-maximized true
 }
 
-window-rule {
-	match app-id="thunderbird"
-	// open-on-workspace "one"
-	open-maximized true
-	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-	open-on-output "DP-1"
-	{{- end }}
-}
+// window-rule {
+// 	match app-id="thunderbird"
+// 	// open-on-workspace "one"
+// 	open-maximized true
+// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
+// 	open-on-output "DP-1"
+// 	{{- end }}
+// }
 
 window-rule {
 	match app-id="thunderbird" title="^Write:"
 	// open-on-workspace "one"
 	open-maximized false
 	open-floating true
-	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-	open-on-output "DP-1"
-	{{- end }}
+	// {{- if eq .chezmoi.hostname "archlinux-z170" }}
+	// open-on-output "DP-1"
+	// {{- end }}
 }
 
 window-rule {
