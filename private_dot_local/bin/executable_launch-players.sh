@@ -18,34 +18,17 @@ sites=(
   $'Spotify\thttps://spotify.com'
 )
 
-browsers=(
-  $'Chrome\tgoogle-chrome-stable'
-  $'Firefox\tfirefox'
-  $'Microsoft Edge\tmicrosoft-edge-stable'
-  $'Vivaldi\tvivaldi'
-)
-
 # Pick site and browser (escape tab in --delimiter)
 selection="$(printf '%s\n' "${sites[@]}" | sk --with-nth=1 --delimiter=$'\t' || true)"
 [[ -z "$selection" ]] && exit 0
 
-browser_pick="$(printf '%s\n' "${browsers[@]}" | sk --with-nth=1 --delimiter=$'\t' || true)"
-[[ -z "$browser_pick" ]] && exit 0
-
 # Split "Label<TAB>Value" into fields
 IFS=$'\t' read -r _site_label site_url <<<"$selection"
-IFS=$'\t' read -r _browser_label browser_cmd <<<"$browser_pick"
-
-# Optional: verify browser exists
-if ! command -v "$browser_cmd" >/dev/null 2>&1; then
-  printf 'Selected browser "%s" is not installed.\n' "$browser_cmd" >&2
-  exit 1
-fi
 
 # Launch detached; pass args separately (no eval, no word-splitting surprises)
 # Example: firefox kiosk profile (uncomment and adjust if desired)
 # exec_cmd=( "$browser_cmd" -P kiosk --kiosk "$site_url" )
-exec_cmd=( "$browser_cmd" --app="$site_url" )
+exec_cmd=( "$DEFAULT_BROWSER" "$site_url" )
 
 setsid -f -- "${exec_cmd[@]}" >/dev/null 2>&1 &
 
