@@ -28,7 +28,7 @@ IFS=$'\t' read -r _site_label site_url <<<"$selection"
 # Launch detached; pass args separately (no eval, no word-splitting surprises)
 # Example: firefox kiosk profile (uncomment and adjust if desired)
 # exec_cmd=( "$browser_cmd" -P kiosk --kiosk "$site_url" )
-exec_cmd=( "$DEFAULT_BROWSER" "$site_url" )
+exec_cmd=( "$DEFAULT_BROWSER" --new-window "$site_url" )
 
 setsid -f -- "${exec_cmd[@]}" >/dev/null 2>&1 &
 
