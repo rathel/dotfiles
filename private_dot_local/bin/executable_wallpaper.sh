@@ -14,8 +14,9 @@ else
 fi
 
 while :; do
-	wallpaper="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
-	notify-send -i "$wallpaper" "Setting Wallpaper to:" "$(basename $wallpaper)"
-	swww img "$wallpaper" >/dev/null 2>&1 &
+	wallpaper1="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
+	wallpaper2="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
+	swww img -o DP-1 "$wallpaper1" >/dev/null 2>&1 &
+	swww img -o DP-2 "$wallpaper2" >/dev/null 2>&1 &
 	sleep 1h
 done
