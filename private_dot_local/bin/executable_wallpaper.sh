@@ -16,7 +16,8 @@ fi
 while :; do
 	wallpaper1="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
 	wallpaper2="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
-	swww img -o DP-1 "$wallpaper1" >/dev/null 2>&1 &
-	swww img -o DP-2 "$wallpaper2" >/dev/null 2>&1 &
+	swww img -o DP-1 "$wallpaper1"
+	sleep 1
+	swww img -o DP-2 "$wallpaper2"
 	sleep 1h
 done
