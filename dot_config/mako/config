@@ -1,0 +1,61 @@
+# ~/.config/mako/config
+
+# === Global / default ===
+# placement
+anchor=top-right
+# dunst offset -> mako margin (distance from screen edge)
+margin=17,17
+# space between stacked notifications (no exact dunst "gap_size")
+outer-margin=10
+
+# sizing (mako doesn’t support min/max tuples; pick a target width/height)
+width=300
+height=400
+
+# visuals
+font=Iosevka Nerd Font 11
+text-alignment=left
+padding=12
+border-size=0
+border-radius=0
+
+# colors
+background-color=#271B1Aee
+text-color=#FFF8FF
+border-color=#EDB361
+separator-size=2
+separator-color=#FFF8FF
+
+# icons
+icons=1
+max-icon-size=128
+
+# markup / format
+markup=1
+# dunst: "<b>%a</b>\n%s\n%b"
+# mako supports a format string, but placeholders differ by version.
+# The safest cross-version approximation is to keep default (summary bold, body below).
+# If your mako supports it, uncomment and adjust:
+# format=<b>%a</b>\n%s\n%b
+
+# progress bar
+# (mako can draw progress bars; names vary slightly across versions)
+progress=1
+progress-height=10
+progress-border-size=1
+progress-border-radius=4
+# Optional: progress-color and progress-background-color
+# progress-color=#DCF2C3
+
+# behavior
+default-timeout=3000            # dunst 'urgency_normal' is 3s; default here = 3s
+ignore-timeout=0
+max-visible=10
+history=1
+sort=1
+
+# Follow focused output: mako can target outputs by name.
+# There isn't a "follow=keyboard" toggle like dunst.
+# If you want “follow focus”, leave this unset and run one mako per output via your WM,
+# or set output to a specific name (e.g., output=DP-1).
+# output=focused   # (works only if your mako build supports it; otherwi
