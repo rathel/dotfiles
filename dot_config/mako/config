@@ -52,7 +52,7 @@ markup=1
 ignore-timeout=0
 max-visible=10
 history=1
-sort=1
+# sort=1
 
 # Follow focused output: mako can target outputs by name.
 # There isn't a "follow=keyboard" toggle like dunst.
