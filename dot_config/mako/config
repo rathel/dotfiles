@@ -40,10 +40,10 @@ markup=1
 
 # progress bar
 # (mako can draw progress bars; names vary slightly across versions)
-progress=1
-progress-height=10
-progress-border-size=1
-progress-border-radius=4
+#progress=1
+#progress-height=10
+#progress-border-size=1
+#progress-border-radius=4
 # Optional: progress-color and progress-background-color
 # progress-color=#DCF2C3
 
