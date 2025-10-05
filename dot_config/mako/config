@@ -48,7 +48,7 @@ markup=1
 # progress-color=#DCF2C3
 
 # behavior
-default-timeout=3000            # dunst 'urgency_normal' is 3s; default here = 3s
+# default-timeout=3000            # dunst 'urgency_normal' is 3s; default here = 3s
 ignore-timeout=0
 max-visible=10
 history=1
