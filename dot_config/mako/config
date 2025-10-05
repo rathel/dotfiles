@@ -23,8 +23,8 @@ border-radius=0
 background-color=#271B1Aee
 text-color=#FFF8FF
 border-color=#EDB361
-separator-size=2
-separator-color=#FFF8FF
+# separator-size=2
+# separator-color=#FFF8FF
 
 # icons
 icons=1
