@@ -604,7 +604,7 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "foot"; }
+	Mod+T { spawn "foot" "-e" "fish"; }
 	Mod+P { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+M { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
 	Mod+Grave { spawn "foot" "--title=scratch" "-e" "sh"; }
