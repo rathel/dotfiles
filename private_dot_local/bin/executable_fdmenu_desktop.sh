@@ -4,7 +4,9 @@ set -euo pipefail
 
 # Allow missing variables while sourcing user env, then re-enable -u
 set +u
-[[ -f "$HOME/.myenv" ]] && source "$HOME/.myenv"
+if [ -f "$HOME/.myenv" ]; then 
+	source "$HOME/.myenv"
+fi
 set -u
 
 # --- Args ---------------------------------------------------------------------
