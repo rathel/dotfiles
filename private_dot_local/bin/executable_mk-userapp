@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-rand=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 6 ; echo '')
+exec_cmd="$1"
+app_name="$2"
+local_app_dir="$HOME/.local/share/applications"
+rand_suffix="$(mktemp -u XXXXXX)"
 
-cat > $HOME/.local/share/applications/userapp-"${2}"-${rand}.desktop <<EOF
-[Desktop Entry]
-Type=Application
-Exec=${1}
-Name=${2}
-EOF
+desktop_file="${local_app_dir}/userapp-${app_name}-${rand_suffix}.desktop"
+
+printf '[Desktop Entry]\nType=Application\nExec=%s\nName=%s\n' "$exec_cmd" "$app_name" > "$desktop_file"
