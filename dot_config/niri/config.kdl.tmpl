@@ -264,7 +264,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "/home/rathel/.local/bin/start-waybar-safe"
 {{- if eq .chezmoi.hostname "archlinux-beelink" }}
-spawn-at-startup "steam" "-tenfoot"
+spawn-at-startup "steam" "-tenghostty"
 spawn-at-startup "/home/rathel/.local/bin/connectspeaker.sh"
 spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
 {{- end }}
@@ -274,7 +274,7 @@ spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-moni
 {{- end }}
 spawn-at-startup "waybar"
 // spawn-at-startup "dunst"
-// spawn-at-startup "foot" "--title=main-term"
+// spawn-at-startup "ghostty" "--title=main-term"
 
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "xwayland-satellite"
@@ -361,7 +361,7 @@ window-rule {
 // window-rule {
 // 	match app-id="zen"
 // 	open-maximized true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -396,7 +396,7 @@ window-rule {
 //
 
 // window-rule {
-//     match app-id="foot" title="scratch"
+//     match app-id="ghostty" title="scratch"
 //     open-floating true
 //     open-focused true
 // }
@@ -421,7 +421,7 @@ window-rule {
 // window-rule {
 // 	match title="Shadow PC"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -429,7 +429,7 @@ window-rule {
 // window-rule {
 // 	match app-id="chrome-play.geforcenow.com__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -437,7 +437,7 @@ window-rule {
 // window-rule {
 // 	match app-id="msedge-play.geforcenow.com__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -445,7 +445,7 @@ window-rule {
 // window-rule {
 // 	match app-id="vivaldi-play.geforcenow.com__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -453,7 +453,7 @@ window-rule {
 // window-rule {
 // 	match app-id="chrome-pc.shadow.tech__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -461,7 +461,7 @@ window-rule {
 // window-rule {
 // 	match app-id="msedge-pc.shadow.tech__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -469,7 +469,7 @@ window-rule {
 // window-rule {
 // 	match app-id="vivaldi-pc.shadow.tech__-Default"
 // 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-2"
 // 	{{- end }}
 // }
@@ -485,7 +485,7 @@ window-rule {
  	default-column-width { proportion 0.2; }
  	default-window-height { proportion 0.2; }
  	open-floating true
-	{{- if eq .chezmoi.hostname "debian-z170" }}
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
  	open-on-output "DP-2"
 	{{- end }}
  	open-focused true
@@ -502,7 +502,7 @@ window-rule {
  	default-window-height { proportion 0.2; }
  	variable-refresh-rate true
  	open-floating true
-	{{- if eq .chezmoi.hostname "debian-z170" }}
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
  	open-on-output "DP-1"
 	{{- end }}
  	open-focused false
@@ -517,7 +517,7 @@ window-rule {
 	default-window-height { proportion 0.2; }
 	variable-refresh-rate true
 	open-floating true
-	{{- if eq .chezmoi.hostname "debian-z170" }}
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 	open-on-output "DP-1"
 	{{- end }}
 	open-focused false
@@ -532,7 +532,7 @@ window-rule {
 	default-floating-position x=1 y=440 relative-to="bottom-right"
  	default-column-width { proportion 0.2; }
  	default-window-height { proportion 0.2; }
-	{{- if eq .chezmoi.hostname "debian-z170" }}
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 	open-on-output "DP-1"
 	{{- end }}
 	open-floating true
@@ -544,7 +544,7 @@ window-rule {
 // 	match app-id="thunderbird"
 // 	// open-on-workspace "one"
 // 	open-maximized true
-// 	{{- if eq .chezmoi.hostname "debian-z170" }}
+// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 // 	open-on-output "DP-1"
 // 	{{- end }}
 // }
@@ -554,7 +554,7 @@ window-rule {
 	// open-on-workspace "one"
 	open-maximized false
 	open-floating true
-	// {{- if eq .chezmoi.hostname "debian-z170" }}
+	// {{- if eq .chezmoi.hostname "cachyos-x8664" }}
 	// open-on-output "DP-1"
 	// {{- end }}
 }
@@ -563,7 +563,7 @@ window-rule {
 	match app-id="obsidian"
 	// open-on-workspace "one"
 	// open-maximized true
-	{{- if eq .chezmoi.hostname "debian-z170" }}
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
 	open-on-output "DP-1"
 	{{- end }}
 }
@@ -605,28 +605,29 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "foot" "-e" "fish"; }
-	Mod+P { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
-	Mod+M { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
-	Mod+Grave { spawn "foot" "--title=scratch" "-e" "sh"; }
-	// Alt+Tab { spawn "foot" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
-	Alt+Tab { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Mod+T { spawn "ghostty" "-e" "fish"; }
+	Mod+P { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
+	Mod+M { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
+	Mod+Grave { spawn "ghostty" "--title=scratch" "-e" "sh"; }
+	// Alt+Tab { spawn "ghostty" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	// Mod+D { spawn "fuzzel"; }
-	Mod+D { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/fdmenu_desktop.sh"; }
+	Mod+D { spawn-sh "yofi"; }
 	// Mod+D { spawn "/home/rathel/.local/bin/fdmenu_desktop.sh"; }
-	// Mod+D { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/menu_picker.sh"; }
+	// Mod+D { spawn "yofi"; }
+	// Mod+D { spawn "ghostty" "--title=scratch" "-e" "/home/rathel/.local/bin/menu_picker.sh"; }
 	Super+Shift+T { spawn "/home/rathel/.local/bin/niri-thunderbird-focus.sh"; }
 	Mod+B { spawn "/home/rathel/.local/bin/niri-browser-focus.sh"; }
 	// Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	// Mod+G { spawn "/home/rathel/.local/bin/launch-geforcenow.sh"; }
-	// Mod+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-geforcenow.sh"; }
-	Mod+G { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
-	// Mod+Shift+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
+	// Mod+G { spawn "ghostty" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-geforcenow.sh"; }
+	Mod+G { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
+	// Mod+Shift+G { spawn "ghostty" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
-	// Mod+T { spawn "bash" "-c" "notify-send hello && exec foot"; }
+	// Mod+T { spawn "bash" "-c" "notify-send hello && exec ghostty"; }
 
 	// Example volume keys mappings for PipeWire & WirePlumber.
 	// The allow-when-locked=true property makes them work even when the session is locked.

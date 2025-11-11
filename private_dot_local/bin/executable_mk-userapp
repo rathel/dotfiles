@@ -9,3 +9,4 @@ rand_suffix="$(mktemp -u XXXXXX)"
 desktop_file="${local_app_dir}/userapp-${app_name}-${rand_suffix}.desktop"
 
 printf '[Desktop Entry]\nType=Application\nExec=%s\nName=%s\n' "$exec_cmd" "$app_name" > "$desktop_file"
+chezmoi add $desktop_file
