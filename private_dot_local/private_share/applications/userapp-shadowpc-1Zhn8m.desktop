@@ -2,4 +2,4 @@
 Type=Application
 Exec=/home/rathel/Applications/ShadowPC.AppImage
 Name=shadowpc
-Icon=shadowpc.png
+Icon=/home/rathel/.local/share/icons/shadowpc.png
