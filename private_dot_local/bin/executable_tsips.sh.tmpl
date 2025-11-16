@@ -4,12 +4,12 @@ TSIPS="$(tailscale status | awk '{print $1}')"
 HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
 OFFLINE="$(tailscale status | grep -i offline | awk '{print $1}')"
 #TERMINAL="kitty @ launch --type=tab"
-TERMINAL="foot"
+TERMINAL="ghostty"
 n=0
 
 for i in $TSIPS; do
 	case $i in
-		$HOSTIP|$OFFLINE)	
+		$HOSTIP|$OFFLINE)
 			echo "Skipping Tailscale IP: $i."
 			continue
 			;;
