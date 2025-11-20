@@ -1,6 +1,6 @@
 #!/bin/bash
 
-browser="zen-twilight"
+browser="edge"
 win_id=$(niri msg -j windows | jq -r --arg app "$browser" '.[] | select(.app_id == $app) | .id')
 
 if [ -n "$win_id" ]; then
