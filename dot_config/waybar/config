@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-center": ["custom/clock"],
+  "modules-center": ["custom/clock", "network"],
   "modules-right": ["tray"],
 
   "custom/clock": {
@@ -13,5 +13,13 @@
   	"icon-size": 18,
 	"spacing": 10
   }
-}
 
+{
+  "network": {
+    "interface": "auto", // or "wlan0" / "eth0"
+    "format": "{ifname}: {bandwidthDownBytes} ↓↑ {bandwidthUpBytes}",
+    "format-disconnected": "Disconnected",
+    "max-length": 50
+  }
+}
+}
