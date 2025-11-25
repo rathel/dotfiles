@@ -2,8 +2,9 @@
   "layer": "top",
   "position": "top",
   "spacing": 10,
-  "modules-center": ["custom/clock", "network"],
+  "modules-center": ["custom/clock"],
   "modules-right": ["tray"],
+  "modules-left": ["network"],
 
   "custom/clock": {
     "exec": "date '+%m/%d %H:%M'",
