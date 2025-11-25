@@ -1,6 +1,7 @@
 {
   "layer": "top",
   "position": "top",
+  "spacing": 10,
   "modules-center": ["custom/clock", "network"],
   "modules-right": ["tray"],
 
