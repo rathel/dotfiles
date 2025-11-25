@@ -15,7 +15,7 @@
   },
 
   "network": {
-    "interface": "en0s31f6", // or "wlan0" / "enp0s31f6"
+    "interface": "enp0s31f6", // or "wlan0" / "enp0s31f6"
     "format": "{ifname}: {bandwidthDownBytes} ↓↑ {bandwidthUpBytes}",
     "format-disconnected": "Disconnected",
     "max-length": 50
