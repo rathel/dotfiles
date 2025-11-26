@@ -21,6 +21,6 @@
     "format": "{ifname}: ↓ {bandwidthDownBytes} ↑ {bandwidthUpBytes}",
     "format-disconnected": "Disconnected",
     "max-length": 50,
-    "internal": 5
+    "interval": 5
   }
 }
