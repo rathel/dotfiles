@@ -17,7 +17,12 @@
   },
 
   "network": {
+  {{- if eq .chezmoi.hostname "cachy-x8664" }}
+    "interface": "enp0s31f6", // or "wlan0" / "enp0s31f6"
+  {{ - else }}
     "interface": "auto", // or "wlan0" / "enp0s31f6"
+  {{- end }}
+
     "format": "{ifname}: ↓ {bandwidthDownBytes} ↑ {bandwidthUpBytes}",
     "format-disconnected": "Disconnected",
     "max-length": 50,
