@@ -1,6 +1,6 @@
 #!/bin/bash
 
-browser="vivaldi"
+browser="vivaldi-stable"
 win_id=$(niri msg -j windows | jq -r --arg app "$browser" '.[] | select(.app_id == $app) | .id')
 
 if [ -n "$win_id" ]; then
@@ -20,7 +20,7 @@ else
         "edge")
         microsoft-edge-stable
         ;;
-        "vivaldi")
+        "vivaldi-stable")
         vivaldi
         ;;
 
