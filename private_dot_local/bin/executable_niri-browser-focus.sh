@@ -1,6 +1,6 @@
 #!/bin/bash
 
-browser="zen"
+browser="vivaldi"
 win_id=$(niri msg -j windows | jq -r --arg app "$browser" '.[] | select(.app_id == $app) | .id')
 
 if [ -n "$win_id" ]; then
@@ -20,6 +20,10 @@ else
         "edge")
         microsoft-edge-stable
         ;;
+        "vivaldi")
+        vivaldi
+        ;;
+
         *)
             echo "Unknown browser: $browser"
             exit 1
