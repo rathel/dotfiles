@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=antigravity
+Exec=/home/rathel/Applications/Antigravity/antigravity
+Terminal=false
+StartupNotify=true
