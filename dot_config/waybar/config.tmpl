@@ -17,11 +17,11 @@
   },
 
   "network": {
-  {{- if eq .chezmoi.hostname "cachy-x8664" }}
+  {{if eq .chezmoi.hostname "cachyos-x8664" }}
     "interface": "enp0s31f6", // or "wlan0" / "enp0s31f6"
-  {{ - else }}
+  {{else }}
     "interface": "auto", // or "wlan0" / "enp0s31f6"
-  {{- end }}
+  {{end }}
 
     "format": "{ifname}: ↓ {bandwidthDownBytes} ↑ {bandwidthUpBytes}",
     "format-disconnected": "Disconnected",
