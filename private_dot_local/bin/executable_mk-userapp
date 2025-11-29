@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Script to create a .desktop file and add it to chezmoi
+# Usage: ./create-desktop-entry.sh <exec_command> <app_name> [icon_path] [categories]
+
+show_usage() {
+    cat << EOF
+Usage: $(basename "$0") <exec_command> <app_name> [icon_path] [categories]
+
+Arguments:
+    exec_command    Command to execute the application
+    app_name        Display name for the application
+    icon_path       (Optional) Path to application icon
+    categories      (Optional) Semicolon-separated categories (e.g., "Development;Utility;")
+
+Examples:
+    $(basename "$0") "firefox" "Firefox Browser"
+    $(basename "$0") "/usr/bin/code" "VS Code" "/usr/share/pixmaps/code.png" "Development;TextEditor;"
+EOF
+    exit 1
+}
+
+# Validate arguments
+if [[ $# -lt 2 ]]; then
+    echo "Error: Missing required arguments" >&2
+    show_usage
+fi
+
+exec_cmd="$1"
+app_name="$2"
+icon_path="${3:-}"
+categories="${4:-}"
+
+# Validate exec command exists
+if ! command -v "${exec_cmd%% *}" &> /dev/null && [[ ! -x "${exec_cmd%% *}" ]]; then
+    echo "Warning: Command '${exec_cmd%% *}' not found or not executable" >&2
+    read -p "Continue anyway? (y/N): " -n 1 -r
+    echo
+    [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+fi
+
+# Create local applications directory if it doesn't exist
+local_app_dir="$HOME/.local/share/applications"
+mkdir -p "$local_app_dir"
+
+# Generate unique suffix
+rand_suffix="$(mktemp -u XXXXXX)"
+desktop_file="${local_app_dir}/userapp-${app_name// /-}-${rand_suffix}.desktop"
+
+# Build desktop entry content
+cat > "$desktop_file" << EOF
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=${app_name}
+Exec=${exec_cmd}
+Terminal=false
+StartupNotify=true
+EOF
+
+# Add optional fields
+[[ -n "$icon_path" ]] && echo "Icon=${icon_path}" >> "$desktop_file"
+[[ -n "$categories" ]] && echo "Categories=${categories}" >> "$desktop_file"
+
+# Validate desktop file
+if command -v desktop-file-validate &> /dev/null; then
+    if ! desktop-file-validate "$desktop_file" 2>&1; then
+        echo "Warning: Desktop file validation found issues (non-fatal)" >&2
+    fi
+fi
+
+# Make executable (good practice for some desktop environments)
+chmod +x "$desktop_file"
+
+echo "Created desktop file: $desktop_file"
+
+# Add to chezmoi if available
+if command -v chezmoi &> /dev/null; then
+    chezmoi add "$desktop_file"
+    echo "Added to chezmoi: $desktop_file"
+else
+    echo "Warning: chezmoi not found. Desktop file created but not added to chezmoi." >&2
+fi
+
+# Update desktop database if available
+if command -v update-desktop-database &> /dev/null; then
+    update-desktop-database "$local_app_dir" 2>/dev/null || true
+    echo "Updated desktop database"
+fi
+
+echo "Done! Application '$app_name' should now appear in your application menu."
