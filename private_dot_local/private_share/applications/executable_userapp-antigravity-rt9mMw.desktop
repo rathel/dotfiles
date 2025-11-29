@@ -5,3 +5,4 @@ Name=antigravity
 Exec=/home/rathel/Applications/Antigravity/antigravity
 Terminal=false
 StartupNotify=true
+/home/rathel/Applications/Antigravity/resources/app/resources/linux/code.png
