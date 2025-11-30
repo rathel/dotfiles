@@ -3,6 +3,6 @@ Type=Application
 Version=1.0
 Name=antigravity
 Exec=/home/rathel/Applications/Antigravity/antigravity
+Icon=/home/rathel/Applications/Antigravity/resources/app/resources/linux/code.png
 Terminal=false
 StartupNotify=true
-/home/rathel/Applications/Antigravity/resources/app/resources/linux/code.png
