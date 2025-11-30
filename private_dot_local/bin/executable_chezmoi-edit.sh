@@ -36,9 +36,29 @@ if [ ! -e "$target" ]; then
 fi
 
 notify-send "Editing $target."
-# Launch editor detached; chezmoi edit works whether newly-added or already-managed
 
-setsid -f chezmoi edit "$target" >/dev/null 2>&1 &
+# Resolve chezmoi's *source* path so you edit the managed file, not the live one.
+if src_path=$(chezmoi source-path "$target" 2>/dev/null); then
+  edit_path="$src_path"
+else
+  # Fallback: edit the target directly if for some reason it's not managed
+  edit_path="$target"
+fi
+
+# Choose a "normal" terminal to spawn
+term="${TERMINAL:-alacritty}"
+
+if ! command -v "$term" >/dev/null 2>&1; then
+  for t in ghostty foot alacritty urxvt xterm; do
+    if command -v "$t" >/dev/null 2>&1; then
+      term="$t"
+      break
+    fi
+  done
+fi
+
+# Spawn Neovim in a new terminal window, detached from the scratch terminal
+setsid -f "$term" -e nvim "$edit_path" >/dev/null 2>&1 &
 
 sleep 0.5
 
