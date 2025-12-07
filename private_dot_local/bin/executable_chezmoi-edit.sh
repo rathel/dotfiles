@@ -1,120 +1,241 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-set +u
-source "$HOME/.myenv"
-set -u
+# ============================================================================
+# Chezmoi Interactive Editor
+# 
+# Fuzzy-find and edit chezmoi-managed files, with automatic git commit/push.
+# ============================================================================
 
-# Let sk print the query (what you typed) and the actual selection (what you chose).
-# If you choose nothing but type a path, we'll use the query as the target.
-mapfile -t lines < <(chezmoi managed -p absolute -x dirs | sk --ansi --with-nth=-2,-1 --delimiter='/' --print-query --prompt="Edit: ")
-query="${lines[0]:-}"
-pick="${lines[1]:-}"
+# --- Configuration ---
+PREFERRED_TERMINAL="alacritty"
+FALLBACK_TERMINALS=(foot ghostty kitty urxvt xterm)
+EDITOR="${EDITOR:-nvim}"
 
-# Prefer a selected item; otherwise fall back to the typed query.
-target="${pick:-$query}"
+# --- Helper Functions ---
 
-# If still empty (Esc with no query), bail.
-[ -z "${target}" ] && exit 1
+die() {
+    notify-send "Chezmoi Edit Error" "$1"
+    echo "ERROR: $1" >&2
+    exit 1
+}
 
-# Expand leading ~ if user typed it
-case "$target" in
-  "~/"*) target="${HOME}/${target#~/}" ;;
-esac
+log() {
+    echo "[chezmoi-edit] $*" >&2
+}
 
-# If it's relative (no leading /), make it relative to $HOME
-case "$target" in
-  /*) ;;                        # absolute already
-  *)  target="${HOME%/}/$target" ;;
-esac
+# Load environment if available
+load_env() {
+    set +u
+    # shellcheck disable=SC1091
+    [[ -f "$HOME/.myenv" ]] && source "$HOME/.myenv"
+    set -u
+}
 
-# Create and add only if it doesn't exist yet
-if [ ! -e "$target" ]; then
-  mkdir -p "$(dirname "$target")"
-  : > "$target"                   # create empty file
-  chezmoi add "$target"
-fi
+# Select target file interactively
+select_target() {
+    local -a lines
+    mapfile -t lines < <(
+        chezmoi managed -p absolute -x dirs | 
+        sk --ansi \
+           --with-nth=-2,-1 \
+           --delimiter='/' \
+           --print-query \
+           --prompt="Edit: " \
+           --preview='bat --color=always --style=plain {}' \
+           --preview-window='right:60%:wrap' || true
+    )
+    
+    local query="${lines[0]:-}"
+    local pick="${lines[1]:-}"
+    
+    # Prefer selection, fall back to query
+    echo "${pick:-$query}"
+}
 
-notify-send "Editing $target."
-
-# Resolve chezmoi's *source* path so you edit the managed file, not the live one.
-if src_path=$(chezmoi source-path "$target" 2>/dev/null); then
-  edit_path="$src_path"
-else
-  # Fallback: edit the target directly if for some reason it's not managed
-  edit_path="$target"
-fi
-
-# chezmoi source repo root (usually ~/.local/share/chezmoi)
-repo_root="$(chezmoi source-path)"
-
-# Get path relative to repo root for nicer git add/commit
-if command -v realpath >/dev/null 2>&1; then
-  rel_path="$(realpath --relative-to="$repo_root" "$edit_path")"
-else
-  rel_path="${edit_path#"$repo_root"/}"
-fi
-
-# --- choose a terminal explicitly to avoid surprises ---
-# If you know you always want kitty, just hardcode it:
-term="alacritty"
-
-# If kitty isn't installed, fall back through a list
-if ! command -v "$term" >/dev/null 2>&1; then
-  for t in foot ghostty alacritty urxvt xterm; do
-    if command -v "$t" >/dev/null 2>&1; then
-      term="$t"
-      break
+# Normalize path (expand ~, make absolute)
+normalize_path() {
+    local path="$1"
+    
+    # Expand tilde
+    path="${path/#\~/$HOME}"
+    
+    # Make absolute if relative
+    if [[ ! "$path" = /* ]]; then
+        path="${HOME%/}/$path"
     fi
-  done
-fi
+    
+    echo "$path"
+}
 
-# If we *still* don't have a terminal, bail with an error
-if ! command -v "$term" >/dev/null 2>&1; then
-  notify-send "No suitable terminal found for chezmoi edit."
-  exit 1
-fi
+# Ensure file exists and is managed by chezmoi
+ensure_managed() {
+    local target="$1"
+    
+    if [[ ! -e "$target" ]]; then
+        log "Creating new file: $target"
+        mkdir -p "$(dirname "$target")"
+        touch "$target"
+        chezmoi add "$target" || die "Failed to add $target to chezmoi"
+    fi
+}
 
-# --- build a small helper script that runs inside the new terminal ---
-tmp_script="$(mktemp /tmp/chezmoi-edit-XXXXXX.sh)"
+# Get chezmoi source path for a target
+get_source_path() {
+    local target="$1"
+    local src_path
+    
+    if src_path=$(chezmoi source-path "$target" 2>/dev/null); then
+        echo "$src_path"
+    else
+        log "Warning: $target not managed by chezmoi, editing directly"
+        echo "$target"
+    fi
+}
 
-cat >"$tmp_script" <<EOF
+# Get relative path from repo root
+get_relative_path() {
+    local full_path="$1"
+    local repo_root="$2"
+    
+    if command -v realpath >/dev/null 2>&1; then
+        realpath --relative-to="$repo_root" "$full_path"
+    else
+        echo "${full_path#"$repo_root"/}"
+    fi
+}
+
+# Find available terminal emulator
+find_terminal() {
+    # Check preferred terminal first
+    if command -v "$PREFERRED_TERMINAL" >/dev/null 2>&1; then
+        echo "$PREFERRED_TERMINAL"
+        return 0
+    fi
+    
+    # Fall back to alternatives
+    for term in "${FALLBACK_TERMINALS[@]}"; do
+        if command -v "$term" >/dev/null 2>&1; then
+            log "Using fallback terminal: $term"
+            echo "$term"
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+# Create the edit-commit-push script
+create_edit_script() {
+    local repo_root="$1"
+    local rel_path="$2"
+    local script_path
+    
+    script_path="$(mktemp /tmp/chezmoi-edit-XXXXXX.sh)"
+    
+    cat >"$script_path" <<'SCRIPT_EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$repo_root"
+REPO_ROOT="$1"
+REL_PATH="$2"
+EDITOR="${EDITOR:-nvim}"
+
+cd "$REPO_ROOT"
+
+echo "Editing: $REL_PATH"
+echo "----------------------------------------"
 
 # Edit the file
-nvim "$rel_path"
+"$EDITOR" "$REL_PATH"
 
-# If no changes, don't commit
-if git diff --quiet -- "$rel_path"; then
-  echo "No changes to commit for $rel_path."
-  read -rp "Press Enter to close..." _
-  exit 0
+# Check for changes
+if git diff --quiet -- "$REL_PATH" && git diff --cached --quiet -- "$REL_PATH"; then
+    echo ""
+    echo "No changes detected."
+    read -rp "Press Enter to close..." _
+    exit 0
 fi
 
-git add "$rel_path"
+# Stage changes
+git add "$REL_PATH"
 
-# You can tweak this commit message format
-git commit -m "Update $rel_path" || {
-  echo "git commit failed."
-  read -rp "Press Enter to close..." _
-  exit 1
+# Show diff
+echo ""
+echo "Changes to be committed:"
+echo "----------------------------------------"
+git diff --cached --stat -- "$REL_PATH"
+echo ""
+
+# Commit with descriptive message
+commit_msg="Update $REL_PATH"
+if git commit -m "$commit_msg"; then
+    echo ""
+    echo "✓ Committed successfully"
+else
+    echo ""
+    echo "✗ Commit failed"
+    read -rp "Press Enter to close..." _
+    exit 1
+fi
+
+# Push changes
+echo ""
+echo "Pushing to remote..."
+if git push; then
+    echo ""
+    echo "✓ Successfully pushed changes"
+    sleep 1
+else
+    echo ""
+    echo "✗ Push failed - check your connection and permissions"
+    read -rp "Press Enter to close..." _
+    exit 1
+fi
+SCRIPT_EOF
+    
+    chmod +x "$script_path"
+    echo "$script_path"
 }
 
-# Push; if it fails, keep the window open so you can see why
-if ! git push; then
-  echo "git push failed."
-  read -rp "Press Enter to close..." _
-  exit 1
-fi
+# --- Main ---
 
-echo "Done: committed and pushed $rel_path."
-read -rp "Press Enter to close..." _
-EOF
+main() {
+    load_env
+    
+    # Select target file
+    local target
+    target=$(select_target)
+    [[ -z "$target" ]] && exit 0  # User cancelled
+    
+    # Normalize and ensure file exists
+    target=$(normalize_path "$target")
+    ensure_managed "$target"
+    
+    notify-send "Chezmoi Edit" "Opening $target"
+    
+    # Get paths
+    local repo_root edit_path rel_path
+    repo_root="$(chezmoi source-path)"
+    edit_path=$(get_source_path "$target")
+    rel_path=$(get_relative_path "$edit_path" "$repo_root")
+    
+    # Find terminal
+    local terminal
+    terminal=$(find_terminal) || die "No suitable terminal emulator found"
+    
+    # Create edit script
+    local script_path
+    script_path=$(create_edit_script "$repo_root" "$rel_path")
+    
+    # Clean up script on exit
+    trap "rm -f '$script_path'" EXIT
+    
+    # Launch terminal
+    log "Launching $terminal"
+    sleep 1
+    setsid -f "$terminal" -e bash "$script_path" "$repo_root" "$rel_path" \
+        >/dev/null 2>&1 &
+}
 
-chmod +x "$tmp_script"
-
-# Spawn the terminal running the helper script, detached from the scratch terminal
-setsid -f "$term" -e "$tmp_script" >/dev/null 2>&1 &
+main "$@"
