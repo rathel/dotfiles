@@ -7,6 +7,12 @@ if [ -n "$win_id" ]; then
     # Focus that specific window
     niri msg action focus-window --id "$win_id"
 else
+<<<<<<< Updated upstream
     # Launch Thunderbird
     $HOME/Applications/thunderbird-beta/thunderbird &
 fi
+=======
+    # Launch Firefox
+    ~/Applications/thunderbird/thunderbird &
+fi
+>>>>>>> Stashed changes
