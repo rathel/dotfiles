@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
-Exec=systemd-inhibit --what=idle /home/rathel/Applications/ShadowPC.AppImage
+Exec=systemd-inhibit --what=idle /home/rathel/Applications/Utilities//ShadowPC.AppImage
 Name=shadowpc
 Icon=/home/rathel/.local/share/icons/shadowpc.png
