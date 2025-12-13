@@ -9,7 +9,7 @@ if [ -n "$win_id" ]; then
 else
 <<<<<<< Updated upstream
     # Launch Thunderbird
-    $HOME/Applications/thunderbird-beta/thunderbird &
+    $HOME/Applications/Utilities/thunderbird-beta/thunderbird &
 fi
 =======
     # Launch Firefox
