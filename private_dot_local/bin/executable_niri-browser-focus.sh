@@ -9,10 +9,10 @@ if [ -n "$win_id" ]; then
 else
     case "$browser" in
         "zen")
-        $HOME/Applications/zen-x86_64.AppImage
+        $HOME/Applications/Utilities/zen-x86_64.AppImage
         ;;
         "zen-twilight")
-        $HOME/Applications/zen-twilight/zen
+        $HOME/Applications/Utilities/zen-twilight/zen
         ;;
         "firefox")
         firefox
