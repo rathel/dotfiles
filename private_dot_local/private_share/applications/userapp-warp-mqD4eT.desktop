@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
-Exec=/home/rathel/Applications/Warp-x86_64.AppImage
+Exec=/home/rathel/Applications/Utilities/Warp-x86_64.AppImage
 Icon=/home/rathel/.local/share/icons/warp.png
 Name=warp
