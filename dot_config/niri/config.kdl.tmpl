@@ -608,6 +608,7 @@ binds {
 	Mod+T { spawn "alacritty" "-e" "fish"; }
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+M { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
+	Mod+Z { spawn "alacritty" "--title=todo" "-e" "nvim" "/home/rathel/Obsidian Vaults/Main/Todo.md"; }
 	Mod+Grave { spawn "alacritty" "--title=scratch" "-e" "sh"; }
 	// Alt+Tab { spawn "alacritty" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Alt+Tab { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
