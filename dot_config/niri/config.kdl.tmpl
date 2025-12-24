@@ -613,7 +613,7 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "alacritty" "-e" "fish"; }
+	Mod+T { spawn "alacritty"; }
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+M { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
 	Mod+Z { spawn "alacritty" "--title=todo" "-e" "nvim" "/home/rathel/Obsidian Vaults/Main/Todo.md"; }
