@@ -617,7 +617,7 @@ binds {
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+M { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
         Mod+Z {
-        if-focused { title="^todo" } {
+        if-focused { match title="^todo" } {
             close-focused-window;
         } else {
             spawn-or-focus "alacritty"
