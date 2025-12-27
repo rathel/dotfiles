@@ -269,7 +269,6 @@ spawn-at-startup "/home/rathel/.local/bin/connectspeaker.sh"
 spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
 {{- end }}
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
-// spawn-at-startup "/home/rathel/Applications/Obsidian.AppImage"
 spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
 {{- end }}
 spawn-at-startup "waybar"
@@ -356,14 +355,6 @@ window-rule {
 	exclude title="^▶"
 	exclude title="Netflix"
 	opacity 0.8
-}
-
-window-rule { 
-	match title="^todo"
-	open-floating true
-	default-floating-position x=5 y=5 relative-to="top-left"
-	default-window-height { proportion 0.35; }
-	default-column-width { proportion 0.40; }
 }
 
 // window-rule {
@@ -571,9 +562,11 @@ window-rule {
 	match app-id="obsidian"
 	// open-on-workspace "one"
 	// open-maximized true
-	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
-	open-on-output "DP-3"
-	{{- end }}
+	open-floating true
+	default-floating-position x=5 y=5 relative-to="top-left"
+	default-window-height { proportion 0.35; }
+	default-column-width { proportion 0.40; }
+
 }
 
 
@@ -616,7 +609,7 @@ binds {
 	Mod+T { spawn "alacritty"; }
 	Mod+P { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/chezmoi-edit.sh"; }
 	Mod+M { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
-        Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-todo-focus.sh"; }
+        Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-obsidian-focus.sh"; }
 	Mod+Grave { spawn "alacritty" "--title=scratch" "-e" "sh"; }
 	// Alt+Tab { spawn "alacritty" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Alt+Tab { spawn-sh "alacritty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
