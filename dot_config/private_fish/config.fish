@@ -3,6 +3,7 @@ if status is-interactive
     set -g fish_key_bindings fish_vi_key_bindings
     set -gx EDITOR nvim
    fish_add_path $HOME/.local/bin
+   fish_add_path $HOME/.cargo/bin
    fish_add_path $HOME/.npm-global/bin
     set fish_greeting
     # wallust_ssh
