@@ -561,6 +561,8 @@ window-rule {
 window-rule {
 	match app-id="thunderbird-beta" title="Reminders"
 	// open-on-workspace "one"
+	default-window-height { proportion 0.30; }
+	default-column-width { proportion 0.30; }
 	open-maximized false
 	open-floating true
 	// {{- if eq .chezmoi.hostname "cachyos-x8664" }}
