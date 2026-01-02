@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Default settings (can be overridden via environment variables)
+RAM="${RAM:-4G}"          # 4GB RAM
+CPUS="${CPUS:-2}"         # 2 vCPUs
+DISK_SIZE="${DISK_SIZE:-40G}"  # 40GB disk size
+QEMU_BIN="${QEMU_BIN:-qemu-system-x86_64}"
+
+usage() {
+    cat <<EOF
+Usage:
+  $0
+    Start an existing VM in the current directory (uses a .qcow2 disk here).
+
+  $0 /path/to/installer.iso vmname
+    Create a new ${DISK_SIZE} qcow2 disk named 'vmname.qcow2' in current dir
+    and boot from the ISO to install.
+
+Environment overrides:
+  RAM=8G CPUS=4 DISK_SIZE=80G $0 /path/to.iso vmname
+EOF
+    exit 1
+}
+
+# Detect acceleration
+accel_args=()
+if [[ -e /dev/kvm && -r /dev/kvm ]]; then
+    accel_args=(-enable-kvm -cpu host)
+else
+    accel_args=(-accel tcg)
+fi
+
+case "$#" in
+    0)
+        # Start existing VM from current directory
+        shopt -s nullglob
+        disks=( *.qcow2 )
+        shopt -u nullglob
+
+        if (( ${#disks[@]} == 0 )); then
+            echo "Error: No .qcow2 disk found in $(pwd)." >&2
+            echo "Hint: use '$0 /path/to.iso name' to create a new VM here." >&2
+            exit 1
+        elif (( ${#disks[@]} > 1 )); then
+            if [[ -n "${DISK:-}" ]]; then
+                disk="$DISK"
+            else
+                echo "Error: Multiple .qcow2 disks found in $(pwd):" >&2
+                printf '  %s\n' "${disks[@]}" >&2
+                echo "Set DISK=<file.qcow2> to choose one, e.g.:" >&2
+                echo "  DISK=${disks[0]} $0" >&2
+                exit 1
+            fi
+        else
+            disk="${disks[0]}"
+        fi
+
+        vmname="${VM_NAME:-$(basename "$disk" .qcow2)}"
+
+        echo "Starting VM '$vmname' with disk '$disk'..."
+        exec "$QEMU_BIN" \
+            "${accel_args[@]}" \
+            -name "$vmname" \
+            -m "$RAM" \
+            -smp "$CPUS" \
+            -drive file="$disk",if=virtio,format=qcow2 \
+            -nic user,model=virtio-net-pci
+        ;;
+
+    2)
+        iso=$1
+        vmname=$2
+        disk="${vmname}.qcow2"
+
+        if [[ ! -f "$iso" ]]; then
+            echo "Error: ISO '$iso' not found." >&2
+            exit 1
+        fi
+
+        if [[ ! -f "$disk" ]]; then
+            echo "Creating disk '$disk' (${DISK_SIZE})..."
+            qemu-img create -f qcow2 "$disk" "$DISK_SIZE"
+        else
+            echo "Using existing disk '$disk'."
+        fi
+
+        echo "Starting VM '$vmname' with:"
+        echo "  ISO:  $iso"
+        echo "  Disk: $disk (${DISK_SIZE})"
+        echo "  RAM:  $RAM"
+        echo "  CPUs: $CPUS"
+
+        exec "$QEMU_BIN" \
+            "${accel_args[@]}" \
+            -name "$vmname" \
+            -m "$RAM" \
+            -smp "$CPUS" \
+            -drive file="$disk",if=virtio,format=qcow2 \
+            -cdrom "$iso" \
+            -boot order=d,once=d \
+            -nic user,model=virtio-net-pci
+        ;;
+
+    *)
+        usage
+        ;;
+esac
+
