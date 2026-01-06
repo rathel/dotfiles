@@ -2,10 +2,11 @@
 set -euo pipefail
 
 # Default settings (can be overridden via environment variables)
-RAM="${RAM:-4G}"          # 4GB RAM
-CPUS="${CPUS:-2}"         # 2 vCPUs
+RAM="${RAM:-4G}"               # 4GB RAM
+CPUS="${CPUS:-2}"              # 2 vCPUs
 DISK_SIZE="${DISK_SIZE:-40G}"  # 40GB disk size
 QEMU_BIN="${QEMU_BIN:-qemu-system-x86_64}"
+SSH_PORT="${SSH_PORT:-2222}"   # Host port to forward to guest's port 22
 
 usage() {
     cat <<EOF
@@ -17,8 +18,14 @@ Usage:
     Create a new ${DISK_SIZE} qcow2 disk named 'vmname.qcow2' in current dir
     and boot from the ISO to install.
 
-Environment overrides:
-  RAM=8G CPUS=4 DISK_SIZE=80G $0 /path/to.iso vmname
+Defaults:
+  RAM:       $RAM
+  CPUs:      $CPUS
+  Disk size: $DISK_SIZE
+  SSH port:  $SSH_PORT (host) -> 22 (guest)
+
+Environment overrides, e.g.:
+  RAM=8G CPUS=4 DISK_SIZE=80G SSH_PORT=2223 $0 /path/to.iso vmname
 EOF
     exit 1
 }
@@ -30,6 +37,9 @@ if [[ -e /dev/kvm && -r /dev/kvm ]]; then
 else
     accel_args=(-accel tcg)
 fi
+
+# NIC with SSH port forwarding
+nic_arg="user,model=virtio-net-pci,hostfwd=tcp::${SSH_PORT}-:22"
 
 case "$#" in
     0)
@@ -59,13 +69,14 @@ case "$#" in
         vmname="${VM_NAME:-$(basename "$disk" .qcow2)}"
 
         echo "Starting VM '$vmname' with disk '$disk'..."
+        echo "SSH from host: ssh -p ${SSH_PORT} <user>@localhost"
         exec "$QEMU_BIN" \
             "${accel_args[@]}" \
             -name "$vmname" \
             -m "$RAM" \
             -smp "$CPUS" \
             -drive file="$disk",if=virtio,format=qcow2 \
-            -nic user,model=virtio-net-pci
+            -nic "$nic_arg"
         ;;
 
     2)
@@ -90,6 +101,9 @@ case "$#" in
         echo "  Disk: $disk (${DISK_SIZE})"
         echo "  RAM:  $RAM"
         echo "  CPUs: $CPUS"
+        echo "  SSH:  host port ${SSH_PORT} -> guest port 22"
+        echo "Once SSH is installed & running inside the guest, you can:"
+        echo "  ssh -p ${SSH_PORT} <user>@localhost"
 
         exec "$QEMU_BIN" \
             "${accel_args[@]}" \
@@ -99,7 +113,7 @@ case "$#" in
             -drive file="$disk",if=virtio,format=qcow2 \
             -cdrom "$iso" \
             -boot order=d,once=d \
-            -nic user,model=virtio-net-pci
+            -nic "$nic_arg"
         ;;
 
     *)
