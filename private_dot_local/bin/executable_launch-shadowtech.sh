@@ -24,7 +24,7 @@ if [ -n "$browser" ]; then
 	elif [ "$browser" == Chrome ]; then
 		notify-send "Launching ShadowTech with Google Chrome..."
 		# setsid -f sh -c "google-chrome-stable --ozone-platform=wayland --app=https://pc.shadow.tech" &
-		setsid -w sh -c "chromium" >/dev/null 2>&1 &
+		setsid -w sh -c "chromium --app=https://pc.shadow.tech" >/dev/null 2>&1 &
 		sleep 0.5
 		exit 0
 	elif [ "$browser" == Vivaldi ]; then
