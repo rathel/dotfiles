@@ -3,7 +3,7 @@
   "position": "top",
   "spacing": 10,
   "modules-center": ["custom/clock"],
-  "modules-right": ["tray"],
+  "modules-right": ["battery", "tray"],
   "modules-left": ["network"],
 
   "custom/clock": {
@@ -19,7 +19,7 @@
   "battery": {
       "bat": "BAT0",
       "interval": 60,
-    }
+    },
 
   "network": {
   {{ if eq .chezmoi.hostname "cachyos-x8664" }}
