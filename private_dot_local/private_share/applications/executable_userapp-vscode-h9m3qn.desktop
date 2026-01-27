@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=vscode
+Exec=/home/rathel/Applications/Productivity/VSCode-linux-x64/code
+Terminal=false
+StartupNotify=true
