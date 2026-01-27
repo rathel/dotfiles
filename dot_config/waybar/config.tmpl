@@ -19,7 +19,7 @@
   "network": {
   {{ if eq .chezmoi.hostname "cachyos-x8664" }}
     "interface": "enp0s31f6", // or "wlan0" / "enp0s31f6"
-  {{ else if eq .chezmoi.hostname "G750JX" }}
+  {{ else if eq .chezmoi.hostname "opensuse-g750jh" }}
     "interface": "wlp0s20u1", // or "wlan0" / "enp0s31f6"
   {{ else }}
     "interface": "auto", // or "wlan0" / "enp0s31f6"
