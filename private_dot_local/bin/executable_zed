@@ -1,8 +1,0 @@
-#!/bin/bash
-
-flatpak run dev.zed.Zed "$@"
-
-if [ "$?" -ne 0 ]; then
-    echo "Failed to run Zed"
-    exit 1
-fi
