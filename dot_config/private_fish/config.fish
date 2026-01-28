@@ -13,3 +13,5 @@ if status is-interactive
     zoxide init fish | source
     starship init fish | source
 end
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
