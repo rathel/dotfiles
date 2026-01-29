@@ -422,13 +422,13 @@ window-rule {
 	default-column-width { proportion 0.2; }
 }
 
-// window-rule {
-// 	match title="Shadow PC"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
+window-rule {
+	match title="Shadow PC"
+	open-fullscreen true
+	{{- if eq .chezmoi.hostname "cachyos-x8664" }}
+	open-on-output "DP-2"
+	{{- end }}
+}
 
 // window-rule {
 // 	match app-id="chrome-play.geforcenow.com__-Default"
