@@ -12,6 +12,7 @@ if status is-interactive
     direnv hook fish | source
     zoxide init fish | source
     starship init fish | source
+	if test -f /home/linuxbrew/.linuxbrew/bin/brew
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
+	end
 end
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
