@@ -50,4 +50,7 @@ for target in "${selected[@]}"; do
 done
 
 # Open editor with all selected source files
-exec "${editor[@]}" "${sources[@]}"
+"${editor[@]}" "${sources[@]}"
+chezmoi git -- add .
+chezmoi git -- commit -m "${sources@]}"
+chezmoi git -- push
