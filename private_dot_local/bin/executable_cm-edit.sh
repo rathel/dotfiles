@@ -33,10 +33,8 @@ fi
 # Build the list (absolute target paths) and select (multi-select enabled with -m).
 # We convert each target path to its chezmoi source path for editing.
 mapfile -t selected < <(
-  chezmoi managed --include=files --path-style=absolute \
-  | sk -m --prompt='chezmoi> ' \
-       --preview='chezmoi source-path {} | xargs -I{} sh -c "test -f \"{}\" && (bat --style=plain --color=always \"{}\" || sed -n \"1,200p\" \"{}\") || echo \"(no source file)\""' \
-       --preview-window='right:60%'
+  chezmoi managed --include=files --path-style=absolute |
+    sk -m --prompt='chezmoi> '
 )
 
 # If user hit escape / no selection
@@ -51,6 +49,12 @@ done
 
 # Open editor with all selected source files
 "${editor[@]}" "${sources[@]}"
-chezmoi git -- add .
-chezmoi git -- commit -m "${sources@]}"
-chezmoi git -- push
+
+status="$(chezmoi git -- status --short)"
+
+if [ -n "${status}" ]; then
+  chezmoi git -- add .
+  chezmoi git -- commit -m "${sources[@]}"
+  chezmoi git -- push
+  chezmoi apply
+fi
