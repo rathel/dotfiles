@@ -622,13 +622,13 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "foot"; }
-	Mod+P { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
-	Mod+M { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
+	Mod+T { spawn "ghostty"; }
+	Mod+P { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
+	Mod+M { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
         Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-obsidian-focus.sh"; }
-	Mod+Grave { spawn "foot" "--title=scratch" "-e" "sh"; }
+	Mod+Grave { spawn "ghostty" "--title=scratch" "-e" "sh"; }
 	// Alt+Tab { spawn "foot" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
-	Alt+Tab { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	// Mod+D { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/fdmenu_desktop.sh"; }
 	// Mod+D { spawn "yofi"; }
@@ -639,7 +639,7 @@ binds {
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	// Mod+G { spawn "/home/rathel/.local/bin/launch-geforcenow.sh"; }
 	// Mod+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-geforcenow.sh"; }
-	Mod+G { spawn-sh "foot --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
+	Mod+G { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
 	// Mod+Shift+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
