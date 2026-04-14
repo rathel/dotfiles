@@ -11,6 +11,6 @@ if [ -n "$win_id" ]; then
 else
   # Launch Thunderbird
   if [ "$ec" == "thunderbird" ]; then
-    thunderbird &
+  $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
   fi
 fi
