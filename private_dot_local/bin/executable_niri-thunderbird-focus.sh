@@ -10,7 +10,7 @@ if [ -n "$win_id" ]; then
   niri msg action focus-window --id "$win_id"
 else
   # Launch Thunderbird
-  if [ "$ec" == "thunderbird" ]; then
+  if [ "$ec" == "thunderbird-nightly" ]; then
   $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
   fi
 fi
