@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Look for the window ID of a Firefox window
-ec="thunderbird"
+ec="thunderbird-nightly"
 
 win_id=$(niri msg -j windows | jq -r --arg app "$ec" '.[] | select(.app_id == $app) | .id')
 
