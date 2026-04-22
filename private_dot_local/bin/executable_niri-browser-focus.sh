@@ -1,6 +1,6 @@
 #!/bin/bash
 
-browser="zen-twilight"
+browser="zen"
 win_id=$(niri msg -j windows | jq -r --arg app "$browser" '.[] | select(.app_id == $app) | .id')
 
 if [ -n "$win_id" ]; then
@@ -9,7 +9,7 @@ if [ -n "$win_id" ]; then
 else
   case "$browser" in
   "zen")
-    zen-browser
+    $HOME/Applications/Utilities/zen/zen
     ;;
   "zen-twilight")
     $HOME/Applications/Utilities/zen-twilight/zen
