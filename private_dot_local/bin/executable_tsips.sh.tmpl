@@ -4,7 +4,7 @@ TSIPS="$(tailscale status | awk '{print $1}')"
 HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
 OFFLINE="$(tailscale status | grep -i offline | awk '{print $1}')"
 #TERMINAL="kitty @ launch --type=tab"
-TERMINAL="wezterm spawn"
+TERMINAL="wezterm cli spawn"
 n=0
 
 for i in $TSIPS; do
@@ -14,19 +14,19 @@ for i in $TSIPS; do
 			continue
 			;;
 		{{ .tailscale.ip.deck }})
-			$TERMINAL -e ssh deck@"$i" >/dev/null 2>&1 &
+			$TERMINAL ssh deck@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		{{ .tailscale.ip.phone }})
-			$TERMINAL -e ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
+			$TERMINAL ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		{{ .tailscale.ip.pixelxl }})
-			$TERMINAL -e ssh -p8022 u0_a213@"$i" >/dev/null 2>&1 &
+			$TERMINAL ssh -p8022 u0_a213@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 		{{ .tailscale.ip.pixel6a }})
-			$TERMINAL -e ssh -p8022 u0_a410@"$i" >/dev/null 2>&1 &
+			$TERMINAL ssh -p8022 u0_a410@"$i" >/dev/null 2>&1 &
 			continue
 			;;
 	esac
