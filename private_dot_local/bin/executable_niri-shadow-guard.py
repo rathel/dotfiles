@@ -63,7 +63,7 @@ def window_text(win):
 
 def is_shadow(win):
     # return bool(SHADOW_RE.search(window_text(win)))
-    return win.get("app_id") == shadow
+    return win.get("app_id") == "shadow"
 
 
 def workspace_output(workspace_id):
