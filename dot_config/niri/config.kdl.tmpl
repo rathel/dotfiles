@@ -52,6 +52,7 @@ input {
 		// accel-profile "flat"
 		// scroll-method "on-button-down"
 		// scroll-button 273
+		// scroll-button-lock
 		// middle-emulation
 	}
 
@@ -195,6 +196,11 @@ layout {
 		// Color of the border around windows that request your attention.
 		urgent-color "#9b0000"
 
+		// Gradients can use a few different interpolation color spaces.
+		// For example, this is a pastel rainbow gradient via in="oklch longer hue".
+		//
+		// active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
+
 		// active-gradient from="#ffbb66" to="#ffc880" angle=45 relative-to="workspace-view"
 		// inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
 	}
@@ -260,6 +266,9 @@ layout {
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
+
+// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "/home/rathel/.local/bin/start-waybar-safe"
@@ -467,6 +476,18 @@ window-rule {
 	// {{- end }}
 }
 
+// Example: block out two password managers from screen capture.
+// (This example rule is commented out with a "/-" in front.)
+// /-window-rule {
+// 	match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+// 	match app-id=r#"^org\.gnome\.World\.Secrets$"#
+// 
+// 	block-out-from "screen-capture"
+// 
+// 	// Use this instead if you want them visible on third-party screenshot tools.
+// 	// block-out-from "screencast"
+// }
+
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
@@ -513,6 +534,17 @@ binds {
 	XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 	XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
 
+	// Example media keys mapping using playerctl.
+	// This will work with any MPRIS-enabled media player.
+	// XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+	// XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+	// XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+	// XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+
+	// Example brightness key mappings for brightnessctl.
+	// XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+	// XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
 	// Open/close the Overview: a zoomed-out view of workspaces and windows.
 	// You can also move the mouse into the top-left hot corner,
 	// or do a four-finger swipe up on a touchpad.
@@ -538,6 +570,13 @@ binds {
 	Mod+Ctrl+K     { move-window-up; }
 	Mod+Ctrl+L     { move-column-right; }
 
+	// Alternative commands that move across workspaces when reaching
+	// the first or last window in a column.
+	// Mod+J     { focus-window-or-workspace-down; }
+	// Mod+K     { focus-window-or-workspace-up; }
+	// Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
+	// Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
+
 	Mod+Home { focus-column-first; }
 	Mod+End  { focus-column-last; }
 	Mod+Ctrl+Home { move-column-to-first; }
@@ -561,6 +600,14 @@ binds {
 	Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
 	Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
 
+	// Alternatively, there are commands to move just a single window:
+	// Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
+	// ...
+
+	// And you can also move a whole workspace to another monitor:
+	// Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
+	// ...
+
 	Mod+Page_Down      { focus-workspace-down; }
 	Mod+Page_Up        { focus-workspace-up; }
 	Mod+U              { focus-workspace-down; }
@@ -569,6 +616,10 @@ binds {
 	Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
 	Mod+Ctrl+U         { move-column-to-workspace-down; }
 	Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+	// Alternatively, there are commands to move just a single window:
+	// Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
+	// ...
 
 	Mod+Shift+Page_Down { move-workspace-down; }
 	Mod+Shift+Page_Up   { move-workspace-up; }
@@ -634,6 +685,12 @@ binds {
 	Mod+Ctrl+8 { move-column-to-workspace 8; }
 	Mod+Ctrl+9 { move-column-to-workspace 9; }
 
+	// Alternatively, there are commands to move just a single window:
+	// Mod+Ctrl+1 { move-window-to-workspace 1; }
+
+	// Switches focus between the current and the previous workspace.
+	// Mod+Tab { focus-workspace-previous; }
+
 	// The following binds move the focused window in and out of a column.
 	// If the window is alone, they will consume it into the nearby column to the side.
 	// If the window is already in a column, they will expel it out.
@@ -646,10 +703,19 @@ binds {
 	Mod+Period { expel-window-from-column; }
 
 	Mod+R { switch-preset-column-width; }
+	// Cycling through the presets in reverse order is also possible.
+	// Mod+Shift+R { switch-preset-column-width-back; }
+
 	Mod+Shift+R { switch-preset-window-height; }
 	Mod+Ctrl+R { reset-window-height; }
 	Mod+F { maximize-column; }
 	Mod+Shift+F { fullscreen-window; }
+
+	// While maximize-column leaves gaps and borders around the window,
+	// maximize-window-to-edges doesn't: the window expands to the edges of the screen.
+	// This bind corresponds to normal window maximizing,
+	// e.g. by double-clicking on the titlebar.
+	// Mod+M { maximize-window-to-edges; }
 
 	// Expand the focused column to space not taken up by other fully visible columns.
 	// Makes the column "fill the rest of the space".
@@ -683,6 +749,14 @@ binds {
 	// Windows in this column will appear as vertical tabs,
 	// rather than stacked on top of each other.
 	Mod+W { toggle-column-tabbed-display; }
+
+	// Actions to switch layouts.
+	// Note: if you uncomment these, make sure you do NOT have
+	// a matching layout switch hotkey configured in xkb options above.
+	// Having both at once on the same hotkey will break the switching,
+	// since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
+	// Mod+Space       { switch-layout "next"; }
+	// Mod+Shift+Space { switch-layout "prev"; }
 
 	Mod+F12 { screenshot; }
 	Mod+Ctrl+F12 { screenshot-screen; }
