@@ -273,18 +273,12 @@ spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-moni
 spawn-at-startup "/home/rathel/.local/bin/niri-shadow-guard.py"
 {{- end }}
 spawn-at-startup "waybar"
-// spawn-at-startup "dunst"
-// spawn-at-startup "foot" "--title=main-term"
 
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "xwayland-satellite"
-// spawn-at-startup "firefox"
-// spawn-at-startup "vivaldi-stable"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
-// spawn-at-startup "thunderbird"
-// spawn-at-startup "/home/rathel/Applications/thunderbird-daily/thunderbird"
 spawn-at-startup "/home/rathel/.local/bin/volume-notify.sh"
 spawn-at-startup "/home/rathel/.local/bin/wallpaper.sh"
 
@@ -334,36 +328,12 @@ animations {
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
 
-// workspace "one" {
-// 	// This workspace is used for the MPV window rule above.
-// 	// It will be created autopmatically if it doesn't exist.
-// 	// You can also use the "workspace" command to create it manually.
-// 	// If you want to change the name, you can do so here.
-// 	open-on-output "DP-1"
-// }
-
-// workspace "streamers" {
-// 	// This workspace is used for the MPV window rule above.
-// 	// It will be created autopmatically if it doesn't exist.
-// 	// You can also use the "workspace" command to create it manually.
-// 	// If you want to change the name, you can do so here.
-// 	open-on-output "DP-1"
-// }
-
 window-rule {
 	match is-focused=false
 	exclude title="^▶"
 	exclude title="Netflix"
 	opacity 0.8
 }
-
-// window-rule {
-// 	match app-id="zen"
-// 	open-maximized true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
 
 window-rule {
 	// This regular expression is intentionally made as specific as possible,
@@ -392,19 +362,6 @@ window-rule {
 
 }
 
-// window-rule {
-//     match app-id="gamescope" title="GeForce NOW"
-//     open-fullscreen true
-//     open-focused true
-// }
-//
-
-// window-rule {
-//     match app-id="foot" title="scratch"
-//     open-floating true
-//     open-focused true
-// }
-
 window-rule {
 	match title="^scratch$"
 	open-floating true
@@ -421,62 +378,6 @@ window-rule {
 	default-window-height { proportion 0.2; }
 	default-column-width { proportion 0.2; }
 }
-
-// window-rule {
-// 	match title="Shadow PC"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="chrome-play.geforcenow.com__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="msedge-play.geforcenow.com__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="vivaldi-play.geforcenow.com__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="chrome-pc.shadow.tech__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="msedge-pc.shadow.tech__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
-
-// window-rule {
-// 	match app-id="vivaldi-pc.shadow.tech__-Default"
-// 	open-fullscreen true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-2"
-// 	{{- end }}
-// }
 
 window-rule {
 	match app-id="vlc"
@@ -544,15 +445,6 @@ window-rule {
 	// open-maximized true
 }
 
-// window-rule {
-// 	match app-id="thunderbird"
-// 	// open-on-workspace "one"
-// 	open-maximized true
-// 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
-// 	open-on-output "DP-3"
-// 	{{- end }}
-// }
-
 window-rule {
 	match app-id="thunderbird" title="^Write:"
 	// open-on-workspace "one"
@@ -573,30 +465,6 @@ window-rule {
 	// {{- if eq .chezmoi.hostname "archlinux-z170" }}
 	// open-on-output "DP-3"
 	// {{- end }}
-}
-
-// window-rule {
-// 	match app-id="obsidian"
-// 	// open-on-workspace "one"
-// 	// open-maximized true
-// 	open-floating true
-// 	default-floating-position x=0 y=5 relative-to="top-left"
-// 	default-window-height { proportion 0.80; }
-// 	default-column-width { proportion 0.30; }
-// }
-
-
-
-// Example: block out two password managers from screen capture.
-// (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-	match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-	match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-	block-out-from "screen-capture"
-
-	// Use this instead if you want them visible on third-party screenshot tools.
-	// block-out-from "screencast"
 }
 
 // Example: enable rounded corners for all windows.
@@ -627,20 +495,12 @@ binds {
 	Mod+M { spawn-sh "wezterm --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
         Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-obsidian-focus.sh"; }
 	Mod+Grave { spawn "wezterm" "--title=scratch" "-e" "sh"; }
-	// Alt+Tab { spawn "foot" "--title=scratch" "/home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Alt+Tab { spawn-sh "wezterm --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
-	// Mod+D { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/fdmenu_desktop.sh"; }
-	// Mod+D { spawn "yofi"; }
-	// Mod+D { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/menu_picker.sh"; }
 	Super+Shift+T { spawn "/home/rathel/.local/bin/niri-thunderbird-focus.sh"; }
 	Mod+B { spawn "/home/rathel/.local/bin/niri-browser-focus.sh"; }
-	// Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
-	// Mod+G { spawn "/home/rathel/.local/bin/launch-geforcenow.sh"; }
-	// Mod+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-geforcenow.sh"; }
 	Mod+G { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
-	// Mod+Shift+G { spawn "foot" "--title=scratch" "-e" "/home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
@@ -678,13 +538,6 @@ binds {
 	Mod+Ctrl+K     { move-window-up; }
 	Mod+Ctrl+L     { move-column-right; }
 
-	// Alternative commands that move across workspaces when reaching
-	// the first or last window in a column.
-	// Mod+J     { focus-window-or-workspace-down; }
-	// Mod+K     { focus-window-or-workspace-up; }
-	// Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
-	// Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
-
 	Mod+Home { focus-column-first; }
 	Mod+End  { focus-column-last; }
 	Mod+Ctrl+Home { move-column-to-first; }
@@ -708,14 +561,6 @@ binds {
 	Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
 	Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
 
-	// Alternatively, there are commands to move just a single window:
-	// Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
-	// ...
-
-	// And you can also move a whole workspace to another monitor:
-	// Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
-	// ...
-
 	Mod+Page_Down      { focus-workspace-down; }
 	Mod+Page_Up        { focus-workspace-up; }
 	Mod+U              { focus-workspace-down; }
@@ -724,10 +569,6 @@ binds {
 	Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
 	Mod+Ctrl+U         { move-column-to-workspace-down; }
 	Mod+Ctrl+I         { move-column-to-workspace-up; }
-
-	// Alternatively, there are commands to move just a single window:
-	// Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
-	// ...
 
 	Mod+Shift+Page_Down { move-workspace-down; }
 	Mod+Shift+Page_Up   { move-workspace-up; }
@@ -765,8 +606,6 @@ binds {
 	// These binds are also affected by touchpad's natural-scroll, so these
 	// example binds are "inverted", since we have natural-scroll enabled for
 	// touchpads by default.
-	// Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
-	// Mod+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
 
 	// You can refer to workspaces by index. However, keep in mind that
 	// niri is a dynamic workspace system, so these commands are kind of
@@ -794,12 +633,6 @@ binds {
 	Mod+Ctrl+7 { move-column-to-workspace 7; }
 	Mod+Ctrl+8 { move-column-to-workspace 8; }
 	Mod+Ctrl+9 { move-column-to-workspace 9; }
-
-	// Alternatively, there are commands to move just a single window:
-	// Mod+Ctrl+1 { move-window-to-workspace 1; }
-
-	// Switches focus between the current and the previous workspace.
-	// Mod+Tab { focus-workspace-previous; }
 
 	// The following binds move the focused window in and out of a column.
 	// If the window is alone, they will consume it into the nearby column to the side.
@@ -850,14 +683,6 @@ binds {
 	// Windows in this column will appear as vertical tabs,
 	// rather than stacked on top of each other.
 	Mod+W { toggle-column-tabbed-display; }
-
-	// Actions to switch layouts.
-	// Note: if you uncomment these, make sure you do NOT have
-	// a matching layout switch hotkey configured in xkb options above.
-	// Having both at once on the same hotkey will break the switching,
-	// since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-	// Mod+Space       { switch-layout "next"; }
-	// Mod+Shift+Space { switch-layout "prev"; }
 
 	Mod+F12 { screenshot; }
 	Mod+Ctrl+F12 { screenshot-screen; }
