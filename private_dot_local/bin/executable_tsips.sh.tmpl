@@ -3,8 +3,8 @@
 TSIPS="$(tailscale status | awk '{print $1}')"
 HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
 OFFLINE="$(tailscale status | grep -i offline | awk '{print $1}')"
-#TERMINAL="kitty @ launch --type=tab"
-TERMINAL="wezterm cli spawn"
+TERMINAL="kitty @ launch --type=tab"
+#TERMINAL="wezterm cli spawn"
 n=0
 
 for i in $TSIPS; do
