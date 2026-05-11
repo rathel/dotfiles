@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Version=1.0
-Name=antigravity
-Exec=/home/rathel/Applications/Productivity/Antigravity/antigravity
-Icon=/home/rathel/Applications/Productivity/Antigravity/resources/app/resources/linux/code.png
-Terminal=false
-StartupNotify=true
