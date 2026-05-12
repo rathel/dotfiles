@@ -484,9 +484,9 @@ window-rule {
 // /-window-rule {
 // 	match app-id=r#"^org\.keepassxc\.KeePassXC$"#
 // 	match app-id=r#"^org\.gnome\.World\.Secrets$"#
-// 
+//
 // 	block-out-from "screen-capture"
-// 
+//
 // 	// Use this instead if you want them visible on third-party screenshot tools.
 // 	// block-out-from "screencast"
 // }
@@ -514,17 +514,17 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "wezterm"; }
-	Mod+P { spawn-sh "wezterm --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
-	Mod+M { spawn-sh "wezterm --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
+	Mod+T { spawn "kitty"; }
+	Mod+P { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
+	Mod+M { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
         Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-obsidian-focus.sh"; }
-	Mod+Grave { spawn "wezterm" "--title=scratch" "-e" "sh"; }
-	Alt+Tab { spawn-sh "wezterm --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
+	Alt+Tab { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Super+Shift+T { spawn "/home/rathel/.local/bin/niri-thunderbird-focus.sh"; }
 	Mod+B { spawn "/home/rathel/.local/bin/niri-browser-focus.sh"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
-	Mod+G { spawn-sh "ghostty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
+	Mod+G { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
