@@ -9,7 +9,7 @@ if [ -n "$win_id" ]; then
 else
   case "$browser" in
   "zen")
-    zen-broser
+    zen-browser
     ;;
   "zen-twilight")
     $HOME/Applications/Utilities/zen-twilight/zen
