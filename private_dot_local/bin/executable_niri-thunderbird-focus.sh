@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Look for the window ID of a Firefox window
-ec="thunderbird-nightly"
+ec="thunderbird"
 
 win_id=$(niri msg -j windows | jq -r --arg app "$ec" '.[] | select(.app_id == $app) | .id')
 
@@ -11,6 +11,6 @@ if [ -n "$win_id" ]; then
 else
   # Launch Thunderbird
   if [ "$ec" == "thunderbird-nightly" ]; then
-  $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
+    $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
   fi
 fi
