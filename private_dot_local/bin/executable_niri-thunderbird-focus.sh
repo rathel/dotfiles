@@ -13,4 +13,6 @@ else
   if [ "$ec" == "thunderbird-nightly" ]; then
     $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
   fi
+  else
+  $ec
 fi
