@@ -12,7 +12,7 @@ else
   # Launch Thunderbird
   if [ "$ec" == "thunderbird-nightly" ]; then
     $HOME/Applications/Utilities/thunderbird-daily/thunderbird &
-  fi
   else
-  $ec
+    $ec &
+  fi
 fi
