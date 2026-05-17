@@ -22,6 +22,6 @@
     },
 
   "network": {
-    "format": "{bandwidthUpBytes}/{bandwidthDownBytes}",
+    "format": "{ifname} {bandwidthUpBytes} {bandwidthDownBytes}",
   }
 }
