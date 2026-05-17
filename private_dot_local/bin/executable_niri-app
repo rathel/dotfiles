@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+close_when_focused=false
+
+case "${1:-}" in
+-h | --help | "")
+  echo "Usage:"
+  echo "  niri-app [--close] COMMAND [ARGS...]"
+  echo
+  echo "Examples:"
+  echo "  niri-app --close zen-browser"
+  echo "  niri-app --close thunderbird"
+  echo "  niri-app --close kate"
+  echo "  niri-app --close flatpak run org.mozilla.Thunderbird"
+  exit 0
+  ;;
+
+-c | --close)
+  close_when_focused=true
+  shift
+  ;;
+esac
+
+if (("$#" == 0)); then
+  echo "Missing command" >&2
+  exit 1
+fi
+
+cmd=("$@")
+
+log_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+log_file="$log_dir/niri-app.log"
+mkdir -p "$log_dir"
+
+make_candidates() {
+  local item base lower
+
+  for item in "$@"; do
+    [[ "$item" == -* ]] && continue
+
+    base="$(basename "$item")"
+    lower="$(printf '%s' "$base" | tr '[:upper:]' '[:lower:]')"
+
+    printf '%s\n' "$lower"
+    printf '%s\n' "${lower%.appimage}"
+    printf '%s\n' "${lower%.desktop}"
+    printf '%s\n' "${lower%-stable}"
+    printf '%s\n' "${lower%-browser}"
+    printf '%s\n' "${lower%-bin}"
+  done
+}
+
+apps_json="$(
+  make_candidates "${cmd[@]}" |
+    awk 'NF && !seen[$0]++' |
+    jq -R . |
+    jq -s .
+)"
+
+windows="$(niri msg -j windows)"
+
+match="$(
+  jq -r --argjson apps "$apps_json" '
+    def lower: ascii_downcase;
+    def last_part: split(".") | last;
+    def stripped:
+      gsub("\\.appimage$"; "")
+      | gsub("\\.desktop$"; "")
+      | gsub("-stable$"; "")
+      | gsub("-browser$"; "")
+      | gsub("-bin$"; "");
+
+    [
+      .[]
+      | . as $win
+      | ($win.app_id // "" | lower) as $app
+      | ($app | last_part) as $last
+      | select(
+          ($apps | index($app)) or
+          ($apps | index($last)) or
+          ($apps | index($app | stripped)) or
+          ($apps | index($last | stripped))
+        )
+    ]
+    | sort_by(.is_focused | not)
+    | .[0]
+    | if . then "\(.id)\t\(.is_focused)\t\(.app_id)" else empty end
+  ' <<<"$windows"
+)"
+
+launch_app() {
+  {
+    printf '\n[%s] launching:' "$(date '+%F %T')"
+    printf ' %q' "${cmd[@]}"
+    printf '\n'
+  } >>"$log_file"
+
+  if command -v setsid >/dev/null 2>&1; then
+    setsid -f -- "${cmd[@]}" >>"$log_file" 2>&1 || {
+      echo "Failed to launch: ${cmd[*]}" >&2
+      echo "See log: $log_file" >&2
+      exit 1
+    }
+  else
+    nohup "${cmd[@]}" >>"$log_file" 2>&1 &
+  fi
+}
+
+if [[ -z "$match" ]]; then
+  launch_app
+  exit 0
+fi
+
+IFS=$'\t' read -r win_id focused matched_app_id <<<"$match"
+
+if [[ "$close_when_focused" == true && "$focused" == "true" ]]; then
+  niri msg action close-window --id "$win_id"
+else
+  niri msg action focus-window --id "$win_id"
+fi
