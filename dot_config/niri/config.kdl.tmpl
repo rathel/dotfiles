@@ -517,12 +517,12 @@ binds {
 	Mod+T { spawn "kitty"; }
 	Mod+P { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
 	Mod+M { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
-        Mod+Z { spawn "sh" "-c" "$HOME/.local/bin/niri-obsidian-focus.sh"; }
+  Mod+Z { spawn "niri-app" "/home/rathel/Applications/Productivity/Obsidian.AppImage"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
 	Alt+Tab { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Super+Shift+T { spawn "niri-app" "thunderbird"; }
-	Mod+B { spawn "/home/rathel/.local/bin/niri-browser-focus.sh"; }
+	Mod+B { spawn "niri-app" "zen-browser"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	Mod+G { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/launch-shadowtech.sh"; }
 
