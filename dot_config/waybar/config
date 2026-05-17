@@ -20,4 +20,8 @@
       "bat": "BAT0",
       "interval": 60,
     },
+
+  "network": {
+    "format": "{bandwidthUpBytes}/{bandwidthDownBytes}",
+  }
 }
