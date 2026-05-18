@@ -42,9 +42,11 @@ mapfile -t selected < <(
 
 # Convert target path(s) -> source path(s)
 sources=()
+filenames=()
 for target in "${selected[@]}"; do
   src="$(chezmoi source-path "$target")"
   sources+=("$src")
+  filenames+=("$(basename "$target")")
 done
 
 # Open editor with all selected source files
@@ -54,7 +56,7 @@ status="$(chezmoi git -- status --short)"
 
 if [ -n "${status}" ]; then
   chezmoi git -- add .
-  chezmoi git -- commit -m "${sources[@]}"
+  chezmoi git -- commit -m "${filenames[*]}"
   chezmoi git -- push
   chezmoi apply
 fi
