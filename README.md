@@ -4,7 +4,7 @@ Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
 
 ## Overview
 
-This repository contains configuration files for my Linux development environment on CachyOS.
+This repository contains configuration files for my Linux desktop.
 
 ## Managed Applications
 
