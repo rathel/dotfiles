@@ -12,6 +12,8 @@ This repository contains configuration files for my Linux development environmen
 - **alacritty** - Terminal emulator
 - **foot** - Wayland terminal
 - **ghostty** - Terminal emulator
+- **kitty** - Terminal emulator
+- **wezterm** - Terminal emulator
 - **fish** - Shell configuration (private)
 - **starship** - Shell prompt
 - **tmux** - Terminal multiplexer with Catppuccin theme
@@ -27,6 +29,10 @@ This repository contains configuration files for my Linux development environmen
 ### Utilities
 - **eza** - Modern ls replacement with custom theme
 - **mpv** - Media player (private)
+
+### Customization & Scripts
+- Custom helper scripts (`~/.local/bin`)
+- Custom desktop entries and icons (`~/.local/share/applications`, `~/.local/share/icons`)
 
 ### Browsers
 - Microsoft Edge flags
