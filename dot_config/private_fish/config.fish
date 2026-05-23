@@ -16,3 +16,12 @@ if status is-interactive
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
 	end
 end
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /home/rathel/.lmstudio/bin
+# End of LM Studio CLI section
+
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/home/rathel/.local/bin" $PATH
