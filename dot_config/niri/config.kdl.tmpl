@@ -274,12 +274,12 @@ layout {
 // spawn-at-startup "/home/rathel/.local/bin/start-waybar-safe"
 {{- if eq .chezmoi.hostname "archlinux-beelink" }}
 spawn-at-startup "steam" "-tenfoot"
-spawn-at-startup "/home/rathel/.local/bin/connectspeaker.sh"
-spawn-at-startup "/home/rathel/.local/bin/streamers.sh"
+spawn-sh-at-startup "$HOME/.local/bin/connectspeaker.sh"
+spawn-sh-at-startup "$HOME/.local/bin/streamers.sh"
 {{- end }}
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
 spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
-spawn-at-startup "/home/rathel/.local/bin/niri-shadow-guard.py"
+spawn-sh-at-startup "$HOME/.local/bin/niri-shadow-guard.py"
 {{- end }}
 spawn-at-startup "waybar"
 
@@ -288,8 +288,8 @@ spawn-at-startup "xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
-spawn-at-startup "/home/rathel/.local/bin/volume-notify.sh"
-spawn-at-startup "/home/rathel/.local/bin/wallpaper.sh"
+spawn-sh-at-startup "$HOME/.local/bin/volume-notify.sh"
+spawn-sh-at-startup "$HOME/.local/bin/wallpaper.sh"
 
 environment {
 	CHROME_USE_OZONE "1"
@@ -515,16 +515,16 @@ binds {
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
 	Mod+T { spawn "kitty"; }
-	Mod+P { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"; }
-	Mod+M { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/launch-players.sh"; }
-  Mod+Z { spawn "niri-app" "/home/rathel/Applications/Productivity/Obsidian.AppImage"; }
+	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
+	Mod+M { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/launch-players.sh"; }
+  Mod+Z { spawn-sh "niri-app $HOME/Applications/Productivity/Obsidian.AppImage"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
-	Alt+Tab { spawn-sh "kitty --title=scratch -e /home/rathel/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Super+Shift+T { spawn "niri-app" "thunderbird"; }
-	Mod+B { spawn "niri-app" "/home/rathel/Applications/Utilities/zen-twilight/zen"; }
+	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/zen-twilight/zen"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
-	Mod+G { spawn "/home/rathel/.local/bin/launch-shadowtech.sh"; }
+	Mod+G { spawn-sh "$HOME/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
