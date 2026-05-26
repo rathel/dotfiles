@@ -34,20 +34,23 @@ log_file="$log_dir/niri-app.log"
 mkdir -p "$log_dir"
 
 make_candidates() {
-  local item base lower
+  local item base parent lower
 
   for item in "$@"; do
     [[ "$item" == -* ]] && continue
 
-    base="$(basename "$item")"
-    lower="$(printf '%s' "$base" | tr '[:upper:]' '[:lower:]')"
+    for base in "$(basename "$item")" "$(basename "$(dirname "$item")")"; do
+      [[ -z "$base" || "$base" == "." || "$base" == "/" ]] && continue
 
-    printf '%s\n' "$lower"
-    printf '%s\n' "${lower%.appimage}"
-    printf '%s\n' "${lower%.desktop}"
-    printf '%s\n' "${lower%-stable}"
-    printf '%s\n' "${lower%-browser}"
-    printf '%s\n' "${lower%-bin}"
+      lower="$(printf '%s' "$base" | tr '[:upper:]' '[:lower:]')"
+
+      printf '%s\n' "$lower"
+      printf '%s\n' "${lower%.appimage}"
+      printf '%s\n' "${lower%.desktop}"
+      printf '%s\n' "${lower%-stable}"
+      printf '%s\n' "${lower%-browser}"
+      printf '%s\n' "${lower%-bin}"
+    done
   done
 }
 
