@@ -514,7 +514,7 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "kitty"; }
+	Mod+T { spawn "niri-app" "kitty"; }
 	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
 	Mod+M { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/launch-players.sh"; }
   Mod+Z { spawn-sh "niri-app $HOME/Applications/Productivity/Obsidian.AppImage"; }
