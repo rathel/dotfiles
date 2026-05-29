@@ -22,7 +22,7 @@
     },
 
   "network": {
-    "format": "{ifname} {bandwidthUpBytes} {bandwidthDownBytes}",
+    "format": "{ifname} {bandwidthUpBytes}    {bandwidthDownBytes}",
     "interval": 1,
   }
 }
