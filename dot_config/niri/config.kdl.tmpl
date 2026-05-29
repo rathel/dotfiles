@@ -517,13 +517,13 @@ binds {
 	Mod+T { spawn "niri-app" "kitty"; }
 	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
 	Mod+M { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/launch-players.sh"; }
-  Mod+Z { spawn-sh "niri-app $HOME/Applications/Productivity/Obsidian.AppImage"; }
+  Mod+Z { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
 	Alt+Tab { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Mod+S hotkey-overlay-title="Steam Launcher" { spawn-sh "$HOME/git/fuzzel-steam-launcher/fuzzel-steam.sh"; }
-	Super+Shift+T { spawn "niri-app" "thunderbird"; }
-	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/zen-twilight/zen"; }
+	Super+Shift+T { spawn "niri-app" -c "thunderbird"; }
+	Mod+B { spawn-sh "niri-app -c $HOME/Applications/Utilities/zen-twilight/zen"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	Mod+G { spawn-sh "$HOME/.local/bin/launch-shadowtech.sh"; }
 
