@@ -25,7 +25,7 @@ search_dirs=(
   "$HOME/.local/bin"
   "$HOME/.local/share/applications"
   "$HOME/Applications"
-  "$HOME/pg4uk-f7ecq/Scripts"
+  "$HOME/pg4uk-f7ecq/50_scripts/scripts"
   "/usr/share/applications"
 )
 # Filter to existing dirs so fd doesn't fail under `set -e`
@@ -104,7 +104,7 @@ rebuild_cache() {
   
   # 2) Executables in user bins/scripts → "Label<TAB>Path"
   #    Process all at once instead of per-directory
-  for user_dir in "$HOME/Applications" "$HOME/.local/bin" "$HOME/pg4uk-f7ecq/Scripts"; do
+  for user_dir in "$HOME/Applications" "$HOME/.local/bin" "$HOME/pg4uk-f7ecq/50_scripts/scripts"; do
     if [[ -d "$user_dir" ]]; then
       fd -H -a -t x . -- "$user_dir" 2>/dev/null
     fi
