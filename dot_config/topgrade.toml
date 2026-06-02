@@ -16,7 +16,7 @@
 # Run `sudo -v` to cache credentials at the start of the run
 # This avoids a blocking password prompt in the middle of an unattended run
 # (default: false)
-# pre_sudo = false
+pre_sudo = true
 
 # Periodically runs `sudo -v` or `please -w` to avoid password re-prompts during updates (default: false)
 # WARNING: This is a potential security risk; if you walk away from the computer while topgrade is running,
@@ -32,7 +32,7 @@ disable = ["antigravity"]
 # disable = ["system", "emacs"]
 
 # Run these steps before all others
-# first = ["chezmoi"]
+first = ["chezmoi"]
 
 # Run these steps after all others
 # last = ["system"]
