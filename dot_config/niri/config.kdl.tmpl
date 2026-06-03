@@ -519,7 +519,7 @@ binds {
 	Mod+M { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/launch-players.sh"; }
   Mod+Z { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
-	Alt+Tab { spawn "$HOME/.local/bin/niri-focus-windows.sh"; }
+	Alt+Tab { spawn-sh "$HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Mod+Shift+D { spawn-sh "niri-app -c ~/Applications/Utilities/Discord/discord"; }
 	Mod+S hotkey-overlay-title="Steam Launcher" { spawn-sh "$HOME/git/fuzzel-steam-launcher/fuzzel-steam.sh"; }
