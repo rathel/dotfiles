@@ -24,7 +24,7 @@ id=$(
       --with-nth=2 \
       --accept-nth=1 \
       --match-nth=2 \
-      --delimiter=$'\t' \
+      --nth-delimiter=$'\t' \
       --minimal-lines \
       --lines=15
 )
