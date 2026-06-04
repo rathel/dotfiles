@@ -44,6 +44,13 @@ make_candidates() {
 
       lower="$(printf '%s' "$base" | tr '[:upper:]' '[:lower:]')"
 
+      case "$lower" in
+        zed | zeditor)
+          printf '%s\n' zed
+          printf '%s\n' zeditor
+          ;;
+      esac
+
       printf '%s\n' "$lower"
       printf '%s\n' "${lower%.appimage}"
       printf '%s\n' "${lower%.desktop}"
