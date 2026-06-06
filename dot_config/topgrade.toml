@@ -28,7 +28,7 @@ pre_sudo = true
 # sudo_command = "sudo"
 
 # Disable specific steps - same options as the command line flag
-disable = ["antigravity"]
+disable = ["antigravity", "windsurf"]
 # disable = ["system", "emacs"]
 
 # Run these steps before all others
