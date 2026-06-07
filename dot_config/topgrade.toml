@@ -84,7 +84,7 @@ first = ["chezmoi"]
 # tmux_session_mode = "attach_if_not_in_session"
 
 # Cleanup temporary or old files (default: false)
-# cleanup = true
+cleanup = true
 
 # Send a notification for every step (default: false)
 # notify_each_step = false
@@ -269,13 +269,14 @@ first = ["chezmoi"]
 
 [git]
 # How many repos to pull or fetch at max in parallel
-# max_concurrency = 5
+max_concurrency = 5
 
 # Additional git repositories to pull or fetch
-# repos = [
+repos = [
 #     "~/src/*/",
 #     "~/.config/something"
-# ]
+"~/git/",
+]
 
 # Set to `false` to skip pulling/fetching the predefined git repos
 # pull_predefined = false
