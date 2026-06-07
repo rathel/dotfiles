@@ -35,7 +35,7 @@ disable = ["antigravity", "windsurf"]
 first = ["chezmoi"]
 
 # Run these steps after all others
-# last = ["system"]
+last = ["system"]
 
 # Ignore failures for these steps
 # ignore_failures = ["powershell"]
