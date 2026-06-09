@@ -524,7 +524,7 @@ binds {
 	Mod+D { spawn "fuzzel"; }
 	Mod+Shift+D { spawn-sh "niri-app -c ~/Applications/Utilities/Discord/discord"; }
 	Mod+S hotkey-overlay-title="Steam Launcher" { spawn-sh "$HOME/git/fuzzel-steam-launcher/fuzzel-steam.sh"; }
-	Super+Shift+T { spawn "niri-app" "-c" "thunderbird"; }
+	Super+Shift+T { spawn-sh "niri-app -c ~/Applications/Utilities/thunderbird-daily/thunderbird"; }
 	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/zen-twilight/zen"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
 	Mod+G { spawn-sh "$HOME/.local/bin/launch-shadowtech.sh"; }
