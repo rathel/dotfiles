@@ -275,7 +275,7 @@ max_concurrency = 5
 repos = [
 #     "~/src/*/",
 #     "~/.config/something"
-"~/git/",
+#     "~/git/",
 ]
 
 # Set to `false` to skip pulling/fetching the predefined git repos
