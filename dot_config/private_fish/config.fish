@@ -23,3 +23,6 @@ set -gx PATH $PATH /home/rathel/.lmstudio/bin
 
 # Added by Antigravity CLI installer
 set -gx PATH "/home/rathel/.local/bin" $PATH
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/rathel/google-cloud-sdk/path.fish.inc' ]; . '/home/rathel/google-cloud-sdk/path.fish.inc'; end
