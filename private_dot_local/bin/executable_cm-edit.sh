@@ -52,11 +52,10 @@ done
 # Open editor with all selected source files
 "${editor[@]}" "${sources[@]}"
 
-status="$(chezmoi git -- status --short)"
-
-if [ -n "${status}" ]; then
-  chezmoi git -- add .
-  chezmoi git -- commit -m "${filenames[*]}"
+# Commit only the selected source paths, and only if they changed.
+if ! chezmoi git -- diff --quiet --cached -- "${sources[@]}" ||
+  ! chezmoi git -- diff --quiet -- "${sources[@]}"; then
+  chezmoi git -- commit --only -m "${filenames[*]}" -- "${sources[@]}"
   chezmoi git -- push
   chezmoi apply
 fi
