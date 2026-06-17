@@ -4,13 +4,63 @@
     font-family:
         Iosevka Nerd Font,
         monospace;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 #waybar {
     background-color: @base;
     color: @text;
+    border: 1px solid @surface0;
+    border-radius: 12px;
+    margin: 6px;
+    padding: 4px 8px;
+}
+
+#custom-clock,
+#battery,
+#tray,
+#network,
+#cpu,
+#memory {
+    background-color: @mantle;
+    border-radius: 8px;
+    margin: 0 4px;
+    padding: 0 10px;
 }
 
 #custom-clock {
+    color: @peach;
+    font-weight: bold;
+}
+
+#network {
+    color: @sky;
+}
+
+#cpu {
+    color: @mauve;
+}
+
+#memory {
+    color: @green;
+}
+
+#battery {
+    color: @yellow;
+}
+
+#battery.warning {
+    color: @peach;
+}
+
+#battery.critical {
+    color: @red;
+}
+
+#tray {
+    padding-right: 6px;
+}
+
+#tray > .passive {
+    opacity: 0.8;
 }
