@@ -4,7 +4,7 @@
   "spacing": 10,
   "modules-center": ["custom/clock"],
   "modules-right": ["battery", "tray"],
-  "modules-left": ["network"],
+  "modules-left": ["network", "cpu", "memory"],
 
   "custom/clock": {
     "exec": "date '+%m/%d %H:%M'",
@@ -24,5 +24,15 @@
   "network": {
     "format": "{ifname} {bandwidthUpBytes}   {bandwidthDownBytes}",
     "interval": 1,
+  },
+
+  "cpu": {
+    "format": " {usage}%",
+    "interval": 5
+  },
+
+  "memory": {
+    "format": " {used}G/{total}G",
+    "interval": 5
   }
 }
