@@ -281,8 +281,9 @@ spawn-sh-at-startup "$HOME/.local/bin/streamers.sh"
 spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
 // spawn-sh-at-startup "$HOME/.local/bin/niri-shadow-guard.py"
 {{- end }}
-spawn-at-startup "waybar"
 
+spawn-at-startup "waybar"
+spawn-at-startup "mullvad-vpn"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"
