@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=DigiKam
+Exec=/home/rathel/Applications/Multimedia/digiKam-9.1.0-Qt6-x86-64.appimage
+Terminal=false
+StartupNotify=true
