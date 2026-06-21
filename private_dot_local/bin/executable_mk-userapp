@@ -21,6 +21,33 @@ EOF
     exit 1
 }
 
+sanitize_filename() {
+    local input="$1"
+    local sanitized
+
+    sanitized="$(printf '%s' "$input" \
+        | tr -cs '[:alnum:]._- ' '-' \
+        | sed 's/^-//; s/-$//; s/-\{2,\}/-/g')"
+
+    [[ -n "$sanitized" ]] || sanitized="app"
+    printf '%s' "$sanitized"
+}
+
+escape_desktop_value() {
+    local input="$1"
+    input="${input//\\/\\\\}"
+    input="${input//$'\n'/\\n}"
+    input="${input//$'\r'/\\r}"
+    printf '%s' "$input"
+}
+
+escape_desktop_exec() {
+    local input="$1"
+    input="$(escape_desktop_value "$input")"
+    input="${input//%/%%}"
+    printf '%s' "$input"
+}
+
 # Validate arguments
 if [[ $# -lt 2 ]]; then
     echo "Error: Missing required arguments" >&2
@@ -44,24 +71,23 @@ fi
 local_app_dir="$HOME/.local/share/applications"
 mkdir -p "$local_app_dir"
 
-# Generate unique suffix
-rand_suffix="$(mktemp -u XXXXXX)"
-desktop_file="${local_app_dir}/userapp-${app_name// /-}-${rand_suffix}.desktop"
+safe_app_name="$(sanitize_filename "$app_name")"
+desktop_file="$(mktemp --tmpdir="$local_app_dir" "userapp-${safe_app_name}-XXXXXX.desktop")"
 
 # Build desktop entry content
 cat > "$desktop_file" << EOF
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=${app_name}
-Exec=${exec_cmd}
+Name=$(escape_desktop_value "$app_name")
+Exec=$(escape_desktop_exec "$exec_cmd")
 Terminal=false
 StartupNotify=true
 EOF
 
 # Add optional fields
-[[ -n "$icon_path" ]] && echo "Icon=${icon_path}" >> "$desktop_file"
-[[ -n "$categories" ]] && echo "Categories=${categories}" >> "$desktop_file"
+[[ -n "$icon_path" ]] && echo "Icon=$(escape_desktop_value "$icon_path")" >> "$desktop_file"
+[[ -n "$categories" ]] && echo "Categories=$(escape_desktop_value "$categories")" >> "$desktop_file"
 
 # Validate desktop file
 if command -v desktop-file-validate &> /dev/null; then
