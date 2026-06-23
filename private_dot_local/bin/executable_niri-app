@@ -36,10 +36,23 @@ make_candidates() {
 }
 
 normalize_name() {
-  printf '%s' "$1" |
-    tr '[:upper:]' '[:lower:]' |
-    sed 's/developers/developer/g' |
-    tr -cd '[:alnum:]'
+  local value
+
+  value="$(
+    printf '%s' "$1" |
+      tr '[:upper:]' '[:lower:]' |
+      sed 's/developers/developer/g' |
+      tr -cd '[:alnum:]'
+  )"
+
+  case "$value" in
+    firefoxdev)
+      printf '%s' firefoxdeveloperedition
+      ;;
+    *)
+      printf '%s' "$value"
+      ;;
+  esac
 }
 
 find_matching_window() {
