@@ -9,8 +9,15 @@ if status is-interactive
     # wallust_ssh
     # tmux_ssh
     /home/rathel/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh
-    direnv hook fish | source
-    zoxide init fish | source
+    if type -q direnv
+        direnv hook fish | source
+    end
+    if type -q zoxide
+        zoxide init fish | source
+    end
+    if type -q carapace
+        carapace _carapace | source
+    end
     starship init fish | source
     if test -f /home/linuxbrew/.linuxbrew/bin/brew
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
