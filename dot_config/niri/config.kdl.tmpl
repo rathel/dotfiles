@@ -291,6 +291,7 @@ spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
 spawn-sh-at-startup "$HOME/.local/bin/volume-notify.sh"
 spawn-sh-at-startup "$HOME/.local/bin/wallpaper.sh"
+spawn-sh-at-startup "rclone mount dropbox: $HOME/Dropbox"
 
 environment {
 	CHROME_USE_OZONE "1"
@@ -353,11 +354,6 @@ window-rule {
 	// since this is the default config, and we want no false positives.
 	// You can get away with just app-id="wezterm" if you want.
 	match app-id=r#"^org\.wezfurlong\.wezterm$"#
-	default-column-width {}
-}
-
-window-rule {
-	match app-id="dev.zed.Zed"
 	default-column-width {}
 }
 
