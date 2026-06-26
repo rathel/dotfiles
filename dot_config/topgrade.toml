@@ -21,8 +21,8 @@ pre_sudo = true
 # Periodically runs `sudo -v` or `please -w` to avoid password re-prompts during updates (default: false)
 # WARNING: This is a potential security risk; if you walk away from the computer while topgrade is running,
 # another person can come by, CTRL+C, and gain access to a sudo session.
-# sudo_loop = true
-# sudo_loop_interval = 240 # 4 minutes (240s); default if sudo_loop enabled
+sudo_loop = true
+sudo_loop_interval = 240 # 4 minutes (240s); default if sudo_loop enabled
 
 # Sudo command to be used
 # sudo_command = "sudo"
@@ -128,7 +128,7 @@ cleanup = true
 
 # Commands to run before anything
 [pre_commands]
-# "Timeshift Snapshot" = "sudo timeshift --create --scripted --comments 'Before Topgrade'"
+"Timeshift Snapshot" = "sudo timeshift --create --scripted --comments 'Before Topgrade'"
 # "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
 
 
