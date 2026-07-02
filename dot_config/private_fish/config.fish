@@ -33,3 +33,6 @@ set -gx PATH "/home/rathel/.local/bin" $PATH
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/rathel/google-cloud-sdk/path.fish.inc' ]; . '/home/rathel/google-cloud-sdk/path.fish.inc'; end
+
+# opencode
+fish_add_path /home/rathel/.opencode/bin
