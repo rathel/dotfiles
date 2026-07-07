@@ -270,7 +270,7 @@ cleanup = true
 
 #[git]
 # How many repos to pull or fetch at max in parallel
-max_concurrency = 5
+# max_concurrency = 5
 
 # Additional git repositories to pull or fetch
 #repos = [
