@@ -6,9 +6,10 @@ These are the main applications and tools configured in the dotfiles:
 - **Terminal Emulators**: `alacritty`, `foot`, `ghostty`, `wezterm`
 - **Shell & Prompt**: `fish`, `starship`
 - **Terminal Multiplexer**: `tmux`
-- **Window Managers/Compositors**: `hyprland`, `niri`
-- **Status Bar**: `waybar`
-- **Notification Daemons**: `dunst`, `mako`
+- **Window Managers/Compositors**: `niri`
+- **Desktop Shell**: `quickshell`
+- **Status Bar**: `waybar` (legacy)
+- **Notification Daemons**: `dunst`, `mako` (legacy)
 - **Application Launcher**: `fuzzel`
 - **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder)
 - **Media**: `mpv`
@@ -30,7 +31,7 @@ These are the main applications and tools configured in the dotfiles:
 
 ## Themes & Plugins
 - **Catppuccin Theme Suite**: 
-  - Catppuccin Mocha color scheme (used across alacritty, foot, ghostty, wezterm, tmux, fuzzel, waybar, etc.)
+  - Catppuccin Mocha color scheme (used across alacritty, foot, ghostty, wezterm, tmux, fuzzel, quickshell, etc.)
   - Tmux Catppuccin plugin (cloned to `~/.config/tmux/plugins/catppuccin`)
 - **Tmux Plugin Manager**: TPM (tmux-plugins/tpm) - though the config uses manual installation
 

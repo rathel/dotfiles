@@ -270,8 +270,8 @@ layout {
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
-// This line starts waybar, a commonly used bar for Wayland compositors.
-// spawn-at-startup "/home/rathel/.local/bin/start-waybar-safe"
+// This line starts quickshell, which replaces waybar + notifications.
+// spawn-at-startup "qs" --no-duplicate
 {{- if eq .chezmoi.hostname "archlinux-beelink" }}
 spawn-at-startup "steam" "-tenfoot"
 spawn-sh-at-startup "$HOME/.local/bin/connectspeaker.sh"
@@ -282,8 +282,7 @@ spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-moni
 // spawn-sh-at-startup "$HOME/.local/bin/niri-shadow-guard.py"
 {{- end }}
 
-spawn-at-startup "waybar"
-spawn-at-startup "shelly-notifications"
+spawn-at-startup "qs" "--no-duplicate"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"

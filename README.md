@@ -19,11 +19,8 @@ This repository contains configuration files for my Linux desktop.
 - **tmux** - Terminal multiplexer with Catppuccin theme
 
 ### Wayland & Desktop
-- **hypr** - Hyprland compositor
 - **niri** - Niri compositor
-- **waybar** - Status bar
-- **dunst** - Notification daemon
-- **mako** - Notification daemon
+- **quickshell** - Wayland shell/bar + notification stack
 - **fuzzel** - Application launcher
 
 ### Utilities
@@ -81,10 +78,11 @@ git push
 
 ## Theme
 
-Configuration uses the **Catppuccin Mocha** color scheme across multiple applications.
+Configuration uses the **Catppuccin Mocha** color scheme across multiple applications, including the Quickshell bar and notifications.
 
 ## Notes
 
 - Private configurations are encrypted/managed separately
 - Custom environment variables are defined in `.myenv`
 - Browser launches via Zen AppImage by default
+- Quickshell now handles the bar and desktop notifications; disable Waybar/Dunst/Mako when using it
