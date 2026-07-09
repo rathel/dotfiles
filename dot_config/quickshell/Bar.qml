@@ -103,7 +103,7 @@ Scope {
     function setBattery(output) {
         const line = String(output).trim()
         if (!line) {
-            batteryText = "󰂎 n/a"
+            batteryText = ""
             return
         }
 
