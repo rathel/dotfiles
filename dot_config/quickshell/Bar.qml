@@ -28,6 +28,10 @@ Scope {
     property string bluetoothText: ""
     property string memoryText: ""
     property string cpuText: ""
+    property string networkLastIface: ""
+    property real networkLastSampleMs: 0
+    property real networkLastRxBytes: 0
+    property real networkLastTxBytes: 0
     property real cpuLastIdle: 0
     property real cpuLastTotal: 0
 
@@ -48,18 +52,52 @@ Scope {
         brightnessText = `󰃟 ${percent}%`
     }
 
+    function formatRate(bytesPerSecond) {
+        const value = Math.max(0, bytesPerSecond)
+
+        if (value >= 1024 * 1024) {
+            return `${(value / (1024 * 1024)).toFixed(value >= 10 * 1024 * 1024 ? 0 : 1)} MiB/s`
+        }
+
+        if (value >= 1024) {
+            return `${(value / 1024).toFixed(value >= 10 * 1024 ? 0 : 1)} KiB/s`
+        }
+
+        return `${Math.round(value)} B/s`
+    }
+
     function setNetwork(output) {
         const line = String(output).trim()
         if (!line) {
             networkText = "󰤭 offline"
+            networkLastIface = ""
+            networkLastSampleMs = 0
+            networkLastRxBytes = 0
+            networkLastTxBytes = 0
             return
         }
 
-        const parts = line.split(/\s+/)
-        const kind = parts.shift() || ""
-        const name = parts.join(" ") || kind
+        const parts = line.split("\t")
+        const kind = parts[0] || ""
+        const name = parts[1] || kind
+        const iface = parts[2] || ""
+        const rxBytes = parseInt(parts[3]) || 0
+        const txBytes = parseInt(parts[4]) || 0
+        const now = Date.now()
 
-        networkText = kind === "ethernet" ? `󰈀 ${name}` : `󰖩 ${name}`
+        let rateText = ""
+        if (iface && iface === networkLastIface && networkLastSampleMs > 0) {
+            const elapsedSeconds = Math.max(1, (now - networkLastSampleMs) / 1000)
+            const downRate = Math.max(0, (rxBytes - networkLastRxBytes) / elapsedSeconds)
+            const upRate = Math.max(0, (txBytes - networkLastTxBytes) / elapsedSeconds)
+            rateText = ` ${formatRate(downRate)}↓ ${formatRate(upRate)}↑`
+        }
+
+        networkText = `${kind === "ethernet" ? "󰈀" : "󰖩"} ${name}${rateText}`
+        networkLastIface = iface
+        networkLastSampleMs = now
+        networkLastRxBytes = rxBytes
+        networkLastTxBytes = txBytes
     }
 
     function setBattery(output) {
@@ -177,7 +215,7 @@ Scope {
 
     Process {
         id: networkProc
-        command: ["bash", "-lc", "nmcli -t -f TYPE,STATE,CONNECTION dev 2>/dev/null | while IFS=: read -r type state name; do if [ \"$type\" = wifi ] && [ \"$state\" = connected ]; then printf 'wifi %s\\n' \"$name\"; exit 0; fi; if [ \"$type\" = ethernet ] && [ \"$state\" = connected ]; then printf 'ethernet %s\\n' \"$name\"; exit 0; fi; done"]
+        command: ["bash", "-lc", "set -e; line=$(nmcli -t -f DEVICE,TYPE,STATE,CONNECTION dev 2>/dev/null | awk -F: '$2 == \"wifi\" && $3 == \"connected\" {print \"wifi\\t\" $4 \"\\t\" $1; exit} $2 == \"ethernet\" && $3 == \"connected\" {print \"ethernet\\t\" $4 \"\\t\" $1; exit}'); [ -n \"$line\" ] || exit 0; IFS=$'\\t' read -r kind name iface <<<\"$line\"; rx=$(cat \"/sys/class/net/$iface/statistics/rx_bytes\" 2>/dev/null || echo 0); tx=$(cat \"/sys/class/net/$iface/statistics/tx_bytes\" 2>/dev/null || echo 0); printf '%s\\t%s\\t%s\\t%s\\t%s\\n' \"$kind\" \"$name\" \"$iface\" \"$rx\" \"$tx\""]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setNetwork(this.text)
@@ -185,7 +223,7 @@ Scope {
     }
 
     Timer {
-        interval: 5000
+        interval: 1000
         running: true
         repeat: true
         onTriggered: networkProc.running = true
