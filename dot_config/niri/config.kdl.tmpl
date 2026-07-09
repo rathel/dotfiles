@@ -288,7 +288,7 @@ spawn-at-startup "xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
-spawn-sh-at-startup "$HOME/.local/bin/volume-notify.sh"
+// spawn-sh-at-startup "$HOME/.local/bin/volume-notify.sh"
 spawn-sh-at-startup "$HOME/.local/bin/wallpaper.sh"
 spawn-sh-at-startup "rclone mount dropbox: $HOME/Dropbox"
 
@@ -518,6 +518,7 @@ binds {
 	Mod+T { spawn "niri-app" "kitty"; }
 	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
 	Mod+M { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/launch-players.sh"; }
+	Mod+Alt+M hotkey-overlay-title="Fladder" { spawn-sh "niri-app -c $HOME/Applications/Multimedia/Fladder-Linux-0.10.3.AppImage"; }
 	Mod+Z { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
 	Mod+Shift+Z hotkey-overlay-title="Zed" { spawn "niri-app" "-c" "zeditor"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
@@ -537,10 +538,10 @@ binds {
 
 	// Example volume keys mappings for PipeWire & WirePlumber.
 	// The allow-when-locked=true property makes them work even when the session is locked.
-	XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
-	XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-	XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-	XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+	XF86AudioRaiseVolume allow-when-locked=true repeat=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
+	XF86AudioLowerVolume allow-when-locked=true repeat=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
+	XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+	XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
 	// Example media keys mapping using playerctl.
 	// This will work with any MPRIS-enabled media player.

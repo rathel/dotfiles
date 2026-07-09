@@ -2,7 +2,7 @@
 set -euo pipefail
 
 make_candidates() {
-  local item base lower candidate
+  local item base lower candidate stem
 
   for item in "$@"; do
     [[ "$item" == -* ]] && continue
@@ -30,6 +30,12 @@ make_candidates() {
         [[ -z "$candidate" ]] && continue
         printf '%s\n' "$candidate"
         printf '%s\n' "$(normalize_name "$candidate")"
+
+        stem="${candidate%%-linux-*}"
+        if [[ "$stem" != "$candidate" && -n "$stem" ]]; then
+          printf '%s\n' "$stem"
+          printf '%s\n' "$(normalize_name "$stem")"
+        fi
       done
     done
   done
@@ -78,7 +84,7 @@ find_matching_window() {
           break 2
         fi
       done
-      ((rank++))
+      ((++rank))
     done
 
     if [[ "$matched" == true ]]; then
