@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Layouts
 
 Item {
+    Theme { id: theme }
+
     required property var notification
 
     implicitWidth: 360
@@ -21,9 +23,9 @@ Item {
         width: parent.implicitWidth
         implicitHeight: content.implicitHeight + 18
         radius: 12
-        color: "#1e1e2e"
+        color: theme.base
         border.width: 1
-        border.color: notification.urgency === NotificationUrgency.Critical ? "#f38ba8" : "#313244"
+        border.color: notification.urgency === NotificationUrgency.Critical ? theme.red : theme.surface0
 
         MouseArea {
             anchors.fill: parent
@@ -40,7 +42,7 @@ Item {
                 width: 40
                 height: 40
                 radius: 10
-                color: "#181825"
+                color: theme.mantle
 
                 Image {
                     anchors.fill: parent
@@ -58,7 +60,7 @@ Item {
                 Text {
                     width: 280
                     text: notification.appName && notification.appName.length > 0 ? notification.appName : "Notification"
-                    color: "#cdd6f4"
+                    color: theme.text
                     font.family: "Iosevka Nerd Font"
                     font.pixelSize: 16
                     font.bold: true
@@ -68,7 +70,7 @@ Item {
                 Text {
                     width: 280
                     text: notification.summary
-                    color: "#f5e0dc"
+                    color: theme.rosewater
                     font.family: "Iosevka Nerd Font"
                     font.pixelSize: 16
                     font.bold: true
@@ -78,7 +80,7 @@ Item {
                 Text {
                     width: 280
                     text: notification.body
-                    color: "#bac2de"
+                    color: theme.subtext0
                     font.family: "Iosevka Nerd Font"
                     font.pixelSize: 16
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -96,7 +98,7 @@ Item {
                         delegate: Rectangle {
                             required property var modelData
                             radius: 8
-                            color: "#313244"
+                            color: theme.surface0
                             implicitHeight: 24
                             implicitWidth: actionLabel.implicitWidth + 18
 
@@ -109,7 +111,7 @@ Item {
                                 id: actionLabel
                                 anchors.centerIn: parent
                                 text: modelData.text || "Action"
-                                color: "#cdd6f4"
+                                color: theme.text
                                 font.family: "Iosevka Nerd Font"
                                 font.pixelSize: 16
                             }
@@ -118,7 +120,7 @@ Item {
 
                     Rectangle {
                         radius: 8
-                        color: "#45475a"
+                        color: theme.surface1
                         implicitHeight: 24
                         implicitWidth: closeLabel.implicitWidth + 18
 
@@ -131,7 +133,7 @@ Item {
                             id: closeLabel
                             anchors.centerIn: parent
                             text: "Close"
-                            color: "#cdd6f4"
+                            color: theme.text
                             font.family: "Iosevka Nerd Font"
                             font.pixelSize: 16
                         }
