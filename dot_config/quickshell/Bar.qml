@@ -259,6 +259,7 @@ Scope {
         model: Quickshell.screens
 
         PanelWindow {
+            id: panelWindow
             required property var modelData
             screen: modelData
 
@@ -280,23 +281,6 @@ Scope {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
-
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: volText.implicitWidth + 20
-                        visible: root.volumeText.length > 0
-
-                        Text {
-                            id: volText
-                            anchors.centerIn: parent
-                            text: root.volumeText
-                            color: root.blue
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
-                    }
 
                     Rectangle {
                         radius: 8
@@ -415,29 +399,59 @@ Scope {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
 
+                    Rectangle {
+                        radius: 8
+                        color: root.panel
+                        implicitHeight: 24
+                        implicitWidth: volText.implicitWidth + 20
+                        visible: root.volumeText.length > 0
+
+                        Text {
+                            id: volText
+                            anchors.centerIn: parent
+                            text: root.volumeText
+                            color: root.blue
+                            font.family: "Iosevka Nerd Font"
+                            font.pixelSize: root.fontSize
+                        }
+                    }
+
                     Repeater {
                         model: SystemTray.items ? SystemTray.items.values : []
 
                         delegate: Item {
+                            id: trayItem
                             required property var modelData
                             width: 22
                             height: 22
 
                             Image {
                                 anchors.fill: parent
-                                source: Quickshell.iconPath(modelData.icon, true)
+                                source: modelData.id === "niri-shadow-guard"
+                                    ? "file://" + Quickshell.env("HOME") + "/.local/share/icons/niri-shadow-guard.png"
+                                    : modelData.icon
                                 fillMode: Image.PreserveAspectFit
                                 smooth: true
                             }
 
                             MouseArea {
                                 anchors.fill: parent
-                                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
                                 onClicked: mouse => {
                                     if (mouse.button === Qt.LeftButton) {
-                                        modelData.activate()
+                                        if (modelData.onlyMenu && modelData.hasMenu) {
+                                            const p = trayItem.mapToItem(panelWindow.contentItem, mouse.x, mouse.y)
+                                            modelData.display(panelWindow, p.x, p.y)
+                                        } else {
+                                            modelData.activate()
+                                        }
                                     } else if (mouse.button === Qt.MiddleButton) {
                                         modelData.secondaryActivate()
+                                    } else if (mouse.button === Qt.RightButton && modelData.hasMenu) {
+                                        const p = trayItem.mapToItem(panelWindow.contentItem, mouse.x, mouse.y)
+                                        modelData.display(panelWindow, p.x, p.y)
                                     }
                                 }
                             }
