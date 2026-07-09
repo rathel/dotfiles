@@ -270,12 +270,13 @@ Scope {
             color: root.bg
             focusable: false
 
-            RowLayout {
+            Item {
                 anchors.fill: parent
                 anchors.margins: 8
-                spacing: 8
 
                 RowLayout {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
 
                     Rectangle {
@@ -398,11 +399,8 @@ Scope {
                     }
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 Text {
+                    anchors.centerIn: parent
                     text: Qt.formatDateTime(clock.date, "ddd MMM d HH:mm")
                     color: root.text
                     font.family: "Iosevka Nerd Font"
@@ -410,11 +408,9 @@ Scope {
                     font.bold: true
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 RowLayout {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
 
                     Repeater {
