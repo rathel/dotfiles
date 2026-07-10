@@ -1,32 +1,43 @@
 #!/bin/env bash
 
 TSIPS="$(tailscale status | awk '{print $1}')"
-HOSTIP="$(tailscale status | grep -i $(hostnamectl hostname) | awk '{print $1}')"
+HOSTIP="$(tailscale status | grep -i "$(hostnamectl hostname)" | awk '{print $1}')"
 OFFLINE="$(tailscale status | grep -i offline | awk '{print $1}')"
-TERMINAL="kitty @ launch --type=tab --title"
-#TERMINAL="wezterm cli spawn"
-n=0
+WINDOW_TERMINAL="alacritty"
+
+spawn_remote() {
+	local title="$1"
+	shift
+
+	if [[ -n ${KITTY_WINDOW_ID:-} ]]; then
+		kitty @ launch --type=tab --title "$title" -- "$@" >/dev/null 2>&1 &
+	elif [[ -n ${WEZTERM_PANE:-} ]]; then
+		wezterm cli spawn -- "$@" >/dev/null 2>&1 &
+	else
+		"$WINDOW_TERMINAL" --title "$title" -e "$@" >/dev/null 2>&1 &
+	fi
+}
 
 for i in $TSIPS; do
 	case $i in
-		$HOSTIP|$OFFLINE)
+		"$HOSTIP"|"$OFFLINE")
 			echo "Skipping Tailscale IP: $i."
 			continue
 			;;
 		{{ .tailscale.ip.deck }})
-			$TERMINAL "$i" ssh deck@"$i" >/dev/null 2>&1 &
+			spawn_remote "$i" ssh deck@"$i"
 			continue
 			;;
 		{{ .tailscale.ip.phone }})
-			$TERMINAL "$i" ssh -p8022 u0_505@"$i" >/dev/null 2>&1 &
+			spawn_remote "$i" ssh -p8022 u0_505@"$i"
 			continue
 			;;
 		{{ .tailscale.ip.pixelxl }})
-			$TERMINAL "$i" ssh -p8022 u0_a213@"$i" >/dev/null 2>&1 &
+			spawn_remote "$i" ssh -p8022 u0_a213@"$i"
 			continue
 			;;
 		{{ .tailscale.ip.pixel6a }})
-			$TERMINAL "$i" ssh -p8022 u0_a410@"$i" >/dev/null 2>&1 &
+			spawn_remote "$i" ssh -p8022 u0_a410@"$i"
 			continue
 			;;
 	esac
@@ -37,7 +48,7 @@ for i in $TSIPS; do
 	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 0.5
-	$TERMINAL "$i" ssh "$i" -t "tmux a -d || tmux" >/dev/null 2>&1 &
+	spawn_remote "$i" ssh "$i" -t "tmux a -d || tmux"
 done
 
 # vim: filetype=bash
