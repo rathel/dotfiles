@@ -18,7 +18,7 @@ Scope {
     readonly property color yellow: theme.yellow
     readonly property color peach: theme.peach
     readonly property color red: theme.red
-    readonly property color mauve: theme.mauve
+    readonly property color lavender: theme.lavender
     readonly property int fontSize: 16
 
     property string volumeText: ""
@@ -365,7 +365,7 @@ Scope {
                             id: btText
                             anchors.centerIn: parent
                             text: root.bluetoothText
-                            color: root.mauve
+                            color: root.lavender
                             font.family: "Iosevka Nerd Font"
                             font.pixelSize: root.fontSize
                         }

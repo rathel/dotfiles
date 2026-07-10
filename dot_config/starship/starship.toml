@@ -1,6 +1,6 @@
 # Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
 add_newline = true
-palette = "catpuccin_mocha"
+palette = "catppuccin_mocha"
 
 format = """
 [](fg:dim_bg)$username$directory$git_branch$git_status$cmd_duration$nodejs$rust$python$time[](fg:dim_bg)

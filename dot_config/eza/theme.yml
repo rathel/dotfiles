@@ -8,7 +8,7 @@ filekinds:
   block_device: {foreground: "#eba0ac"}
   char_device: {foreground: "#eba0ac"}
   socket: {foreground: "#bac2de"}
-  special: {foreground: "#cba6f7"}
+  special: {foreground: "#b4befe"}
   executable: {foreground: "#a6e3a1"}
   mount_point: {foreground: "#94e2d5"}
 
@@ -23,7 +23,7 @@ perms:
   other_read: {foreground: "#f38ba8"}
   other_write: {foreground: "#f9e2af"}
   other_execute: {foreground: "#a6e3a1"}
-  special_user_file: {foreground: "#cba6f7"}
+  special_user_file: {foreground: "#b4befe"}
   special_other: {foreground: "#7f849c"}
   attribute: {foreground: "#9399b2"}
 
@@ -33,12 +33,12 @@ size:
   number_byte: {foreground: "#bac2de"}
   number_kilo: {foreground: "#a6adc8"}
   number_mega: {foreground: "#89b4fa"}
-  number_giga: {foreground: "#cba6f7"}
-  number_huge: {foreground: "#cba6f7"}
+  number_giga: {foreground: "#b4befe"}
+  number_huge: {foreground: "#b4befe"}
   unit_byte: {foreground: "#a6adc8"}
   unit_kilo: {foreground: "#89dceb"}
-  unit_mega: {foreground: "#cba6f7"}
-  unit_giga: {foreground: "#cba6f7"}
+  unit_mega: {foreground: "#b4befe"}
+  unit_giga: {foreground: "#b4befe"}
   unit_huge: {foreground: "#94e2d5"}
 
 users:
@@ -64,16 +64,16 @@ git:
 
 git_repo:
   branch_main: {foreground: "#a6adc8"}
-  branch_other: {foreground: "#cba6f7"}
+  branch_other: {foreground: "#b4befe"}
   git_clean: {foreground: "#a6e3a1"}
   git_dirty: {foreground: "#eba0ac"}
 
 security_context:
   colon: {foreground: "#6c7086"}
   user: {foreground: "#7f849c"}
-  role: {foreground: "#cba6f7"}
+  role: {foreground: "#b4befe"}
   typ: {foreground: "#585b70"}
-  range: {foreground: "#cba6f7"}
+  range: {foreground: "#b4befe"}
 
 file_type:
   image: {foreground: "#f9e2af"}
@@ -93,7 +93,7 @@ inode: {foreground: "#a6adc8"}
 blocks: {foreground: "#6c7086"}
 header: {foreground: "#cdd6f4"}
 octal: {foreground: "#94e2d5"}
-flags: {foreground: "#cba6f7"}
+flags: {foreground: "#b4befe"}
 
 symlink_path: {foreground: "#89dceb"}
 control_char: {foreground: "#74c7ec"}
