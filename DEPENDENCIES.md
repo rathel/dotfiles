@@ -26,7 +26,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Dotfile Manager**: `chezmoi`
 
 ## Fonts
-- **Nerd Fonts**: `ttf-iosevka-term-nerd`, `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)
+- **Nerd Fonts**: `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)
 - These are required for icons in terminals, tmux, and other applications
 
 ## Themes & Plugins

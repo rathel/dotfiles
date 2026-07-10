@@ -1,9 +1,7 @@
 @import "mocha.css";
 
 * {
-    font-family:
-        Iosevka Nerd Font,
-        monospace;
+    font-family: Iosevka Nerd Font;
     font-size: 18px;
 }
 
