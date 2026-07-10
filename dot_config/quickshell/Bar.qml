@@ -93,7 +93,7 @@ Scope {
             rateText = ` ${formatRate(downRate)}↓ ${formatRate(upRate)}↑`
         }
 
-        networkText = `${kind === "ethernet" ? "󰈀" : "󰖩"} ${name}${rateText}`
+        networkText = kind === "ethernet" ? `󰈀${rateText}` : `󰖩 ${name}${rateText}`
         networkLastIface = iface
         networkLastSampleMs = now
         networkLastRxBytes = rxBytes
