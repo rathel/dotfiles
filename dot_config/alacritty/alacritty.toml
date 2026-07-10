@@ -4,7 +4,7 @@
 import = ["catppuccin-mocha.toml"]
 
 [window]
-opacity = 0.9
+opacity = 1.0
 decorations = "full"
 
 [window.padding]
