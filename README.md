@@ -23,6 +23,42 @@ This repository contains configuration files for my Linux desktop.
 - **quickshell** - Wayland shell/bar + notification stack
 - **fuzzel** - Application launcher
 
+#### Niri keybindings
+`Mod` is Super on TTY and Alt when running in a window.
+
+- `Mod+T` — kitty terminal
+- `Mod+P` — scratch editor
+- `Mod+M` — media/player launcher
+- `Mod+Z` / `Mod+Shift+Z` — Obsidian / Zed
+- `Mod+Grave` — scratch shell
+- `Alt+Tab` — switch windows
+- `Mod+D` — app launcher
+- `Mod+Shift+D` — Discord
+- `Mod+S` — Steam launcher
+- `Super+Shift+T` — Thunderbird
+- `Mod+B` / `Mod+Shift+B` — Firefox Dev / Beeper
+- `Super+Alt+L` — lock screen
+- `Mod+G` — ShadowTech
+- `Mod+Q` — close window
+- `Mod+O` — overview
+- `Mod+H/J/K/L` or arrow keys — move focus
+- `Mod+Ctrl+H/J/K/L` or arrow keys — move windows/columns
+- `Mod+1..9` — switch workspaces
+- `Mod+Ctrl+1..9` — move column to workspace
+- `Mod+PageUp/PageDown` or `Mod+U/I` — workspace focus
+- `Mod+Shift+PageUp/PageDown` or `Mod+Shift+U/I` — move workspace
+- `Mod+BracketLeft/BracketRight` — consume/expel window
+- `Mod+Comma` / `Mod+Period` — consume/expel window in column
+- `Mod+R` / `Mod+Shift+R` / `Mod+Ctrl+R` — column width / window height / reset height
+- `Mod+F` / `Mod+Shift+F` / `Mod+Ctrl+F` — maximize / fullscreen / expand column
+- `Mod+C` / `Mod+Ctrl+C` — center column(s)
+- `Mod+V` / `Mod+Shift+V` — toggle floating / switch focus floating-tiling
+- `Mod+W` — tabbed column view
+- `Mod+F12` / `Mod+Ctrl+F12` / `Mod+Alt+F12` — screenshots
+- `Mod+Escape` — toggle keyboard shortcut inhibition
+- `Mod+Shift+E` / `Ctrl+Alt+Delete` — quit
+- `Mod+Shift+P` — power off monitors
+
 ### Utilities
 - **eza** - Modern ls replacement with custom theme
 - **mpv** - Media player (private)
