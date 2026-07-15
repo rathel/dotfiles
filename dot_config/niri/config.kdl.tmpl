@@ -519,8 +519,8 @@ binds {
 	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
 	Mod+M hotkey-overlay-title="Fladder" { spawn-sh "niri-app -c $HOME/Applications/Multimedia/Fladder-Linux-0.10.3.AppImage"; }
 
-	Mod+Z { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
-	Mod+Shift+Z hotkey-overlay-title="Zed" { spawn "niri-app" "-c" "zeditor"; }
+	Mod+O hotkey-overlay-title="Obsidian" { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
+	Mod+Z hotkey-overlay-title="Zed" { spawn "niri-app" "-c" "zeditor"; }
 	Mod+Grave { spawn "kitty" "--title=scratch" "-e" "sh"; }
 	Alt+Tab { spawn-sh "$HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
@@ -557,7 +557,7 @@ binds {
 	// Open/close the Overview: a zoomed-out view of workspaces and windows.
 	// You can also move the mouse into the top-left hot corner,
 	// or do a four-finger swipe up on a touchpad.
-	Mod+O repeat=false { toggle-overview; }
+	Mod+Shift+O repeat=false { toggle-overview; }
 
 	Mod+Q { close-window; }
 
