@@ -8,6 +8,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Terminal Multiplexer**: `tmux`
 - **Window Managers/Compositors**: `niri`
 - **Desktop Shell**: `quickshell`
+- **Codex Usage Meter**: OpenAI Codex CLI (`@openai/codex`), logged in with a ChatGPT subscription
 - **Status Bar**: `waybar` (legacy)
 - **Notification Daemons**: `dunst`, `mako` (legacy)
 - **Application Launcher**: `fuzzel`

@@ -186,10 +186,24 @@ Scope {
             return
         }
 
-        const session = Math.max(0, Math.min(100, parseInt(parts[0]) || 0))
-        const weekly = Math.max(0, Math.min(100, parseInt(parts[1]) || 0))
-        codexUsage = Math.max(session, weekly)
-        codexText = `󰚩 5h ${session}% · 7d ${weekly}%`
+        const session = parseInt(parts[0])
+        const weekly = parseInt(parts[1])
+        const labels = []
+        const usages = []
+
+        if (session >= 0) {
+            const value = Math.min(100, session)
+            labels.push(`5h ${value}%`)
+            usages.push(value)
+        }
+        if (weekly >= 0) {
+            const value = Math.min(100, weekly)
+            labels.push(`7d ${value}%`)
+            usages.push(value)
+        }
+
+        codexUsage = usages.length > 0 ? Math.max(...usages) : 0
+        codexText = labels.length > 0 ? `󰚩 ${labels.join(" · ")}` : ""
     }
 
     SystemClock {
