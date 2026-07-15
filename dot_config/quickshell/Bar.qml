@@ -28,6 +28,8 @@ Scope {
     property string bluetoothText: ""
     property string memoryText: ""
     property string cpuText: ""
+    property string codexText: ""
+    property int codexUsage: 0
     property string networkLastIface: ""
     property real networkLastSampleMs: 0
     property real networkLastRxBytes: 0
@@ -176,6 +178,20 @@ Scope {
         cpuLastTotal = total
     }
 
+    function setCodexUsage(output) {
+        const parts = String(output).trim().split(/\s+/)
+        if (parts.length < 2) {
+            codexText = ""
+            codexUsage = 0
+            return
+        }
+
+        const session = Math.max(0, Math.min(100, parseInt(parts[0]) || 0))
+        const weekly = Math.max(0, Math.min(100, parseInt(parts[1]) || 0))
+        codexUsage = Math.max(session, weekly)
+        codexText = `󰚩 5h ${session}% · 7d ${weekly}%`
+    }
+
     SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -291,6 +307,26 @@ Scope {
         running: true
         repeat: true
         onTriggered: cpuProc.running = true
+    }
+
+    Process {
+        id: codexProc
+        command: [Quickshell.env("HOME") + "/.local/bin/codex-usage"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: root.setCodexUsage(this.text)
+        }
+    }
+
+    Timer {
+        interval: 300000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (!codexProc.running) {
+                codexProc.running = true
+            }
+        }
     }
 
     Variants {
@@ -436,6 +472,23 @@ Scope {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
+
+                    Rectangle {
+                        radius: 8
+                        color: root.panel
+                        implicitHeight: 24
+                        implicitWidth: codexUsageText.implicitWidth + 20
+                        visible: root.codexText.length > 0
+
+                        Text {
+                            id: codexUsageText
+                            anchors.centerIn: parent
+                            text: root.codexText
+                            color: root.codexUsage >= 90 ? root.red : root.codexUsage >= 70 ? root.yellow : root.green
+                            font.family: "Iosevka Nerd Font"
+                            font.pixelSize: root.fontSize
+                        }
+                    }
 
                     Rectangle {
                         radius: 8
