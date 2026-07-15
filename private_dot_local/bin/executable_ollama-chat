@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+"""Small dependency-free terminal client for a remote Ollama server."""
+
+import argparse
+import json
+import os
+import sys
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+DEFAULT_HOST = "http://100.72.34.26:11434"
+DEFAULT_MODEL = "qwen3.6:latest"
+
+
+def chat(host, model, messages, timeout):
+    request = Request(
+        host.rstrip("/") + "/api/chat",
+        data=json.dumps({"model": model, "messages": messages, "stream": False}).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            payload = json.load(response)
+    except HTTPError as error:
+        detail = error.read().decode(errors="replace").strip()
+        raise RuntimeError(f"Ollama returned HTTP {error.code}: {detail}") from error
+    except URLError as error:
+        raise RuntimeError(f"Could not reach Ollama at {host}: {error.reason}") from error
+    return payload["message"]["content"]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("prompt", nargs="*", help="prompt; omit for interactive mode")
+    parser.add_argument("-m", "--model", default=os.environ.get("OLLAMA_MODEL", DEFAULT_MODEL))
+    parser.add_argument("--host", default=os.environ.get("OLLAMA_HOST", DEFAULT_HOST))
+    parser.add_argument("--timeout", type=int, default=600)
+    args = parser.parse_args()
+
+    messages = []
+    if args.prompt:
+        messages.append({"role": "user", "content": " ".join(args.prompt)})
+        try:
+            print(chat(args.host, args.model, messages, args.timeout))
+        except RuntimeError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
+        return 0
+
+    print(f"Ollama: {args.host}  model: {args.model}")
+    print("Commands: /clear, /model NAME, /quit")
+    while True:
+        try:
+            prompt = input("\n> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+        if not prompt:
+            continue
+        if prompt in ("/quit", "/exit"):
+            break
+        if prompt == "/clear":
+            messages.clear()
+            print("conversation cleared")
+            continue
+        if prompt.startswith("/model "):
+            args.model = prompt.split(None, 1)[1]
+            print(f"model: {args.model}")
+            continue
+
+        messages.append({"role": "user", "content": prompt})
+        try:
+            answer = chat(args.host, args.model, messages, args.timeout)
+        except RuntimeError as error:
+            messages.pop()
+            print(f"error: {error}", file=sys.stderr)
+            continue
+        messages.append({"role": "assistant", "content": answer})
+        print(f"\n{answer}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

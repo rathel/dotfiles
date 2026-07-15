@@ -1,0 +1,3 @@
+[misc]
+notify_each_step = true
+notify_end = "always"
