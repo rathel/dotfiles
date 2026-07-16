@@ -29,7 +29,7 @@ This repository contains configuration files for my Linux desktop.
 - `Mod+T` — kitty terminal
 - `Mod+P` — scratch editor
 - `Mod+M` — media/player launcher
-- `Mod+Z` / `Mod+Shift+Z` — Obsidian / Zed
+- `Mod+Z` / `Mod+Shift+Z` — Zed / Obsidian
 - `Mod+Grave` — scratch shell
 - `Alt+Tab` — switch windows
 - `Mod+D` — app launcher
