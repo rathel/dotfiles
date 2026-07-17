@@ -397,18 +397,18 @@ window-rule {
 	open-floating true
 }
 
- window-rule {
- 	match app-id="imv"
- 	default-floating-position x=1 y=1 relative-to="bottom-right"
- 	default-column-width { proportion 0.2; }
- 	default-window-height { proportion 0.2; }
- 	open-floating true
+// window-rule {
+// 	match app-id="imv"
+// 	default-floating-position x=1 y=1 relative-to="bottom-right"
+// 	default-column-width { proportion 0.2; }
+// 	default-window-height { proportion 0.2; }
+// 	open-floating true
 	{{- if eq .chezmoi.hostname "archlinux-z170" }}
- 	open-on-output "DP-2"
+// 	open-on-output "DP-2"
 	{{- end }}
- 	open-focused true
- 	// open-maximized true
- }
+// 	open-focused true
+// 	// open-maximized true
+// }
 
 
  window-rule {
