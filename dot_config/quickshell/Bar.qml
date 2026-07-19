@@ -179,31 +179,15 @@ Scope {
     }
 
     function setCodexUsage(output) {
-        const parts = String(output).trim().split(/\s+/)
-        if (parts.length < 2) {
-            codexText = ""
-            codexUsage = 0
+        const weekly = parseInt(String(output).trim())
+        if (isNaN(weekly) || weekly < 0) {
+            // Keep the last good value when the helper has a transient failure.
             return
         }
 
-        const session = parseInt(parts[0])
-        const weekly = parseInt(parts[1])
-        const labels = []
-        const usages = []
-
-        if (session >= 0) {
-            const value = Math.min(100, session)
-            labels.push(`5h ${value}%`)
-            usages.push(value)
-        }
-        if (weekly >= 0) {
-            const value = Math.min(100, weekly)
-            labels.push(`7d ${value}%`)
-            usages.push(value)
-        }
-
-        codexUsage = usages.length > 0 ? Math.max(...usages) : 0
-        codexText = labels.length > 0 ? `󰚩 ${labels.join(" · ")}` : ""
+        const value = Math.min(100, weekly)
+        codexUsage = value
+        codexText = `󰚩 7d ${value}%`
     }
 
     SystemClock {
@@ -333,7 +317,9 @@ Scope {
     }
 
     Timer {
-        interval: 300000
+        // Retry often enough to recover from a short-lived Codex/app-server
+        // failure, while the helper itself prevents a hung process.
+        interval: 60000
         running: true
         repeat: true
         onTriggered: {
