@@ -278,7 +278,7 @@ spawn-sh-at-startup "$HOME/.local/bin/connectspeaker.sh"
 // spawn-sh-at-startup "$HOME/.local/bin/streamers.sh"
 {{- end }}
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
-spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "$HOME/.local/bin/lock-if-shadow-stopped.sh" "before-sleep" "$HOME/.local/bin/lock-if-shadow-stopped.sh"
+spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
 spawn-sh-at-startup "$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard"
 {{- end }}
 
