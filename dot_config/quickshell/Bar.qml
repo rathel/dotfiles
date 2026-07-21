@@ -3,23 +3,62 @@ import Quickshell.Io
 import Quickshell.Services.SystemTray
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 Scope {
     id: root
 
     Theme { id: theme }
 
-    readonly property color bg: theme.base
-    readonly property color panel: theme.mantle
+    readonly property color bg: theme.mantle
+    readonly property color panel: theme.base
     readonly property color text: theme.text
     readonly property color muted: theme.overlay0
     readonly property color blue: theme.blue
+    readonly property color cyan: theme.cyan
+    readonly property color teal: theme.teal
     readonly property color green: theme.green
+    readonly property color greenSoft: theme.greenSoft
+    readonly property color greenDim: theme.greenDim
     readonly property color yellow: theme.yellow
-    readonly property color peach: theme.peach
     readonly property color red: theme.red
-    readonly property color lavender: theme.lavender
     readonly property int fontSize: 16
+
+    component StatusTab: Item {
+        id: statusTab
+
+        property alias text: label.text
+        property color textColor: root.text
+
+        implicitWidth: label.implicitWidth + 30
+        implicitHeight: 24
+
+        Shape {
+            anchors.fill: parent
+
+            ShapePath {
+                fillColor: root.panel
+                strokeWidth: 0
+                startX: 0
+                startY: 0
+                PathLine { x: statusTab.width - 10; y: 0 }
+                PathLine { x: statusTab.width; y: statusTab.height / 2 }
+                PathLine { x: statusTab.width - 10; y: statusTab.height }
+                PathLine { x: 0; y: statusTab.height }
+                PathLine { x: 0; y: 0 }
+            }
+        }
+
+        Text {
+            id: label
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            color: statusTab.textColor
+            font.family: "Iosevka Nerd Font"
+            font.pixelSize: root.fontSize
+        }
+    }
 
     property string volumeText: ""
     property string brightnessText: ""
@@ -356,106 +395,40 @@ Scope {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: brightText.implicitWidth + 20
+                    StatusTab {
+                        text: root.brightnessText
+                        textColor: root.greenSoft
                         visible: root.brightnessText.length > 0
-
-                        Text {
-                            id: brightText
-                            anchors.centerIn: parent
-                            text: root.brightnessText
-                            color: root.yellow
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: netText.implicitWidth + 20
+                    StatusTab {
+                        text: root.networkText
+                        textColor: root.green
                         visible: root.networkText.length > 0
-
-                        Text {
-                            id: netText
-                            anchors.centerIn: parent
-                            text: root.networkText
-                            color: root.green
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: btText.implicitWidth + 20
+                    StatusTab {
+                        text: root.bluetoothText
+                        textColor: root.cyan
                         visible: root.bluetoothText.length > 0
-
-                        Text {
-                            id: btText
-                            anchors.centerIn: parent
-                            text: root.bluetoothText
-                            color: root.lavender
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: memText.implicitWidth + 20
+                    StatusTab {
+                        text: root.memoryText
+                        textColor: root.teal
                         visible: root.memoryText.length > 0
-
-                        Text {
-                            id: memText
-                            anchors.centerIn: parent
-                            text: root.memoryText
-                            color: root.peach
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: cpuText.implicitWidth + 20
+                    StatusTab {
+                        text: root.cpuText
+                        textColor: root.greenDim
                         visible: root.cpuText.length > 0
-
-                        Text {
-                            id: cpuText
-                            anchors.centerIn: parent
-                            text: root.cpuText
-                            color: root.red
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: batText.implicitWidth + 20
+                    StatusTab {
+                        text: root.batteryText
+                        textColor: root.text
                         visible: root.batteryText.length > 0
-
-                        Text {
-                            id: batText
-                            anchors.centerIn: parent
-                            text: root.batteryText
-                            color: root.text
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
                 }
 
@@ -473,38 +446,16 @@ Scope {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: codexUsageText.implicitWidth + 20
+                    StatusTab {
+                        text: root.codexText
+                        textColor: root.codexUsage >= 90 ? root.red : root.codexUsage >= 70 ? root.yellow : root.green
                         visible: root.codexText.length > 0
-
-                        Text {
-                            id: codexUsageText
-                            anchors.centerIn: parent
-                            text: root.codexText
-                            color: root.codexUsage >= 90 ? root.red : root.codexUsage >= 70 ? root.yellow : root.green
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
-                    Rectangle {
-                        radius: 8
-                        color: root.panel
-                        implicitHeight: 24
-                        implicitWidth: volText.implicitWidth + 20
+                    StatusTab {
+                        text: root.volumeText
+                        textColor: root.blue
                         visible: root.volumeText.length > 0
-
-                        Text {
-                            id: volText
-                            anchors.centerIn: parent
-                            text: root.volumeText
-                            color: root.blue
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: root.fontSize
-                        }
                     }
 
                     Repeater {
