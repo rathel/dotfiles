@@ -8,24 +8,45 @@ opacity = 1.0
 decorations = "full"
 
 [window.padding]
-x = 0
-y = 0
+x = 10
+y = 10
+
+[scrolling]
+history = 10000
 
 [font]
-size = 11.5
+size = 12.0
 
 [font.normal]
-family = "Iosevka Nerd Font"
+family = "IosevkaTerm Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "Iosevka Nerd Font"
+family = "IosevkaTerm Nerd Font"
 style = "Bold"
 
 [font.italic]
-family = "Iosevka Nerd Font"
+family = "IosevkaTerm Nerd Font"
 style = "Italic"
 
 [font.bold_italic]
-family = "Iosevka Nerd Font"
+family = "IosevkaTerm Nerd Font"
 style = "Bold Italic"
+
+[bell]
+duration = 0
+command = "None"
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "Never" }
+
+# Alacritty has no native panes or tabs, so these shortcuts use OS windows.
+[keyboard]
+bindings = [
+  { key = "Enter", mods = "Control|Shift", action = "CreateNewWindow" },
+  { key = "T", mods = "Control|Shift", action = "CreateNewWindow" },
+  { key = "W", mods = "Control|Shift", action = "Quit" },
+]

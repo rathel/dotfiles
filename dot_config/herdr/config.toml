@@ -1,0 +1,25 @@
+[theme]
+# Catppuccin Mocha Verdant, matching ~/.config/kitty/kitty.conf
+name = "catppuccin"
+
+[theme.custom]
+panel_bg = "#07110d"
+surface0 = "#1b3a2d"
+surface1 = "#12271e"
+surface_dim = "#0b1812"
+overlay0 = "#486052"
+overlay1 = "#7fb7a7"
+text = "#c9dccb"
+subtext0 = "#b8c9ba"
+mauve = "#b79ad8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+red = "#f38ba8"
+blue = "#89dceb"
+teal = "#94e2d5"
+peach = "#fab387"
+accent = "#a6e3a1"
+
+[keys]
+navigate_workspace_down = "j"
+navigate_workspace_up = "k"

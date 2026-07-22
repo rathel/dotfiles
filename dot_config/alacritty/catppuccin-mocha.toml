@@ -1,60 +1,62 @@
+# Catppuccin Mocha Verdant, matching ~/.config/kitty/kitty.conf
+
 [colors.primary]
-background = "#1e1e2e"
-foreground = "#cdd6f4"
-dim_foreground = "#7f849c"
-bright_foreground = "#cdd6f4"
+background = "#07110d"
+foreground = "#c9dccb"
+dim_foreground = "#486052"
+bright_foreground = "#e4f1e5"
 
 [colors.cursor]
-text = "#1e1e2e"
-cursor = "#f5e0dc"
+text = "#07110d"
+cursor = "#a6e3a1"
 
 [colors.vi_mode_cursor]
-text = "#1e1e2e"
-cursor = "#b4befe"
+text = "#07110d"
+cursor = "#a6e3a1"
 
 [colors.search.matches]
-foreground = "#1e1e2e"
-background = "#a6adc8"
+foreground = "#e4f1e5"
+background = "#1b3a2d"
 
 [colors.search.focused_match]
-foreground = "#1e1e2e"
+foreground = "#07110d"
 background = "#a6e3a1"
 
 [colors.footer_bar]
-foreground = "#1e1e2e"
-background = "#a6adc8"
+foreground = "#c9dccb"
+background = "#12271e"
 
 [colors.hints.start]
-foreground = "#1e1e2e"
-background = "#f9e2af"
+foreground = "#07110d"
+background = "#dccb88"
 
 [colors.hints.end]
-foreground = "#1e1e2e"
-background = "#a6adc8"
+foreground = "#07110d"
+background = "#7fb7a7"
 
 [colors.selection]
-text = "#1e1e2e"
-background = "#f5e0dc"
+text = "#e4f1e5"
+background = "#1b3a2d"
 
 [colors.normal]
-black = "#45475a"
-red = "#f38ba8"
-green = "#a6e3a1"
-yellow = "#f9e2af"
-blue = "#89b4fa"
-magenta = "#f5c2e7"
-cyan = "#94e2d5"
-white = "#bac2de"
+black = "#0b1812"
+red = "#e88a9c"
+green = "#8fd694"
+yellow = "#dccb88"
+blue = "#7fb7a7"
+magenta = "#b79ad8"
+cyan = "#79c9b7"
+white = "#b8c9ba"
 
 [colors.bright]
-black = "#585b70"
+black = "#486052"
 red = "#f38ba8"
 green = "#a6e3a1"
 yellow = "#f9e2af"
-blue = "#89b4fa"
-magenta = "#f5c2e7"
+blue = "#89dceb"
+magenta = "#cba6f7"
 cyan = "#94e2d5"
-white = "#a6adc8"
+white = "#e4f1e5"
 
 [[colors.indexed_colors]]
 index = 16
@@ -62,4 +64,4 @@ color = "#fab387"
 
 [[colors.indexed_colors]]
 index = 17
-color = "#f5e0dc"
+color = "#f5a97f"
