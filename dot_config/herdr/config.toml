@@ -1,3 +1,6 @@
+onboarding = false
+# Always start new panes, tabs, and workspaces in the home directory.
+new_cwd = "home"
 [theme]
 # Catppuccin Mocha Verdant, matching ~/.config/kitty/kitty.conf
 name = "catppuccin"
