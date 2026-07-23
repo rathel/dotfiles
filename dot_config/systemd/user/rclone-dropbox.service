@@ -1,0 +1,15 @@
+[Unit]
+Description=Mount Dropbox with rclone
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/mkdir -p %h/Dropbox
+ExecStart=/usr/bin/rclone mount --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 1h dropbox: %h/Dropbox
+ExecStop=/usr/bin/fusermount3 -u %h/Dropbox
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target
