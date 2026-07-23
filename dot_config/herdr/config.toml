@@ -23,3 +23,6 @@ accent = "#a6e3a1"
 [keys]
 navigate_workspace_down = "j"
 navigate_workspace_up = "k"
+
+[experimental]
+kitty_graphics = true
