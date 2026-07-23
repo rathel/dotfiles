@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ssh_config=${HOST_PICKER_SSH_CONFIG:-"$HOME/.ssh/config"}
+default_ssh_config=$HOME/.ssh/config
+terminal=${HOST_PICKER_TERMINAL:-kitty}
+special_host=${HOST_PICKER_SSH_TMUX_HOST:-netbook}
+tmux_session=${HOST_PICKER_TMUX_SESSION:-main}
+
+notify_error() {
+    if command -v notify-send >/dev/null 2>&1 &&
+        notify-send --urgency=critical "SSH host picker" "$1"; then
+        return
+    fi
+
+    printf 'host-picker: %s\n' "$1" >&2
+}
+
+require_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        notify_error "Required command not found: $1"
+        exit 1
+    fi
+}
+
+for command in fuzzel "$terminal" ssh python3; do
+    require_command "$command"
+done
+
+ssh_config=$(python3 -c 'import os, sys; print(os.path.abspath(os.path.expanduser(sys.argv[1])))' "$ssh_config")
+default_ssh_config=$(python3 -c 'import os, sys; print(os.path.abspath(os.path.expanduser(sys.argv[1])))' "$default_ssh_config")
+
+if [[ ! -r $ssh_config ]]; then
+    notify_error "Cannot read SSH config: $ssh_config"
+    exit 1
+fi
+
+if ! hosts=$(
+    python3 - "$ssh_config" <<'PY'
+import glob
+import os
+import re
+import shlex
+import sys
+from pathlib import Path
+
+DIRECTIVE = re.compile(r"^\s*([^\s=#]+)(?:\s*=\s*|\s+)(.*?)\s*$")
+SSH_DIR = Path.home() / ".ssh"
+hosts = set()
+visited = set()
+
+
+def values(text, path, line_number):
+    lexer = shlex.shlex(text, posix=True)
+    lexer.commenters = "#"
+    lexer.whitespace_split = True
+    try:
+        return list(lexer)
+    except ValueError as error:
+        raise RuntimeError(f"{path}:{line_number}: {error}") from error
+
+
+def expand_include(pattern):
+    placeholder = "\0"
+    pattern = pattern.replace("%%", placeholder)
+    pattern = pattern.replace("%d", str(Path.home()))
+    pattern = os.path.expandvars(os.path.expanduser(pattern))
+
+    # Host-dependent tokens cannot be expanded while enumerating aliases.
+    if re.search(r"%[A-Za-z%]", pattern):
+        return None
+
+    pattern = pattern.replace(placeholder, "%")
+    path = Path(pattern)
+    if not path.is_absolute():
+        path = SSH_DIR / path
+    return str(path)
+
+
+def parse(path):
+    try:
+        resolved = path.resolve(strict=True)
+    except OSError as error:
+        raise RuntimeError(f"cannot resolve included SSH config {path}: {error}") from error
+
+    if resolved in visited:
+        return
+    visited.add(resolved)
+
+    try:
+        lines = resolved.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as error:
+        raise RuntimeError(f"cannot read included SSH config {resolved}: {error}") from error
+
+    for line_number, line in enumerate(lines, 1):
+        match = DIRECTIVE.match(line)
+        if not match:
+            continue
+
+        keyword = match.group(1).lower()
+        arguments = values(match.group(2), resolved, line_number)
+
+        if keyword == "host":
+            for host in arguments:
+                if host and not host.startswith("!") and not any(
+                    character in host for character in "*?"
+                ):
+                    hosts.add(host)
+            continue
+
+        if keyword != "include":
+            continue
+
+        for include in arguments:
+            pattern = expand_include(include)
+            if pattern is None:
+                continue
+            for included in sorted(glob.glob(pattern)):
+                if Path(included).is_file():
+                    parse(Path(included))
+
+
+try:
+    parse(Path(sys.argv[1]))
+except RuntimeError as error:
+    print(f"host-picker: {error}", file=sys.stderr)
+    raise SystemExit(1)
+
+for host in sorted(hosts, key=lambda value: (value.casefold(), value)):
+    print(host)
+PY
+); then
+    notify_error "Failed to parse SSH config: $ssh_config"
+    exit 1
+fi
+
+if [[ -z $hosts ]]; then
+    notify_error "No concrete Host aliases found in $ssh_config"
+    exit 1
+fi
+
+if ! host=$(printf '%s\n' "$hosts" | fuzzel --dmenu --only-match --prompt='SSH host: '); then
+    exit 0
+fi
+
+[[ -n $host ]] || exit 0
+
+host_is_listed=false
+while IFS= read -r candidate; do
+    if [[ $host == "$candidate" ]]; then
+        host_is_listed=true
+        break
+    fi
+done <<< "$hosts"
+
+if [[ $host_is_listed != true ]]; then
+    notify_error "Invalid SSH host selection: $host"
+    exit 1
+fi
+
+if [[ $host == "$special_host" ]]; then
+    printf -v remote_command 'tmux new-session -A -s %q' "$tmux_session"
+    exec "$terminal" -T "SSH: $host" -e ssh -F "$ssh_config" -t -- "$host" "$remote_command"
+fi
+
+require_command herdr
+
+if [[ $ssh_config == "$default_ssh_config" ]]; then
+    exec "$terminal" -T "Herdr: $host" -e herdr --remote "$host"
+fi
+
+# Herdr normally creates an SSH config that includes ~/.ssh/config. For an
+# alternate config, put an ssh wrapper first in PATH so Herdr keeps its control
+# socket options while using the same config that populated the picker.
+runtime_dir=$(mktemp -d /tmp/host-picker.XXXXXX)
+cleanup_runtime_dir() {
+    rm -rf -- "$runtime_dir"
+}
+trap cleanup_runtime_dir EXIT
+
+ln -s -- "$ssh_config" "$runtime_dir/source-config"
+{
+    printf 'Include "%s/source-config"\n' "$runtime_dir"
+    if [[ -f /etc/ssh/ssh_config ]]; then
+        printf 'Include /etc/ssh/ssh_config\n'
+    fi
+    printf 'Host *\n'
+    printf '    ServerAliveInterval 15\n'
+    printf '    ServerAliveCountMax 4\n'
+} > "$runtime_dir/herdr-ssh-config"
+
+cat > "$runtime_dir/ssh" <<'EOF'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+arguments=()
+removed_config=false
+while (($#)); do
+    if [[ $removed_config == false && $1 == -F ]]; then
+        if (($# < 2)); then
+            printf 'host-picker ssh wrapper: -F requires a path\n' >&2
+            exit 2
+        fi
+        shift 2
+        removed_config=true
+        continue
+    fi
+    if [[ $removed_config == false && $1 == -F?* ]]; then
+        shift
+        removed_config=true
+        continue
+    fi
+    arguments+=("$1")
+    shift
+done
+
+exec "$HOST_PICKER_REAL_SSH" -F "$HOST_PICKER_HERDR_SSH_CONFIG" "${arguments[@]}"
+EOF
+chmod 700 "$runtime_dir/ssh"
+
+real_ssh=$(type -P ssh)
+PATH="$runtime_dir:$PATH" \
+    HOST_PICKER_REAL_SSH="$real_ssh" \
+    HOST_PICKER_HERDR_SSH_CONFIG="$runtime_dir/herdr-ssh-config" \
+    "$terminal" -T "Herdr: $host" -e herdr --remote "$host"
