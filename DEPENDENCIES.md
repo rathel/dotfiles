@@ -12,7 +12,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Status Bar**: `waybar` (legacy)
 - **Notification Daemons**: `dunst`, `mako` (legacy)
 - **Application Launcher**: `fuzzel`
-- **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder)
+- **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder), `curl` (weather widget)
 - **Media**: `mpv`
 - **Text Editor**: `neovim`
 - **Directory Navigation**: `zoxide`, `direnv`

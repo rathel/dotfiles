@@ -68,6 +68,7 @@ Scope {
     property string memoryText: ""
     property string cpuText: ""
     property string codexText: ""
+    property string weatherText: ""
     property int codexUsage: 0
     property string networkLastIface: ""
     property real networkLastSampleMs: 0
@@ -229,6 +230,32 @@ Scope {
         codexText = `󰚩 7d ${value}%`
     }
 
+    function setWeather(output) {
+        const line = String(output).trim()
+        const parts = line.split(String.fromCharCode(9))
+        const condition = (parts[0] || "").toLowerCase()
+        const temperature = (parts[1] || "").match(/[+−-]?[0-9]+(?:[.][0-9]+)?°?[CF]/i)
+
+        if (!temperature) {
+            return
+        }
+
+        let icon = "󰖙"
+        if (/thunder|storm/.test(condition)) {
+            icon = "󰖓"
+        } else if (/snow|blizzard|sleet|ice/.test(condition)) {
+            icon = "󰖘"
+        } else if (/rain|drizzle|shower/.test(condition)) {
+            icon = "󰖗"
+        } else if (/fog|mist|haze/.test(condition)) {
+            icon = "󰖑"
+        } else if (/cloud|overcast/.test(condition)) {
+            icon = /partly|few|scattered/.test(condition) ? "󰖕" : "󰖐"
+        }
+
+        weatherText = `${icon} ${temperature[0].replace("−", "-")}`
+    }
+
     SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -347,6 +374,27 @@ Scope {
     }
 
     Process {
+        id: weatherProc
+        command: ["bash", "-lc", "curl -fsSL --max-time 10 'https://wttr.in/?format=%C%09%t' 2>/dev/null || true"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: root.setWeather(this.text)
+        }
+    }
+
+    Timer {
+        // wttr.in is used without an API key and resolves the current location.
+        interval: 900000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (!weatherProc.running) {
+                weatherProc.running = true
+            }
+        }
+    }
+
+    Process {
         id: codexProc
         command: [Quickshell.env("HOME") + "/.local/bin/codex-usage"]
         running: true
@@ -445,6 +493,12 @@ Scope {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
+
+                    StatusTab {
+                        text: root.weatherText
+                        textColor: root.blue
+                        visible: root.weatherText.length > 0
+                    }
 
                     StatusTab {
                         text: root.codexText
