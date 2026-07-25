@@ -67,8 +67,10 @@ Scope {
     property string bluetoothText: ""
     property string memoryText: ""
     property string cpuText: ""
+    property string rebootText: ""
     property string codexText: ""
     property string weatherText: ""
+    property bool rebootNeeded: false
     property int codexUsage: 0
     property string networkLastIface: ""
     property real networkLastSampleMs: 0
@@ -216,6 +218,16 @@ Scope {
 
         cpuLastIdle = idle
         cpuLastTotal = total
+    }
+
+    function setRebootStatus(output) {
+        const status = String(output).trim()
+        if (status !== "needed" && status !== "current") {
+            return
+        }
+
+        rebootNeeded = status === "needed"
+        rebootText = rebootNeeded ? "󰡕" : "󰸞"
     }
 
     function setCodexUsage(output) {
@@ -374,6 +386,45 @@ Scope {
     }
 
     Process {
+        id: rebootProc
+        // Arch removes the running release's pkgbase on upgrade. Debian-family
+        // systems use reboot-required and identify the triggering package when possible.
+        command: [
+            "sh",
+            "-c",
+            "release=$(uname -r); " +
+            "if [ -e /etc/arch-release ]; then " +
+                "[ -f \"/usr/lib/modules/$release/pkgbase\" ] && status=current || status=needed; " +
+            "elif [ -e /etc/debian_version ] && [ -e /run/reboot-required ]; then " +
+                "if [ ! -s /run/reboot-required.pkgs ] || " +
+                    "grep -Eq '^linux-(image|binary|modules)(-unsigned)?-' /run/reboot-required.pkgs; then " +
+                    "status=needed; " +
+                "else " +
+                    "status=current; " +
+                "fi; " +
+            "else " +
+                "status=current; " +
+            "fi; " +
+            "printf '%s\\n' \"$status\""
+        ]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: root.setRebootStatus(this.text)
+        }
+    }
+
+    Timer {
+        interval: 60000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (!rebootProc.running) {
+                rebootProc.running = true
+            }
+        }
+    }
+
+    Process {
         id: weatherProc
         command: ["bash", "-lc", "curl -fsSL --max-time 10 'https://wttr.in/?format=%C%09%t' 2>/dev/null || true"]
         running: true
@@ -493,6 +544,12 @@ Scope {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
+
+                    StatusTab {
+                        text: root.rebootText
+                        textColor: root.rebootNeeded ? root.red : root.green
+                        visible: root.rebootText.length > 0
+                    }
 
                     StatusTab {
                         text: root.weatherText
