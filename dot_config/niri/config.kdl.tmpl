@@ -189,12 +189,13 @@ layout {
 		// If you enable the border, you probably want to disable the focus ring.
 		// off
 
-		width 1
-		active-color "#ffffff"
-		inactive-color "#000000"
+		// Catppuccin Mocha Verdant, shared with kitty.conf.
+		width 2
+		active-color "#a6e3a1"
+		inactive-color "#486052"
 
 		// Color of the border around windows that request your attention.
-		urgent-color "#9b0000"
+		urgent-color "#f38ba8"
 
 		// Gradients can use a few different interpolation color spaces.
 		// For example, this is a pastel rainbow gradient via in="oklch longer hue".
@@ -239,7 +240,7 @@ layout {
 		offset x=0 y=5
 
 		// You can also change the shadow color and opacity.
-		color "#0007"
+		color "#07110dcc"
 	}
 
 	// Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -394,6 +395,12 @@ window-rule {
 window-rule {
 	match app-id="thunar" title="^File Operation Progress$"
 	open-floating true
+}
+
+window-rule {
+	match app-id="Fladder"
+	open-on-output "DP-3"
+	open-maximized true
 }
 
 // window-rule {

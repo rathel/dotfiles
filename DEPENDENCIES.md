@@ -40,6 +40,7 @@ These are the main applications and tools configured in the dotfiles:
 Scripts in `private_dot_local/bin/` require these tools:
 - Core utilities: `awk`, `sha256sum`, `stat`, `findmnt`, `xargs`, `shuf`, `pgrep`, `pkill`, `date`
 - These are typically part of base system packages like `coreutils`, `util-linux`, `procps-ng`
+- Microsoft Edge installer: `curl`, `gzip`, `binutils` (for `ar`), `tar`, and `sha256sum`
 
 ## Optional/Conditional Dependencies
 - **Linuxbrew**: For additional package management (checked in fish config)
