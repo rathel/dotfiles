@@ -160,7 +160,7 @@ if [[ $host_is_listed != true ]]; then
 fi
 
 if [[ $host == "$special_host" ]]; then
-    printf -v remote_command 'tmux a -d || tmux"
+    printf -v remote_command 'tmux new-session -A -s %q' "$tmux_session"
     exec "$terminal" -T "SSH: $host" -e ssh -F "$ssh_config" -t -- "$host" "$remote_command"
 fi
 
