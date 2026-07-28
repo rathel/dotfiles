@@ -3,6 +3,8 @@
 *.swo
 *~
 *.bak
+__pycache__/
+*.py[cod]
 key.txt.age
 *.pem
 *.key
