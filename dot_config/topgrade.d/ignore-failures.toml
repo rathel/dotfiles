@@ -1,3 +1,0 @@
-[misc]
-# Keep going when optional commands or repo pulls fail.
-ignore_failures = ["custom_commands", "git_repos"]

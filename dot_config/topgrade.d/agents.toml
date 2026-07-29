@@ -1,14 +1,10 @@
-# AI / agent CLI updates discovered on this system.
+# CLI updaters not already covered by Topgrade built-ins or npm.
 [commands]
 "AGY" = "agy update"
-"Auggie" = "auggie upgrade --skip-confirmation"
-"Codex" = "codex update"
+# PATH resolves Copilot to the standalone installation, not its npm copy.
 "Copilot" = "copilot update"
-"Cursor Agent" = "cursor-agent update"
 "Droid" = "droid update"
-"Gemini CLI" = "npm update -g @google/gemini-cli"
 "Goose" = "goose update"
 "Herdr" = "herdr update"
-"Hermes" = "hermes update"
-"Openclaw" = "openclaw update"
-"OpenCode" = "opencode upgrade"
+# Retain OpenClaw's post-update doctor, plugin sync, and service restart.
+"OpenClaw" = "openclaw update"

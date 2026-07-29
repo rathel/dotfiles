@@ -1,3 +1,0 @@
-[misc]
-# Skip failed steps without prompting to retry.
-ask_retry = false
