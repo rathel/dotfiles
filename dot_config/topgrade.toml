@@ -11,6 +11,7 @@ first = ["chezmoi"]
 last = ["system"]
 
 # Continue unattended and tolerate failures in optional update groups.
+assume_yes = true
 ask_retry = false
 ignore_failures = ["custom_commands", "git_repos"]
 
