@@ -1,0 +1,14 @@
+# AI / agent CLI updates discovered on this system.
+[commands]
+"AGY" = "agy update"
+"Auggie" = "auggie upgrade --skip-confirmation"
+"Codex" = "codex update"
+"Copilot" = "copilot update"
+"Cursor Agent" = "cursor-agent update"
+"Droid" = "droid update"
+"Gemini CLI" = "npm update -g @google/gemini-cli"
+"Goose" = "goose update"
+"Herdr" = "herdr update"
+"Hermes" = "hermes update"
+"Openclaw" = "openclaw update"
+"OpenCode" = "opencode upgrade"
