@@ -24,6 +24,57 @@ require_command() {
     fi
 }
 
+run_remote_herdr() {
+    if (($# != 2)); then
+        printf 'host-picker: internal remote launcher requires a host and SSH config\n' >&2
+        exit 2
+    fi
+
+    local host=$1
+    local ssh_config=$2
+    local real_ssh=${HOST_PICKER_REAL_SSH:-$(type -P ssh)}
+    local herdr_pid=$$
+    local remote_command
+
+    # Herdr creates this SSH control socket while attaching. Reuse it so the
+    # title command reaches the same remote server without another login.
+    printf -v remote_command 'herdr terminal title set %q' "$host — Herdr"
+    (
+        control_socket=
+        while [[ -z $control_socket ]]; do
+            if ! kill -0 "$herdr_pid" 2>/dev/null; then
+                exit 0
+            fi
+            for candidate in /tmp/herdr-ssh-"$herdr_pid"-*/ctl; do
+                if [[ -S $candidate ]]; then
+                    control_socket=$candidate
+                    break
+                fi
+            done
+            [[ -n $control_socket ]] || sleep 0.1
+        done
+
+        for ((attempt = 0; attempt < 120; attempt++)); do
+            if response=$("$real_ssh" -F "$ssh_config" -S "$control_socket" \
+                -o ControlMaster=no -T -- "$host" "$remote_command") &&
+                [[ $response == *'"reason":"set"'* ]]; then
+                exit 0
+            fi
+            if ! kill -0 "$herdr_pid" 2>/dev/null; then
+                exit 0
+            fi
+            sleep 0.25
+        done
+    ) </dev/null >/dev/null 2>&1 &
+
+    exec herdr --remote "$host"
+}
+
+if [[ ${1:-} == --herdr-remote ]]; then
+    shift
+    run_remote_herdr "$@"
+fi
+
 for command in fuzzel "$terminal" ssh python3; do
     require_command "$command"
 done
@@ -167,7 +218,7 @@ fi
 require_command herdr
 
 if [[ $ssh_config == "$default_ssh_config" ]]; then
-    exec "$terminal" -T "Herdr: $host" -e herdr --remote "$host"
+    exec "$terminal" -T "Herdr: $host" -e "$0" --herdr-remote "$host" "$ssh_config"
 fi
 
 # Herdr normally creates an SSH config that includes ~/.ssh/config. For an
@@ -224,4 +275,4 @@ real_ssh=$(type -P ssh)
 PATH="$runtime_dir:$PATH" \
     HOST_PICKER_REAL_SSH="$real_ssh" \
     HOST_PICKER_HERDR_SSH_CONFIG="$runtime_dir/herdr-ssh-config" \
-    "$terminal" -T "Herdr: $host" -e herdr --remote "$host"
+    "$terminal" -T "Herdr: $host" -e "$0" --herdr-remote "$host" "$ssh_config"
