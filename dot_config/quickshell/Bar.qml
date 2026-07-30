@@ -66,6 +66,7 @@ Scope {
     property string batteryText: ""
     property string bluetoothText: ""
     property string memoryText: ""
+    property string swapText: ""
     property string cpuText: ""
     property string rebootText: ""
     property string codexText: ""
@@ -187,11 +188,13 @@ Scope {
     function setMemory(output) {
         const line = String(output).trim()
         const parts = line.split(/\s+/)
-        const used = parseInt(parts[0]) || 0
-        const total = parseInt(parts[1]) || 1
-        const percent = Math.round((used / total) * 100)
+        const memoryUsed = parseInt(parts[0]) || 0
+        const memoryTotal = parseInt(parts[1]) || 1
+        const swapUsed = parseInt(parts[2]) || 0
+        const swapTotal = parseInt(parts[3]) || 0
 
-        memoryText = ` ${percent}%`
+        memoryText = ` ${Math.round((memoryUsed / memoryTotal) * 100)}%`
+        swapText = swapTotal > 0 ? `󰓡 ${Math.round((swapUsed / swapTotal) * 100)}%` : ""
     }
 
     function setCpu(output) {
@@ -355,7 +358,7 @@ Scope {
 
     Process {
         id: memoryProc
-        command: ["bash", "-lc", "free -m | awk '/^Mem:/ {print $3, $2}'"]
+        command: ["bash", "-lc", "free -m | awk '/^Mem:/ {used=$3; total=$2} /^Swap:/ {print used, total, $3, $2}'"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setMemory(this.text)
@@ -516,6 +519,12 @@ Scope {
                         text: root.memoryText
                         textColor: root.teal
                         visible: root.memoryText.length > 0
+                    }
+
+                    StatusTab {
+                        text: root.swapText
+                        textColor: root.yellow
+                        visible: root.swapText.length > 0
                     }
 
                     StatusTab {
