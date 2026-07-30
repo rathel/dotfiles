@@ -523,7 +523,7 @@ binds {
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
 	Mod+T { spawn "niri-app" "kitty"; }
 	Mod+P { spawn-sh "kitty --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
-	Mod+M hotkey-overlay-title="Fladder" { spawn-sh "niri-app -c $HOME/Applications/Multimedia/Fladder-Linux-0.10.3.AppImage"; }
+	Mod+M hotkey-overlay-title="Streaming Services" { spawn-sh "$HOME/.local/bin/launch-players.sh"; }
 
 	Mod+Z hotkey-overlay-title="Zed" { spawn "niri-app" "-c" "zeditor"; }
 	Mod+Shift+Z hotkey-overlay-title="Obsidian" { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }

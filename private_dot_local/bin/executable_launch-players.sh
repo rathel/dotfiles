@@ -1,35 +1,58 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-set +u
-source "$HOME/.myenv"
-set -u
+jellyfin_url=${MEDIA_LAUNCHER_JELLYFIN_URL:-http://raspberrypi-plex:8096/web/}
 
-# Ensure required tools exist
-for cmd in sk setsid; do
-  command -v "$cmd" >/dev/null 2>&1 || { printf '%s not found.\n' "$cmd" >&2; exit 1; }
+notify_error() {
+    if command -v notify-send >/dev/null 2>&1 &&
+        notify-send --urgency=critical "Media launcher" "$1"; then
+        return
+    fi
+
+    printf 'launch-players: %s\n' "$1" >&2
+}
+
+require_command() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        notify_error "Required command not found: $1"
+        exit 1
+    fi
+}
+
+for command in fuzzel xdg-open; do
+    require_command "$command"
 done
 
-# Use literal tabs via $'...\t...' so --delimiter=$'\t' works
-sites=(
-  $'Amazon Prime Video\thttps://amazon.com/gp/video/storefront'
-  $'Plex\thttps://app.plex.tv/desktop'
-  $'Netflix\thttps://netflix.com'
-  $'Spotify\thttps://spotify.com'
+services=(
+    "Netflix"
+    "Amazon Prime Video"
+    "Disney+"
+    "Jellyfin"
 )
 
-# Pick site and browser (escape tab in --delimiter)
-selection="$(printf '%s\n' "${sites[@]}" | sk --with-nth=1 --delimiter=$'\t' || true)"
-[[ -z "$selection" ]] && exit 0
+urls=(
+    "https://www.netflix.com/"
+    "https://www.amazon.com/gp/video/storefront"
+    "https://www.disneyplus.com/"
+    "$jellyfin_url"
+)
 
-# Split "Label<TAB>Value" into fields
-IFS=$'\t' read -r _site_label site_url <<<"$selection"
+if ! service=$(printf '%s\n' "${services[@]}" | fuzzel --dmenu --only-match --prompt='Streaming service: '); then
+    exit 0
+fi
 
-# Launch detached; pass args separately (no eval, no word-splitting surprises)
-# Example: firefox kiosk profile (uncomment and adjust if desired)
-# exec_cmd=( "$browser_cmd" -P kiosk --kiosk "$site_url" )
-exec_cmd=( "$DEFAULT_BROWSER" --new-window "$site_url" )
+[[ -n $service ]] || exit 0
 
-setsid -f -- "${exec_cmd[@]}" >/dev/null 2>&1 &
+for index in "${!services[@]}"; do
+    if [[ $service == "${services[$index]}" ]]; then
+        if ! xdg-open "${urls[$index]}"; then
+            notify_error "Failed to open ${services[$index]}"
+            exit 1
+        fi
+        exit 0
+    fi
+done
 
-sleep 2
+notify_error "Invalid streaming service selection: $service"
+exit 1
