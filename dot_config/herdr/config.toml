@@ -4,26 +4,26 @@ onboarding = false
 new_cwd = "home"
 
 [theme]
-# Catppuccin Mocha Verdant, matching ~/.config/kitty/kitty.conf
-name = "catppuccin"
+# Nord - Polar Night, matching ~/.config/kitty/kitty.conf
+name = "nord"
 
 [theme.custom]
-panel_bg = "#07110d"
-surface0 = "#1b3a2d"
-surface1 = "#12271e"
-surface_dim = "#0b1812"
-overlay0 = "#486052"
-overlay1 = "#7fb7a7"
-text = "#c9dccb"
-subtext0 = "#b8c9ba"
-mauve = "#b79ad8"
-green = "#a6e3a1"
-yellow = "#f9e2af"
-red = "#f38ba8"
-blue = "#89dceb"
-teal = "#94e2d5"
-peach = "#fab387"
-accent = "#a6e3a1"
+panel_bg = "#2e3440"
+surface0 = "#434c5e"
+surface1 = "#3b4252"
+surface_dim = "#2e3440"
+overlay0 = "#4c566a"
+overlay1 = "#81a1c1"
+text = "#d8dee9"
+subtext0 = "#e5e9f0"
+mauve = "#b48ead"
+green = "#a3be8c"
+yellow = "#ebcb8b"
+red = "#bf616a"
+blue = "#81a1c1"
+teal = "#8fbcbb"
+peach = "#d08770"
+accent = "#88c0d0"
 
 [keys]
 navigate_workspace_down = "j"

@@ -16,7 +16,8 @@ This repository contains configuration files for my Linux desktop.
 - **wezterm** - Terminal emulator
 - **fish** - Shell configuration (private)
 - **starship** - Shell prompt
-- **tmux** - Terminal multiplexer with Catppuccin theme
+- **tmux** - Terminal multiplexer with Nord - Polar Night theme
+- **pi** - Coding agent with a custom Nord - Polar Night TUI theme
 
 ### Wayland & Desktop
 - **niri** - Niri compositor
@@ -114,7 +115,7 @@ git push
 
 ## Theme
 
-Configuration uses the **Catppuccin Mocha** color scheme across multiple applications, including the Quickshell bar and notifications.
+Configuration uses the canonical **Nord - Polar Night** color scheme across terminals, multiplexers, launchers, bars, notifications, and Pi. Polar Night provides the dark UI surfaces, with Snow Storm, Frost, and Aurora colors used for text and semantic accents.
 
 ## Notes
 

@@ -1,4 +1,4 @@
-@import "mocha.css";
+@import "nord.css";
 
 * {
     font-family: Iosevka Nerd Font;
@@ -6,9 +6,9 @@
 }
 
 #waybar {
-    background-color: @base;
-    color: @text;
-    border: 1px solid @surface0;
+    background-color: @nord0;
+    color: @nord4;
+    border: 1px solid @nord2;
     border-radius: 12px;
     margin: 6px;
     padding: 4px 8px;
@@ -20,11 +20,11 @@
 #network,
 #cpu,
 #memory {
-    background-color: @mantle;
+    background-color: @nord1;
     border-radius: 8px;
     margin: 0 4px;
     padding: 0 10px;
-    color: @text;
+    color: @nord4;
 }
 
 #custom-clock {

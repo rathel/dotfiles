@@ -37,5 +37,5 @@ keybind = ctrl+shift+bracket_left=previous_tab
 # Keep the window title blank.
 title = " "
 
-# Catppuccin Mocha Verdant
-theme = catppuccin-mocha.conf
+# Nord - Polar Night
+theme = nord-polar-night.conf

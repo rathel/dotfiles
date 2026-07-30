@@ -31,10 +31,8 @@ These are the main applications and tools configured in the dotfiles:
 - These are required for icons in terminals, tmux, and other applications
 
 ## Themes & Plugins
-- **Catppuccin Theme Suite**: 
-  - Catppuccin Mocha color scheme (used across alacritty, foot, ghostty, wezterm, tmux, fuzzel, quickshell, etc.)
-  - Tmux Catppuccin plugin (cloned to `~/.config/tmux/plugins/catppuccin`)
-- **Tmux Plugin Manager**: TPM (tmux-plugins/tpm) - though the config uses manual installation
+- **Nord - Polar Night**: The canonical Nord palette is embedded directly in the managed configs, so no external theme package is required.
+- Zellij and Herdr use their built-in Nord themes; tmux uses native styling and requires no theme plugin.
 
 ## Additional Dependencies from Scripts
 Scripts in `private_dot_local/bin/` require these tools:
@@ -50,7 +48,6 @@ Scripts in `private_dot_local/bin/` require these tools:
 ## Installation Notes
 1. Most packages can be installed via `pacman` or `paru` on CachyOS
 2. Fonts should be installed from the AUR or official repositories
-3. Catppuccin themes are included in the dotfiles but may require additional setup for some applications
-4. The tmux catppuccin plugin is already included in the repository at `dot_config/tmux/plugins/catppuccin/`
+3. Nord colors are configured locally; no separate theme installation is needed
 
 This list covers all dependencies identified from configuration files, scripts, and documentation in the repository. Some dependencies may already be installed on a base CachyOS system.

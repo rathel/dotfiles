@@ -19,12 +19,12 @@ padding=12
 border-size=0
 border-radius=0
 
-# colors
-background-color=#271B1Aee
-text-color=#FFF8FF
-border-color=#EDB361
+# Nord - Polar Night colors
+background-color=#2E3440EE
+text-color=#D8DEE9
+border-color=#88C0D0
 # separator-size=2
-# separator-color=#FFF8FF
+# separator-color=#434C5E
 
 # icons
 icons=1
@@ -45,7 +45,7 @@ markup=1
 #progress-border-size=1
 #progress-border-radius=4
 # Optional: progress-color and progress-background-color
-# progress-color=#DCF2C3
+# progress-color=#88C0D0
 
 # behavior
 default-timeout=3000

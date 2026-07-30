@@ -162,10 +162,10 @@ layout {
 		// - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
 		// Color of the ring on the active monitor.
-		active-color "#ffffff"
+		active-color "#88c0d0"
 
 		// Color of the ring on inactive monitors.
-		inactive-color "#000000"
+		inactive-color "#4c566a"
 
 		// You can also use gradients. They take precedence over solid colors.
 		// Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -174,13 +174,13 @@ layout {
 		// You can use any CSS linear-gradient tool on the web to set these up.
 		// Changing the color space is also supported, check the wiki for more info.
 		//
-		// active-gradient from="#80c8ff" to="#bbddff" angle=45
+		// active-gradient from="#88c0d0" to="#81a1c1" angle=45
 
 		// You can also color the gradient relative to the entire view
 		// of the workspace, rather than relative to just the window itself.
 		// To do that, set relative-to="workspace-view".
 		//
-		// inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+		// inactive-gradient from="#3b4252" to="#4c566a" angle=45 relative-to="workspace-view"
 	}
 
 	// You can also add a border. It's similar to the focus ring, but always visible.
@@ -189,21 +189,21 @@ layout {
 		// If you enable the border, you probably want to disable the focus ring.
 		// off
 
-		// Catppuccin Mocha Verdant, shared with kitty.conf.
+		// Nord - Polar Night, shared with kitty.conf.
 		width 2
-		active-color "#a6e3a1"
-		inactive-color "#486052"
+		active-color "#88c0d0"
+		inactive-color "#4c566a"
 
 		// Color of the border around windows that request your attention.
-		urgent-color "#f38ba8"
+		urgent-color "#bf616a"
 
 		// Gradients can use a few different interpolation color spaces.
-		// For example, this is a pastel rainbow gradient via in="oklch longer hue".
+		// For example, this is a Frost gradient via in="oklch longer hue".
 		//
-		// active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
+		// active-gradient from="#8fbcbb" to="#5e81ac" angle=45 relative-to="workspace-view" in="oklch longer hue"
 
-		// active-gradient from="#ffbb66" to="#ffc880" angle=45 relative-to="workspace-view"
-		// inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+		// active-gradient from="#88c0d0" to="#81a1c1" angle=45 relative-to="workspace-view"
+		// inactive-gradient from="#3b4252" to="#4c566a" angle=45 relative-to="workspace-view"
 	}
 
 	// You can enable drop shadows for windows.
@@ -240,7 +240,7 @@ layout {
 		offset x=0 y=5
 
 		// You can also change the shadow color and opacity.
-		color "#07110dcc"
+		color "#2e3440cc"
 	}
 
 	// Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -279,7 +279,7 @@ spawn-sh-at-startup "$HOME/.local/bin/connectspeaker.sh"
 // spawn-sh-at-startup "$HOME/.local/bin/streamers.sh"
 {{- end }}
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
-spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 000000" "before-sleep" "swaylock -f -c 000000"
+spawn-at-startup "swayidle" "-w" "timeout" "601" "niri msg action power-off-monitors" "timeout" "600" "swaylock -f -c 2e3440" "before-sleep" "swaylock -f -c 2e3440"
 spawn-sh-at-startup "$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard"
 {{- end }}
 
@@ -536,7 +536,7 @@ binds {
 	Super+Shift+T { spawn-sh "niri-app -c ~/Applications/Utilities/thunderbird-daily/thunderbird"; }
 	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/zen-twilight/zen"; }
 	Mod+Shift+B { spawn-sh "niri-app -c $HOME/Applications/Utilities/beeper.AppImage"; }
-	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "000000"; }
+	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "2e3440"; }
 	Mod+G { spawn-sh "$HOME/.local/bin/launch-shadowtech.sh"; }
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.

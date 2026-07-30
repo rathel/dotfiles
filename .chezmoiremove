@@ -1,3 +1,8 @@
 .config/topgrade.d/ignore-failures.toml
 .config/topgrade.d/notifications.toml
 .config/topgrade.d/skip-failed.toml
+.config/alacritty/catppuccin-mocha.toml
+.config/fuzzel/themes/catppuccin-mocha/verdant.ini
+.config/ghostty/themes/catppuccin-mocha.conf
+.config/waybar/mocha.css
+.pi/agent/themes/catppuccin-mocha.json

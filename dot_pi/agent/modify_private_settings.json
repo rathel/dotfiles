@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+import json
+import sys
+
+source = sys.stdin.read()
+settings = json.loads(source) if source.strip() else {}
+settings["theme"] = "nord-polar-night"
+json.dump(settings, sys.stdout, indent=2)
+if not source or source.endswith("\n"):
+    sys.stdout.write("\n")

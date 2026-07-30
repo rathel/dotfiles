@@ -28,62 +28,81 @@ config.window_close_confirmation = "AlwaysPrompt"
 config.default_cursor_style = "SteadyBlock"
 config.cursor_blink_rate = 0
 
--- Catppuccin Mocha Verdant
+-- Nord - Polar Night
+local nord = {
+  nord0 = "#2e3440",
+  nord1 = "#3b4252",
+  nord2 = "#434c5e",
+  nord3 = "#4c566a",
+  nord4 = "#d8dee9",
+  nord5 = "#e5e9f0",
+  nord6 = "#eceff4",
+  nord7 = "#8fbcbb",
+  nord8 = "#88c0d0",
+  nord9 = "#81a1c1",
+  nord10 = "#5e81ac",
+  nord11 = "#bf616a",
+  nord12 = "#d08770",
+  nord13 = "#ebcb8b",
+  nord14 = "#a3be8c",
+  nord15 = "#b48ead",
+}
+
 config.colors = {
-  foreground = "#c9dccb",
-  background = "#07110d",
-  cursor_bg = "#a6e3a1",
-  cursor_fg = "#07110d",
-  cursor_border = "#a6e3a1",
-  selection_fg = "#e4f1e5",
-  selection_bg = "#1b3a2d",
-  scrollbar_thumb = "#486052",
-  split = "#486052",
+  foreground = nord.nord4,
+  background = nord.nord0,
+  cursor_bg = nord.nord8,
+  cursor_fg = nord.nord0,
+  cursor_border = nord.nord8,
+  selection_fg = nord.nord6,
+  selection_bg = nord.nord2,
+  scrollbar_thumb = nord.nord3,
+  split = nord.nord3,
   ansi = {
-    "#0b1812",
-    "#e88a9c",
-    "#8fd694",
-    "#dccb88",
-    "#7fb7a7",
-    "#b79ad8",
-    "#79c9b7",
-    "#b8c9ba",
+    nord.nord1,
+    nord.nord11,
+    nord.nord14,
+    nord.nord13,
+    nord.nord9,
+    nord.nord15,
+    nord.nord8,
+    nord.nord5,
   },
   brights = {
-    "#486052",
-    "#f38ba8",
-    "#a6e3a1",
-    "#f9e2af",
-    "#89dceb",
-    "#cba6f7",
-    "#94e2d5",
-    "#e4f1e5",
+    nord.nord3,
+    nord.nord11,
+    nord.nord14,
+    nord.nord13,
+    nord.nord9,
+    nord.nord15,
+    nord.nord7,
+    nord.nord6,
   },
   indexed = {
-    [16] = "#fab387",
-    [17] = "#f5a97f",
+    [16] = nord.nord12,
+    [17] = nord.nord11,
   },
   tab_bar = {
-    background = "#0b1812",
+    background = nord.nord0,
     active_tab = {
-      bg_color = "#a6e3a1",
-      fg_color = "#07110d",
+      bg_color = nord.nord8,
+      fg_color = nord.nord0,
     },
     inactive_tab = {
-      bg_color = "#12271e",
-      fg_color = "#c9dccb",
+      bg_color = nord.nord1,
+      fg_color = nord.nord4,
     },
     inactive_tab_hover = {
-      bg_color = "#1b3a2d",
-      fg_color = "#e4f1e5",
+      bg_color = nord.nord2,
+      fg_color = nord.nord6,
     },
     new_tab = {
-      bg_color = "#12271e",
-      fg_color = "#c9dccb",
+      bg_color = nord.nord1,
+      fg_color = nord.nord4,
     },
     new_tab_hover = {
-      bg_color = "#1b3a2d",
-      fg_color = "#e4f1e5",
+      bg_color = nord.nord2,
+      fg_color = nord.nord6,
     },
   },
 }
@@ -97,15 +116,15 @@ config.show_new_tab_button_in_tab_bar = false
 local left_arrow = wezterm.nerdfonts.pl_right_hard_divider
 local right_arrow = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, _, _, _, hover)
-  local background = "#12271e"
-  local foreground = "#c9dccb"
+  local background = nord.nord1
+  local foreground = nord.nord4
 
   if tab.is_active then
-    background = "#a6e3a1"
-    foreground = "#07110d"
+    background = nord.nord8
+    foreground = nord.nord0
   elseif hover then
-    background = "#1b3a2d"
-    foreground = "#e4f1e5"
+    background = nord.nord2
+    foreground = nord.nord6
   end
 
   local title = tab.tab_title
@@ -114,13 +133,13 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover)
   end
 
   return {
-    { Background = { Color = "#0b1812" } },
+    { Background = { Color = nord.nord0 } },
     { Foreground = { Color = background } },
     { Text = left_arrow },
     { Background = { Color = background } },
     { Foreground = { Color = foreground } },
     { Text = " " .. title .. " " },
-    { Background = { Color = "#0b1812" } },
+    { Background = { Color = nord.nord0 } },
     { Foreground = { Color = background } },
     { Text = right_arrow },
   }
