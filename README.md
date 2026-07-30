@@ -19,6 +19,9 @@ This repository contains configuration files for my Linux desktop.
 - **tmux** - Terminal multiplexer with Nord - Polar Night theme
 - **pi** - Coding agent with a custom Nord - Polar Night TUI theme
 
+### Editors
+- **Zed** - Editor with age-encrypted settings and a custom Nord - Polar Night theme
+
 ### Wayland & Desktop
 - **niri** - Niri compositor
 - **quickshell** - Wayland shell/bar + notification stack
@@ -89,6 +92,22 @@ chezmoi diff
 chezmoi apply
 ```
 
+### Encrypted configuration
+
+`~/.config/zed/settings.json` is encrypted with chezmoi's built-in age support. The age identity is intentionally stored outside this repository at `~/.config/chezmoi/key.txt` and must be restored from a secure backup before applying on a new machine.
+
+Configure chezmoi with the public recipient:
+
+```toml
+encryption = "age"
+
+[age]
+identity = "~/.config/chezmoi/key.txt"
+recipient = "age1jmm8sxaqyp34pwn4ep5tyy8pgfr7zjf848m8m75w5nzlhhy4j4gqk0py72"
+```
+
+The recipient is public; never commit the identity file.
+
 ### Update dotfiles
 ```bash
 # Add a new file
@@ -119,7 +138,7 @@ Configuration uses the canonical **Nord - Polar Night** color scheme across term
 
 ## Notes
 
-- Private configurations are encrypted/managed separately
+- Private configurations use chezmoi age encryption; the identity key must be stored and backed up separately
 - Custom environment variables are defined in `.myenv`
 - Browser launches via Zen AppImage by default
 - Quickshell now handles the bar and desktop notifications; disable Waybar/Dunst/Mako when using it

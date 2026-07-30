@@ -14,7 +14,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Application Launcher**: `fuzzel`
 - **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder), `curl` (weather widget), `xdg-utils` (provides `xdg-open`)
 - **Media**: `mpv`
-- **Text Editor**: `neovim`
+- **Text Editors**: `neovim`, `zed` (CLI: `zeditor`)
 - **Directory Navigation**: `zoxide`, `direnv`
 - **Wallpaper Tools**: `swww`, `wallust`, `awww`
 - **PDF Viewer**: `zathura`
@@ -24,7 +24,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Email Client**: `thunderbird`
 - **Python**: `python3`
 - **Package Managers**: `pacman`, `paru` (AUR helper)
-- **Dotfile Manager**: `chezmoi`
+- **Dotfile Manager**: `chezmoi` with built-in age encryption support
 
 ## Fonts
 - **Nerd Fonts**: `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)
@@ -49,5 +49,6 @@ Scripts in `private_dot_local/bin/` require these tools:
 1. Most packages can be installed via `pacman` or `paru` on CachyOS
 2. Fonts should be installed from the AUR or official repositories
 3. Nord colors are configured locally; no separate theme installation is needed
+4. Restore the chezmoi age identity to `~/.config/chezmoi/key.txt` before applying encrypted files
 
 This list covers all dependencies identified from configuration files, scripts, and documentation in the repository. Some dependencies may already be installed on a base CachyOS system.
