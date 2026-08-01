@@ -1,1 +1,10 @@
 key.txt.age
+
+# Pi credentials and machine-local state
+.pi/agent/auth.json
+.pi/agent/mcp.json
+.pi/agent/models.json
+.pi/agent/models-store.json
+.pi/agent/trust.json
+.pi/agent/sessions/**
+.pi/agent/npm/**
