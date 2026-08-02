@@ -29,5 +29,8 @@ accent = "#88c0d0"
 navigate_workspace_down = "j"
 navigate_workspace_up = "k"
 
+[ui]
+prompt_new_tab_name = false
+
 [experimental]
 kitty_graphics = true
