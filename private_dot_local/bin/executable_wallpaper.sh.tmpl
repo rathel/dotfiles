@@ -2,7 +2,7 @@
 
 sleep 2
 
-wallpapers="$HOME/Wallpapers"
+# wallpapers="$HOME/Wallpapers"
 
 if command -v awww &> /dev/null; then
 	if ! pgrep -x "awww-daemon" > /dev/null; then
@@ -13,11 +13,13 @@ else
 	exit 1
 fi
 
-while :; do
-	wallpaper1="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
-	# wallpaper2="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
-	awww img "$wallpaper1"
-	# sleep 1
-	# awww img -o DP-2 "$wallpaper2"
-	sleep 1h
-done
+sleep 1 && aww img ~/Wallpapers/snowymountainnord.png
+
+# while :; do
+# 	wallpaper1="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
+# 	# wallpaper2="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
+# 	awww img "$wallpaper1"
+# 	# sleep 1
+# 	# awww img -o DP-2 "$wallpaper2"
+# 	sleep 1h
+# done
