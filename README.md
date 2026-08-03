@@ -17,7 +17,7 @@ This repository contains configuration files for my Linux desktop.
 - **fish** - Shell configuration (private)
 - **starship** - Shell prompt
 - **tmux** - Terminal multiplexer with Nord - Polar Night theme
-- **pi** - Coding agent with a custom Nord - Polar Night TUI theme
+- **pi** - Coding agent with a custom Nord - Polar Night TUI theme and Brave web search (`/brave-search-setup`)
 
 ### Editors
 - **Zed** - Editor with age-encrypted settings and a custom Nord - Polar Night theme

@@ -4,6 +4,17 @@ import sys
 
 source = sys.stdin.read()
 settings = json.loads(source) if source.strip() else {}
+brave_package = "npm:@firstpick/pi-extension-brave-search"
+packages = settings.get("packages")
+if not isinstance(packages, list):
+    packages = []
+if not any(
+    entry == brave_package
+    or isinstance(entry, dict) and entry.get("source") == brave_package
+    for entry in packages
+):
+    packages.append(brave_package)
+settings["packages"] = packages
 settings["theme"] = "nord-polar-night"
 json.dump(settings, sys.stdout, indent=2)
 if not source or source.endswith("\n"):

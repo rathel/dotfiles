@@ -36,3 +36,6 @@ if [ -f '/home/rathel/google-cloud-sdk/path.fish.inc' ]; . '/home/rathel/google-
 
 # opencode
 fish_add_path /home/rathel/.opencode/bin
+
+# OpenClaw Completion
+test -f "/home/rathel/.openclaw/completions/openclaw.fish"; and source "/home/rathel/.openclaw/completions/openclaw.fish"

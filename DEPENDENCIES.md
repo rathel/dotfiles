@@ -9,6 +9,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Window Managers/Compositors**: `niri`
 - **Desktop Shell**: `quickshell`
 - **Codex Usage Meter**: OpenAI Codex CLI (`@openai/codex`), logged in with a ChatGPT subscription
+- **Pi web search**: Brave Search extension (`@firstpick/pi-extension-brave-search`); configure its API key in Pi with `/brave-search-setup`
 - **Status Bar**: `waybar` (legacy)
 - **Notification Daemons**: `dunst`, `mako` (legacy)
 - **Application Launcher**: `fuzzel`
