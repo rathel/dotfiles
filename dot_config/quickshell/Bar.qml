@@ -522,15 +522,15 @@ Scope {
                     }
 
                     StatusTab {
-                        text: root.swapText
-                        textColor: root.yellow
-                        visible: root.swapText.length > 0
+                        text: root.cpuText
+                        textColor: root.blue
+                        visible: root.cpuText.length > 0
                     }
 
                     StatusTab {
-                        text: root.cpuText
-                        textColor: root.greenDim
-                        visible: root.cpuText.length > 0
+                        text: root.swapText
+                        textColor: root.yellow
+                        visible: root.swapText.length > 0
                     }
 
                     StatusTab {
