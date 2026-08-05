@@ -99,6 +99,7 @@ from pathlib import Path
 DIRECTIVE = re.compile(r"^\s*([^\s=#]+)(?:\s*=\s*|\s+)(.*?)\s*$")
 SSH_DIR = Path.home() / ".ssh"
 hosts = set()
+hostname_by_host = {}
 visited = set()
 
 
@@ -144,6 +145,7 @@ def parse(path):
     except OSError as error:
         raise RuntimeError(f"cannot read included SSH config {resolved}: {error}") from error
 
+    current_hosts = []
     for line_number, line in enumerate(lines, 1):
         match = DIRECTIVE.match(line)
         if not match:
@@ -153,11 +155,20 @@ def parse(path):
         arguments = values(match.group(2), resolved, line_number)
 
         if keyword == "host":
-            for host in arguments:
+            current_hosts = [
+                host
+                for host in arguments
                 if host and not host.startswith("!") and not any(
                     character in host for character in "*?"
-                ):
-                    hosts.add(host)
+                )
+            ]
+            hosts.update(current_hosts)
+            continue
+
+        if keyword == "hostname" and current_hosts and arguments:
+            for host in current_hosts:
+                # OpenSSH uses the first value found for each option.
+                hostname_by_host.setdefault(host, arguments[0])
             continue
 
         if keyword != "include":
@@ -178,7 +189,12 @@ except RuntimeError as error:
     print(f"host-picker: {error}", file=sys.stderr)
     raise SystemExit(1)
 
-for host in sorted(hosts, key=lambda value: (value.casefold(), value)):
+def sort_key(host):
+    hostname = hostname_by_host.get(host, host)
+    return (hostname.casefold(), hostname, host.casefold(), host)
+
+
+for host in sorted(hosts, key=sort_key):
     print(host)
 PY
 ); then
