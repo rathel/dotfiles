@@ -15,7 +15,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Application Launcher**: `fuzzel`
 - **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder), `curl` (weather widget), `xdg-utils` (provides `xdg-open`)
 - **Media**: `mpv`
-- **Text Editors**: `neovim`, `zed` (CLI: `zeditor`)
+- **Text Editors**: `emacs`, `neovim`, `zed` (CLI: `zeditor`)
 - **Directory Navigation**: `zoxide`, `direnv`
 - **Wallpaper Tools**: `swww`, `wallust`, `awww`
 - **PDF Viewer**: `zathura`
@@ -26,6 +26,9 @@ These are the main applications and tools configured in the dotfiles:
 - **Python**: `python3`
 - **Package Managers**: `pacman`, `paru` (AUR helper)
 - **Dotfile Manager**: `chezmoi` with built-in age encryption support
+
+## Emacs packages
+- **Evil**: installed automatically from GNU ELPA/MELPA by `~/.emacs.d/init.el`
 
 ## Fonts
 - **Nerd Fonts**: `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)

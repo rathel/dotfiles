@@ -20,6 +20,7 @@ This repository contains configuration files for my Linux desktop.
 - **pi** - Coding agent with a custom Nord - Polar Night TUI theme and Brave web search (`/brave-search-setup`)
 
 ### Editors
+- **Emacs** - Minimal UI with Evil (Vim) mode
 - **Zed** - Editor with age-encrypted settings and a custom Nord - Polar Night theme
 
 ### Wayland & Desktop
