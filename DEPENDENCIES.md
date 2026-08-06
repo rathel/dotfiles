@@ -23,6 +23,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Audio Control**: `wireplumber` (for wpctl)
 - **Notifications**: `libnotify` (provides notify-send)
 - **Email Client**: `thunderbird`
+- **Thunderbird MCP**: `TKasperczyk/thunderbird-mcp` v0.7.4 (local bridge plus Thunderbird extension)
 - **Python**: `python3`
 - **Package Managers**: `pacman`, `paru` (AUR helper)
 - **Dotfile Manager**: `chezmoi` with built-in age encryption support
