@@ -29,7 +29,8 @@ These are the main applications and tools configured in the dotfiles:
 - **Dotfile Manager**: `chezmoi` with built-in age encryption support
 
 ## Emacs packages
-- **Evil**: installed automatically from GNU ELPA/MELPA by `~/.emacs.d/init.el`
+- **Evil**: stable release installed automatically from NonGNU ELPA by `~/.emacs.d/init.el`
+- **Eshell**: included with Emacs; no separate package is required
 
 ## Fonts
 - **Nerd Fonts**: `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)
