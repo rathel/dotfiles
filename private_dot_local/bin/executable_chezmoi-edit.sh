@@ -68,29 +68,29 @@ normalize_path() {
     echo "$path"
 }
 
-# Ensure file exists and is managed by chezmoi
+# Ensure the existing target is managed; never create or add files here.
 ensure_managed() {
     local target="$1"
-    
+
     if [[ ! -e "$target" ]]; then
-        log "Creating new file: $target"
-        mkdir -p "$(dirname "$target")"
-        touch "$target"
-        chezmoi add "$target" || die "Failed to add $target to chezmoi"
+        die "Refusing to create an unapproved file: $target"
+    fi
+
+    if ! chezmoi source-path "$target" >/dev/null 2>&1; then
+        die "Target is not managed by chezmoi: $target"
     fi
 }
 
-# Get chezmoi source path for a target
+# Get chezmoi source path for a managed target
 get_source_path() {
     local target="$1"
     local src_path
-    
-    if src_path=$(chezmoi source-path "$target" 2>/dev/null); then
-        echo "$src_path"
-    else
-        log "Warning: $target not managed by chezmoi, editing directly"
-        echo "$target"
+
+    if ! src_path=$(chezmoi source-path "$target" 2>/dev/null); then
+        die "Refusing to edit an unmanaged target: $target"
     fi
+
+    echo "$src_path"
 }
 
 # Get relative path from repo root

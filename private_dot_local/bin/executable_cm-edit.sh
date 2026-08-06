@@ -45,6 +45,10 @@ sources=()
 filenames=()
 for target in "${selected[@]}"; do
   src="$(chezmoi source-path "$target")"
+  if [[ ! -e "$src" ]]; then
+    printf 'Refusing to edit missing chezmoi source: %s\n' "$src" >&2
+    exit 1
+  fi
   sources+=("$src")
   filenames+=("$(basename "$target")")
 done
