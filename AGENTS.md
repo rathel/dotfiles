@@ -17,6 +17,7 @@ Guidance for AI/coding agents working in this chezmoi dotfiles repository.
   - `private_dot_local/bin/executable_script` -> `~/.local/bin/script` with private permissions and executable bit
   - `*.tmpl` files are chezmoi templates; keep Go-template syntax intact.
 - Use `chezmoi add <target-path>` to import a file from `$HOME` into this repo.
+- Do not add any files to chezmoi without explicit permission.
 - Use `chezmoi edit <target-path>` when editing an already-managed file from the home-path perspective.
 - If editing source files directly, preserve chezmoi prefixes such as `dot_`, `private_`, and `executable_`.
 - Do not commit secrets. Respect `.chezmoiignore` and `.gitignore`; keys such as `key.txt.age`, `*.pem`, `*.key`, `id_rsa*`, and `id_ed25519*` must not be added.
