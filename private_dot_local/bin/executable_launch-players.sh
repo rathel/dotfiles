@@ -32,6 +32,8 @@ services=(
     "Jellyfin"
     "Netflix"
     "Plex"
+    "Spotify"
+    "YouTube"
 )
 
 urls=(
@@ -41,6 +43,8 @@ urls=(
     "$jellyfin_url"
     "https://www.netflix.com/"
     "https://app.plex.tv/desktop/"
+    "https://open.spotify.com/"
+    "https://www.youtube.com/"
 )
 
 icons=(
@@ -50,6 +54,8 @@ icons=(
     "$icon_dir/jellyfin.svg,jellyfin,multimedia-video-player"
     "$icon_dir/netflix.svg,netflix,web-browser"
     "$icon_dir/plex.svg,plex,multimedia-video-player"
+    "$icon_dir/spotify.svg,spotify,spotify-client,multimedia-audio-player"
+    "$icon_dir/youtube.svg,youtube,youtube-web,web-browser"
 )
 
 print_menu_entries() {
