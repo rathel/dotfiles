@@ -12,7 +12,7 @@ window-padding-y = 10
 
 # Tabs: compact, flat, and always visible, like kitty's tab bar.
 # GTK tabs cannot reproduce kitty's powerline shape exactly.
-window-show-tab-bar = always
+window-show-tab-bar = never
 gtk-tabs-location = top
 gtk-wide-tabs = false
 gtk-toolbar-style = flat
