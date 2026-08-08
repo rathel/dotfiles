@@ -16,7 +16,7 @@ window-show-tab-bar = never
 gtk-tabs-location = top
 gtk-wide-tabs = false
 gtk-toolbar-style = flat
-gtk-titlebar-style = tabs
+gtk-titlebar-style = native
 # Ghostty measures scrollback in bytes; 10 MB comfortably covers 10,000 lines.
 scrollback-limit = 10000000
 copy-on-select = clipboard
