@@ -31,7 +31,7 @@ This repository contains configuration files for my Linux desktop.
 #### Niri keybindings
 `Mod` is Super on TTY and Alt when running in a window.
 
-- `Mod+T` — kitty terminal
+- `Mod+T` — foot terminal
 - `Mod+P` — scratch editor
 - `Mod+M` — media/player launcher
 - `Mod+Z` / `Mod+Shift+Z` — Zed / Obsidian

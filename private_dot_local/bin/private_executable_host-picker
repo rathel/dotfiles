@@ -4,7 +4,7 @@ set -euo pipefail
 
 ssh_config=${HOST_PICKER_SSH_CONFIG:-"$HOME/.ssh/config"}
 default_ssh_config=$HOME/.ssh/config
-terminal=${HOST_PICKER_TERMINAL:-ghostty}
+terminal=${HOST_PICKER_TERMINAL:-foot}
 special_host=${HOST_PICKER_SSH_TMUX_HOST:-netbook}
 tmux_session=${HOST_PICKER_TMUX_SESSION:-main}
 
