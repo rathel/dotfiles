@@ -30,6 +30,7 @@ cursor-style-blink = false
 # Handy keybinds
 keybind = ctrl+shift+enter=new_split:auto
 keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+o=toggle_tab_overview
 keybind = ctrl+shift+w=close_surface
 keybind = ctrl+shift+bracket_right=next_tab
 keybind = ctrl+shift+bracket_left=previous_tab
