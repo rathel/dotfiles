@@ -61,7 +61,7 @@
         "ghost_element.disabled": "#4c566a80",
 
         "text": "#d8dee9",
-        "text.muted": "#4c566a",
+        "text.muted": "#d8dee9",
         "text.placeholder": "#4c566a",
         "text.disabled": "#4c566a",
         "text.accent": "#88c0d0",
