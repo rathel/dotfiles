@@ -13,6 +13,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Status Bar**: `waybar` (legacy)
 - **Notification Daemons**: `dunst`, `mako` (legacy)
 - **Application Launcher**: `fuzzel`
+- **Browser password filling**: `qutebrowser` (ships the `qute-bitwarden` userscript), Bitwarden CLI (`bw`), `keyutils` (provides `keyctl`), and the Python `tldextract` module (Arch package: `python-tldextract`)
 - **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder), `curl` (weather widget), `xdg-utils` (provides `xdg-open`)
 - **Media**: `mpv`
 - **Text Editors**: `emacs`, `neovim`, `zed` (CLI: `zeditor`)
