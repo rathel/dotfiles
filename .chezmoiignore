@@ -1,5 +1,8 @@
 key.txt.age
 
+# Repository-only agent instructions
+AGENTS.md
+
 # Pi credentials and machine-local state
 .pi/agent/auth.json
 .pi/agent/mcp.json
