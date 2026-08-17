@@ -18,7 +18,7 @@ These are the main applications and tools configured in the dotfiles:
 - **Media**: `mpv`
 - **Text Editors**: `emacs`, `neovim`, `zed` (CLI: `zeditor`)
 - **Directory Navigation**: `zoxide`, `direnv`
-- **Wallpaper Tools**: `swww`, `wallust`, `awww`
+- **Wallpaper Tools**: `swww`, `wallust`, `awww`, `swaybg` (fallback)
 - **PDF Viewer**: `zathura`
 - **Virtualization**: `qemu-system-x86_64`, `qemu-img`
 - **Audio Control**: `wireplumber` (for wpctl)

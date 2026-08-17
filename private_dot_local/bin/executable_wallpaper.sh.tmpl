@@ -3,17 +3,20 @@
 sleep 2
 
 # wallpapers="$HOME/Wallpapers"
+wallpaper="$HOME/Wallpapers/snowymountainnord.png"
 
 if command -v awww &> /dev/null; then
 	if ! pgrep -x "awww-daemon" > /dev/null; then
 		nohup awww-daemon >/dev/null 2>&1 &
 	fi
+	sleep 1 && awww img "$wallpaper"
+elif command -v swaybg &> /dev/null; then
+	echo "awww command not found; falling back to swaybg."
+	nohup swaybg -i "$wallpaper" >/dev/null 2>&1 &
 else
-	echo "awww command not found. Please install awww to set the wallpaper."
+	echo "Neither awww nor swaybg was found. Please install one to set the wallpaper."
 	exit 1
 fi
-
-sleep 1 && awww img ~/Wallpapers/snowymountainnord.png
 
 # while :; do
 # 	wallpaper1="$(fd . $wallpapers -e jpg -e png | shuf -n1)"
