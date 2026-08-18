@@ -532,12 +532,6 @@ Scope {
                         textColor: root.yellow
                         visible: root.swapText.length > 0
                     }
-
-                    StatusTab {
-                        text: root.batteryText
-                        textColor: root.text
-                        visible: root.batteryText.length > 0
-                    }
                 }
 
                 Text {
@@ -576,6 +570,12 @@ Scope {
                         text: root.volumeText
                         textColor: root.blue
                         visible: root.volumeText.length > 0
+                    }
+
+                    StatusTab {
+                        text: root.batteryText
+                        textColor: root.text
+                        visible: root.batteryText.length > 0
                     }
 
                     Repeater {
