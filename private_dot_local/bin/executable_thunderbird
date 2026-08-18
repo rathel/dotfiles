@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -u
+
+preferred="${HOME:-}/Applications/Utilities/thunderbird/thunderbird"
+
+# Use the portable build whenever its launcher is available. If its mount is
+# unavailable, continue to the locally installed Thunderbird below.
+if [[ -f "$preferred" && -x "$preferred" ]]; then
+    exec "$preferred" "$@"
+fi
+
+# This script is also named thunderbird, so skip it while looking through PATH
+# for the locally installed Thunderbird binary.
+self="$(readlink -f -- "$0" 2>/dev/null || printf '%s' "$0")"
+IFS=: read -r -a path_entries <<< "${PATH:-}"
+
+for name in thunderbird thunderbird-bin; do
+    for directory in "${path_entries[@]}"; do
+        [[ -n "$directory" ]] || directory=.
+        candidate="$directory/$name"
+        [[ -f "$candidate" && -x "$candidate" ]] || continue
+
+        resolved="$(readlink -f -- "$candidate" 2>/dev/null || printf '%s' "$candidate")"
+        [[ "$resolved" == "$self" ]] && continue
+
+        exec "$candidate" "$@"
+    done
+done
+
+printf 'thunderbird: portable Thunderbird is unavailable and no local Thunderbird was found\n' >&2
+exit 127

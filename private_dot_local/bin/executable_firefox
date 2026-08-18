@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -u
+
+preferred="${HOME:-}/Applications/Utilities/firefox/firefox"
+
+# Use the portable build whenever its launcher is available. If its mount is
+# unavailable, continue to the locally installed Firefox below.
+if [[ -f "$preferred" && -x "$preferred" ]]; then
+    exec "$preferred" "$@"
+fi
+
+# This script is also named firefox, so skip it while looking through PATH for
+# the locally installed Firefox binary.
+self="$(readlink -f -- "$0" 2>/dev/null || printf '%s' "$0")"
+IFS=: read -r -a path_entries <<< "${PATH:-}"
+
+for directory in "${path_entries[@]}"; do
+    [[ -n "$directory" ]] || directory=.
+    candidate="$directory/firefox"
+    [[ -f "$candidate" && -x "$candidate" ]] || continue
+
+    resolved="$(readlink -f -- "$candidate" 2>/dev/null || printf '%s' "$candidate")"
+    [[ "$resolved" == "$self" ]] && continue
+
+    exec "$candidate" "$@"
+done
+
+printf 'firefox: portable Firefox is unavailable and no local Firefox was found\n' >&2
+exit 127
