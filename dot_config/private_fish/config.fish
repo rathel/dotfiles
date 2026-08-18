@@ -52,3 +52,6 @@ test -f "/home/rathel/.openclaw/completions/openclaw.fish"; and source "/home/ra
 
 # Pi
 fish_add_path "/home/rathel/.local/share/pi-node/node-v22.23.2-linux-x64/bin"
+
+# Aardwolf MUD
+alias aardwolf='telnet aardmud.org 4000'
