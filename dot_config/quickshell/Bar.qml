@@ -429,7 +429,7 @@ Scope {
 
     Process {
         id: weatherProc
-        command: ["bash", "-lc", "curl -fsSL --max-time 10 'https://wttr.in/?format=%C%09%t' 2>/dev/null || true"]
+        command: ["bash", "-lc", "curl -fsSL --max-time 10 'https://wttr.in/?u&format=%C%09%t' 2>/dev/null || true"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setWeather(this.text)
