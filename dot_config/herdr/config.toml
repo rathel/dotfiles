@@ -4,7 +4,7 @@ onboarding = false
 new_cwd = "home"
 
 [theme]
-# Nord - Polar Night, matching ~/.config/kitty/kitty.conf
+# Nord - Polar Night
 name = "nord"
 
 [theme.custom]
@@ -31,6 +31,3 @@ navigate_workspace_up = "k"
 
 [ui]
 prompt_new_tab_name = false
-
-[experimental]
-kitty_graphics = true

@@ -4,5 +4,7 @@
 .config/alacritty/catppuccin-mocha.toml
 .config/fuzzel/themes/catppuccin-mocha/verdant.ini
 .config/ghostty/themes/catppuccin-mocha.conf
+.config/kitty/kitty.conf
 .config/waybar/mocha.css
+.config/zellij/config.kdl
 .pi/agent/themes/catppuccin-mocha.json

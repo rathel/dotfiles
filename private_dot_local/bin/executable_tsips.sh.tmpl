@@ -9,9 +9,7 @@ spawn_remote() {
 	local title="$1"
 	shift
 
-	if [[ -n ${KITTY_WINDOW_ID:-} ]]; then
-		kitty @ launch --type=tab --title "$title" -- "$@" >/dev/null 2>&1 &
-	elif [[ -n ${WEZTERM_PANE:-} ]]; then
+	if [[ -n ${WEZTERM_PANE:-} ]]; then
 		wezterm cli spawn -- "$@" >/dev/null 2>&1 &
 	else
 		"$WINDOW_TERMINAL" --title "$title" -e "$@" >/dev/null 2>&1 &
@@ -44,7 +42,6 @@ for i in $TSIPS; do
 
 	# ssh-copy-id rathel@$i
 	# alacritty ssh rathel@$i &
-	# kitty --detach kitten ssh rathel@$i &
 	# wezterm ssh "$i" &
 	sleep 0.5
 	spawn_remote "$i" ssh "$i" -t "tmux a -d || tmux"

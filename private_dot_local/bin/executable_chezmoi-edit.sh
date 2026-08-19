@@ -9,7 +9,7 @@ set -euo pipefail
 
 # --- Configuration ---
 PREFERRED_TERMINAL="alacritty"
-FALLBACK_TERMINALS=(foot ghostty kitty urxvt xterm)
+FALLBACK_TERMINALS=(foot ghostty urxvt xterm)
 EDITOR="${EDITOR:-nvim}"
 
 # --- Helper Functions ---

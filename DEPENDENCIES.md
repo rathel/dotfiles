@@ -1,61 +1,149 @@
-Based on my analysis of the repository, here's a comprehensive dependency list for setting up this dotfiles configuration on CachyOS (Arch-based Linux). I've categorized the dependencies and included notes on where they're referenced or used.
+# Dependencies
 
-## Core System Packages
-These are the main applications and tools configured in the dotfiles:
+This is an inventory of software referenced by the managed files in this repository. It is not a single install command: install the core items, then add the optional groups for the features you use. Command names are shown in backticks; package hints use Arch/CachyOS names where they are useful.
 
-- **Terminal Emulators**: `alacritty`, `foot`, `ghostty`, `wezterm`
-- **Shell & Prompt**: `fish`, `starship`
-- **Terminal Multiplexer**: `tmux`
-- **Window Managers/Compositors**: `niri`
-- **Desktop Shell**: `quickshell`
-- **Codex Usage Meter**: OpenAI Codex CLI (`@openai/codex`), logged in with a ChatGPT subscription
-- **Pi web search**: Brave Search extension (`@firstpick/pi-extension-brave-search`); configure its API key in Pi with `/brave-search-setup`
-- **Status Bar**: `waybar` (legacy)
-- **Notification Daemons**: `dunst`, `mako` (legacy)
-- **Application Launcher**: `fuzzel`
-- **Browser password filling**: `qutebrowser` (ships the `qute-bitwarden` userscript), Bitwarden CLI (`bw`), `keyutils` (provides `keyctl`), and the Python `tldextract` module (Arch package: `python-tldextract`)
-- **File Utilities**: `eza` (modern ls), `fd` (fd-find), `skim` (sk fuzzy finder), `curl` (weather widget), `xdg-utils` (provides `xdg-open`)
-- **Media**: `mpv`
-- **Text Editors**: `emacs`, `neovim`, `zed` (CLI: `zeditor`)
-- **Directory Navigation**: `zoxide`, `direnv`
-- **Wallpaper Tools**: `swww`, `wallust`, `awww`
-- **PDF Viewer**: `zathura`
-- **Virtualization**: `qemu-system-x86_64`, `qemu-img`
-- **Audio Control**: `wireplumber` (for wpctl)
-- **Notifications**: `libnotify` (provides notify-send)
-- **Email Client**: `thunderbird`
-- **Thunderbird MCP**: `TKasperczyk/thunderbird-mcp` v0.7.4 (local bridge plus Thunderbird extension)
-- **Python**: `python3`
-- **Package Managers**: `pacman`, `paru` (AUR helper)
-- **Dotfile Manager**: `chezmoi` with built-in age encryption support
+## Core setup
 
-## Emacs packages
-- **Evil**: stable release installed automatically from NonGNU ELPA by `~/.emacs.d/init.el`
-- **Eshell**: included with Emacs; no separate package is required
+These are the dependencies for the normal shell, Niri, Quickshell, and helper-script setup:
 
-## Fonts
-- **Nerd Fonts**: `ttf-iosevka-nerd` (or similar Iosevka variants with Nerd Font patches)
-- These are required for icons in terminals, tmux, and other applications
+- **Dotfiles and source control**: `chezmoi`, `git`.
+  Chezmoi has built-in age support; restore the age identity at
+  `~/.config/chezmoi/key.txt` before applying encrypted files. A separate `age`
+  executable is not required by default.
+- **Shell and prompt**: `fish`, `bash`, `starship`.
+- **Niri desktop**: `niri`, `quickshell` (the session starts it as `qs`), and
+  `fuzzel`.
+- **Interactive CLI helpers**: `skim` (`sk`), `fd`, `jq`, `bat`, `eza`, and
+  `neovim` (`nvim`).
+- **Terminal workflow**: `tmux` and `openssh` (`ssh`).
+- **General tools**: `curl` and `python` (`python3`).
+- **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
+  config initializes them only when they are present.
+- **Fonts and cursors**: Iosevka Nerd Font variants (`Iosevka Nerd Font` and
+  `IosevkaTerm Nerd Font`) and the `breeze_cursors` cursor theme.
+- **Quickshell icons**: the `Surfn-Arc` icon theme is selected by the shell.
 
-## Themes & Plugins
-- **Nord - Polar Night**: The canonical Nord palette is embedded directly in the managed configs, so no external theme package is required.
-- Zellij and Herdr use their built-in Nord themes; tmux uses native styling and requires no theme plugin.
+## Configured terminal emulators
 
-## Additional Dependencies from Scripts
-Scripts in `private_dot_local/bin/` require these tools:
-- Core utilities: `awk`, `sha256sum`, `stat`, `findmnt`, `xargs`, `shuf`, `pgrep`, `pkill`, `date`
-- These are typically part of base system packages like `coreutils`, `util-linux`, `procps-ng`
-- Microsoft Edge installer: `curl`, `gzip`, `binutils` (for `ar`), `tar`, and `sha256sum`
+The repository configures several terminals, but they are alternatives rather
+than all being required. The current keybindings and scripts use `foot` most
+often; `alacritty` is the editor helper's preferred terminal. `ghostty` and
+`wezterm` are configured fallbacks/integrations.
 
-## Optional/Conditional Dependencies
-- **Linuxbrew**: For additional package management (checked in fish config)
-- **Flatpak**: For flatpak application updates (in upgrade script)
-- **Distrobox**: For container management (in upgrade script)
+- `alacritty`
+- `foot`
+- `ghostty`
+- `wezterm`
 
-## Installation Notes
-1. Most packages can be installed via `pacman` or `paru` on CachyOS
-2. Fonts should be installed from the AUR or official repositories
-3. Nord colors are configured locally; no separate theme installation is needed
-4. Restore the chezmoi age identity to `~/.config/chezmoi/key.txt` before applying encrypted files
+## Niri and Quickshell session services
 
-This list covers all dependencies identified from configuration files, scripts, and documentation in the repository. Some dependencies may already be installed on a base CachyOS system.
+The Niri template starts these programs directly:
+
+- `swayidle` and `swaylock` on hosts other than `archlinux-beelink`.
+- `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`, `nm-applet`, and
+  `udiskie` on every host.
+- A locally built `niri-shadow-guard` binary at
+  `~/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard` on hosts
+  other than `archlinux-beelink`.
+- `awww` is the preferred wallpaper backend; `swaybg` is the fallback.
+
+The Quickshell bar calls these tools for status data:
+
+- `wpctl` from WirePlumber/PipeWire.
+- `brightnessctl`.
+- `nmcli` from NetworkManager and `bluetoothctl` from BlueZ.
+- `curl` for the weather widget.
+
+The Quickshell notification server replaces the legacy notification daemons.
+`libnotify` (`notify-send`) is still used by several helper scripts.
+
+The portal configuration expects `xdg-desktop-portal` plus the GNOME and GTK
+backends, and `gnome-keyring` for the configured Secret portal.
+
+## Managed applications and feature groups
+
+Install these only when using the corresponding configuration or helper:
+
+- **Editors**: `emacs` and `evil` (Evil is installed automatically from
+  NonGNU ELPA by `~/.emacs.d/init.el`; Eshell is built into Emacs), plus
+  `zed`/`zeditor`.
+- **Terminal multiplexer integration**: `herdr`. It is required by the SSH host
+  picker for non-special hosts.
+- **Media and documents**: `mpv` and `zathura`.
+- **Browser password filling**: `qutebrowser` includes the `qute-bitwarden`
+  userscript. That feature additionally needs the Bitwarden CLI (`bw`),
+  `keyutils` (`keyctl`), and Python `tldextract` (Arch package:
+  `python-tldextract`). `pyperclip` is optional. Run `bw login` and `bw sync`
+  once before using the bindings.
+- **Email**: Thunderbird, either the portable copy under
+  `~/Applications/Utilities/thunderbird` or a `thunderbird`/`thunderbird-bin`
+  executable in `PATH`.
+- **Dropbox mount**: `rclone` and `fusermount3` for
+  `dot_config/systemd/user/rclone-dropbox.service`; configure the `dropbox:`
+  remote separately.
+- **Virtual machines**: `qemu-system-x86_64` and `qemu-img`.
+- **System upgrades**: `topgrade` for `dot_config/topgrade.toml`.
+
+Browser launchers can use any of the following, depending on the selected
+entry: Firefox, Zen (the default in `.myenv`), Vivaldi, Brave, Chromium/Chrome,
+or Microsoft Edge. The Edge installer extracts the official package into
+`~/Applications/Utilities/microsoft-edge` without root privileges.
+
+## Helper-script dependencies
+
+The following are the non-obvious dependencies of the scripts under
+`private_dot_local/bin/`:
+
+| Feature | Additional dependencies |
+| --- | --- |
+| `niri-app`, window switching, screenshots | `niri`, `fuzzel`, `jq`, `notify-send` for error notifications |
+| Desktop launcher cache | `fd`, `sk`, `awk`, `findmnt`, `sha256sum`, `stat`, `xargs` |
+| Chezmoi editors | `chezmoi`, `sk`, `bat`, `git`, an editor, and a terminal; `notify-send` is used for errors |
+| PDF launcher | `fd`, `sk`, `zathura`, `notify-send` |
+| Streaming-service launcher | `fuzzel`, `xdg-open` (`xdg-utils`), and optionally `notify-send` |
+| Wallpaper launcher | `awww` **or** `swaybg` |
+| Volume notifications | `wpctl`, `pactl`, `notify-send`, `awk`, `grep`, and `stdbuf` |
+| Stream recording helper | `yt-dlp` and `awk` |
+| Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, a terminal, and `tmux`; `wezterm` enables its tab/pane integration |
+| SSH host picker | `fuzzel`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and `tmux` for the special host |
+| Microsoft Edge installer | `curl`, `gzip`, `awk`, `ar` (`binutils`), `tar`, and `sha256sum` |
+| Desktop-entry creator | `desktop-file-validate` and `update-desktop-database` are optional; `chezmoi` is used when available |
+| Thunderbird backup | `pgrep`, `pkill`, `tar`, and `xz` |
+| QEMU launcher | `qemu-system-x86_64` and `qemu-img` |
+| `infisical-env` Fish function | `infisical` and a local Infisical project configuration |
+| Pi launcher and Codex meter | `pi`, a terminal, Python, and the OpenAI Codex CLI |
+
+Most remaining commands come from standard Arch/base-system packages:
+`coreutils`, `findutils`, `gawk`, `grep`, `sed`, `procps-ng`, `util-linux`,
+`systemd`, `tar`, `xz`, and `gzip`. `jq` and `skim` are the notable non-base
+command-line tools used by multiple helpers.
+
+## Optional external integrations
+
+These are referenced conditionally or through local paths and are not needed
+to apply the core dotfiles:
+
+- Pi's Brave search package: `npm:@firstpick/pi-extension-brave-search`,
+  configured with `/brave-search-setup`.
+- The OpenClaw completion file, OpenCode, LM Studio CLI, Google Cloud SDK, and
+  Linuxbrew are sourced only when their local installations exist.
+- `ollama-chat` uses only Python's standard library and connects to a remote
+  Ollama service; a local Ollama installation is not required.
+- Obsidian, Discord, Beeper, Steam's external Fuzzel launcher, Shadow PC, and
+  local AppImages are host-specific applications referenced by the Niri binds.
+- The `upgrade.sh` and `waybar_timer` helpers referenced by the Fish/Waybar
+  setup live outside this repository.
+
+## Legacy and deliberately omitted dependencies
+
+- Quickshell now provides the bar and notifications. `waybar`, `dunst`, and
+  `mako` remain as legacy/fallback configurations; install them only if those
+  paths are used. The Waybar fallback also needs the external `waybar_timer`
+  helper.
+- `swww` and `wallust` are not used by the active configuration. The wallpaper
+  script uses `awww` with a `swaybg` fallback.
+- `pacman`, `paru`, Flatpak, Distrobox, and Linuxbrew are not runtime
+  dependencies of this repository. They are package-management or optional
+  environment choices.
+- Nord colors are embedded in the managed configurations, and Herdr plus
+  native tmux styling do not require an external theme package.

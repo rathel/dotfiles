@@ -26,14 +26,14 @@ if [[ -t 1 ]]; then
     exec "$pi_command" -p "$prompt"
 fi
 
-terminal=${PI_TERMINAL:-kitty}
+terminal=${PI_TERMINAL:-foot}
 if ! command -v "$terminal" >/dev/null 2>&1; then
     printf 'pi-fuzzel: terminal not found: %s\n' "$terminal" >&2
     exit 1
 fi
 
 case "$(basename "$terminal")" in
-    kitty | foot | alacritty)
+    foot | alacritty)
         exec "$terminal" --hold "$pi_command" -p "$prompt"
         ;;
     *)

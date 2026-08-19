@@ -10,8 +10,8 @@ background-opacity = 1.0
 window-padding-x = 10
 window-padding-y = 10
 
-# Tabs: compact, flat, and always visible, like kitty's tab bar.
-# GTK tabs cannot reproduce kitty's powerline shape exactly.
+# Tabs: compact, flat, and always visible.
+# GTK tabs cannot reproduce the powerline shape exactly.
 window-show-tab-bar = never
 gtk-tabs-location = top
 gtk-wide-tabs = false

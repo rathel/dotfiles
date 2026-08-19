@@ -12,7 +12,6 @@ This repository contains configuration files for my Linux desktop.
 - **alacritty** - Terminal emulator
 - **foot** - Wayland terminal
 - **ghostty** - Terminal emulator
-- **kitty** - Terminal emulator
 - **wezterm** - Terminal emulator
 - **fish** - Shell configuration (private)
 - **starship** - Shell prompt
