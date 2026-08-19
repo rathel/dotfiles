@@ -8,28 +8,29 @@ set -u
 # Get JSON from niri
 json=$(niri msg -j windows)
 
-# Use fuzzel to pick a window by title, with the window ID hidden from view.
-id=$(
-  jq -r '.[] | [.id, (.app_id // ""), (.title // "")] | @tsv' <<<"$json" |
-    while IFS=$'\t' read -r win_id app_id title; do
+mapfile -t window_ids < <(jq -r '.[].id' <<<"$json")
+
+# Use fuzzel to pick a window by title. Select by index so the window ID stays hidden.
+if ! selected_index=$(
+  jq -r '.[] | [(.app_id // ""), (.title // "")] | @tsv' <<<"$json" |
+    while IFS=$'\t' read -r app_id title; do
       icon="${app_id:-application-x-executable}"
       lower_icon="$(tr '[:upper:]' '[:lower:]' <<<"$icon")"
-      label="${app_id:-Unknown} - ${title:-Untitled}"
-
-      printf '%s\t%s\0icon\x1f%s,%s,application-x-executable\n' \
-        "$win_id" "$label" "$icon" "$lower_icon"
+      printf '%s - %s\0icon\x1f%s\n' \
+        "${app_id:-Unknown}" "${title:-Untitled}" "$lower_icon"
     done |
     fuzzel --dmenu \
+      --index \
+      --no-run-if-empty \
+      --no-sort \
       --prompt "Switch window: " \
-      --with-nth=2 \
-      --accept-nth=1 \
-      --match-nth=2 \
-      --nth-delimiter=$'\t' \
-      --minimal-lines \
       --lines=15
-)
+); then
+  exit 0
+fi
 
-# Exit if nothing selected
-[ -z "$id" ] && exit 1
+# Exit if nothing was selected or the index is invalid.
+[[ "$selected_index" =~ ^[0-9]+$ ]] || exit 1
+(( selected_index < ${#window_ids[@]} )) || exit 1
 
-niri msg action focus-window --id "$id"
+niri msg action focus-window --id "${window_ids[selected_index]}"
