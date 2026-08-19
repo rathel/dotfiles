@@ -1,0 +1,9 @@
+[X-GNOME-Metatheme]
+Name=Nord Polar Night
+Type=X-GNOME-Metatheme
+Comment=Nord Polar Night theme
+Encoding=UTF-8
+GtkTheme=Nord-Polar-Night
+IconTheme=Nord-Breeze
+CursorTheme=breeze_cursors
+CursorSize=24

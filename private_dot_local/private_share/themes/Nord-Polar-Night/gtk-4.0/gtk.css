@@ -1,0 +1,90 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita-dark/gtk.css");
+
+@define-color nord0 #2e3440;
+@define-color nord1 #3b4252;
+@define-color nord2 #434c5e;
+@define-color nord3 #4c566a;
+@define-color nord4 #d8dee9;
+@define-color nord6 #eceff4;
+@define-color nord8 #88c0d0;
+@define-color nord10 #5e81ac;
+@define-color nord11 #bf616a;
+@define-color nord13 #ebcb8b;
+@define-color nord14 #a3be8c;
+
+.background,
+window {
+  background-color: @nord0;
+  color: @nord4;
+}
+
+headerbar,
+.titlebar {
+  background-color: @nord0;
+  color: @nord6;
+}
+
+button {
+  background-color: @nord1;
+  color: @nord4;
+  border-color: @nord3;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: @nord2;
+  color: @nord6;
+}
+
+button:active,
+button:checked {
+  background-color: @nord10;
+  color: @nord6;
+}
+
+entry,
+textview,
+textview text,
+view,
+listview,
+columnview {
+  background-color: @nord0;
+  color: @nord4;
+}
+
+entry:focus {
+  border-color: @nord8;
+  box-shadow: 0 0 0 1px @nord8;
+}
+
+popover,
+popover.background,
+menu,
+tooltip {
+  background-color: @nord2;
+  color: @nord4;
+}
+
+row:hover,
+modelbutton:hover {
+  background-color: @nord2;
+  color: @nord6;
+}
+
+selection {
+  background-color: @nord10;
+  color: @nord6;
+}
+
+scale highlight,
+progressbar progress {
+  background-color: @nord10;
+}
+
+scrollbar slider {
+  background-color: @nord3;
+}
+
+*:disabled {
+  color: @nord3;
+}
