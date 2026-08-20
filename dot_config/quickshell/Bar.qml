@@ -321,7 +321,25 @@ Scope {
 
     Process {
         id: networkProc
-        command: ["bash", "-lc", "set -e; line=$(nmcli -t -f DEVICE,TYPE,STATE,CONNECTION dev 2>/dev/null | awk -F: '$2 == \"wifi\" && $3 == \"connected\" {print \"wifi\\t\" $4 \"\\t\" $1; exit} $2 == \"ethernet\" && $3 == \"connected\" {print \"ethernet\\t\" $4 \"\\t\" $1; exit}'); [ -n \"$line\" ] || exit 0; IFS=$'\\t' read -r kind name iface <<<\"$line\"; rx=$(cat \"/sys/class/net/$iface/statistics/rx_bytes\" 2>/dev/null || echo 0); tx=$(cat \"/sys/class/net/$iface/statistics/tx_bytes\" 2>/dev/null || echo 0); printf '%s\\t%s\\t%s\\t%s\\t%s\\n' \"$kind\" \"$name\" \"$iface\" \"$rx\" \"$tx\""]
+        command: [
+            "bash",
+            "-lc",
+            "iface=$(ip route show default 2>/dev/null | awk 'NR == 1 {for (i = 1; i <= NF; i++) if ($i == \"dev\") {print $(i + 1); exit}}'); " +
+            "if [ -z \"$iface\" ] && command -v nmcli >/dev/null 2>&1; then " +
+                "iface=$(nmcli -t -f DEVICE,TYPE,STATE dev 2>/dev/null | awk -F: '$2 ~ /^(wifi|ethernet)$/ && $3 ~ /^connected/ {print $1; exit}'); " +
+            "fi; " +
+            "[ -n \"$iface\" ] || exit 0; " +
+            "kind=$(nmcli -g GENERAL.TYPE device show \"$iface\" 2>/dev/null | head -n1); " +
+            "if [ \"$kind\" != wifi ] && [ \"$kind\" != ethernet ]; then " +
+                "if [ -d \"/sys/class/net/$iface/wireless\" ]; then kind=wifi; else kind=ethernet; fi; " +
+            "fi; " +
+            "name=$(nmcli -g GENERAL.CONNECTION device show \"$iface\" 2>/dev/null | head -n1); " +
+            "[ \"$name\" = \"--\" ] && name=\"\"; " +
+            "[ -n \"$name\" ] || name=\"$iface\"; " +
+            "rx=$(cat \"/sys/class/net/$iface/statistics/rx_bytes\" 2>/dev/null || echo 0); " +
+            "tx=$(cat \"/sys/class/net/$iface/statistics/tx_bytes\" 2>/dev/null || echo 0); " +
+            "printf '%s\\t%s\\t%s\\t%s\\t%s\\n' \"$kind\" \"$name\" \"$iface\" \"$rx\" \"$tx\""
+        ]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setNetwork(this.text)
