@@ -70,11 +70,6 @@ Install these only when using the corresponding configuration or helper:
 - **Terminal multiplexer integration**: `herdr`. It is required by the SSH host
   picker for non-special hosts.
 - **Media and documents**: `mpv` and `zathura`.
-- **Browser password filling**: `qutebrowser` includes the `qute-bitwarden`
-  userscript. That feature additionally needs the Bitwarden CLI (`bw`),
-  `keyutils` (`keyctl`), and Python `tldextract` (Arch package:
-  `python-tldextract`). `pyperclip` is optional. Run `bw login` and `bw sync`
-  once before using the bindings.
 - **Email**: Thunderbird, either the portable copy under
   `~/Applications/Utilities/thunderbird` or a `thunderbird`/`thunderbird-bin`
   executable in `PATH`.

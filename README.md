@@ -74,7 +74,6 @@ This repository contains configuration files for my Linux desktop.
 ### Browsers
 - Microsoft Edge flags
 - Vivaldi configuration
-- **qutebrowser + Bitwarden** — qutebrowser's bundled `qute-bitwarden` userscript uses the Bitwarden CLI and fuzzel. In normal mode, press `,bw` to fill a login, `,bwu` for username only, `,bwp` for password only, or `,bwt` for a TOTP code. Install `python-tldextract` and run `bw login`/`bw sync` once if needed; the first use prompts to unlock the vault.
 
 ## Usage
 
