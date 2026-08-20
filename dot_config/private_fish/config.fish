@@ -28,7 +28,9 @@ if status is-interactive
     if type -q carapace
         carapace _carapace | source
     end
-    starship init fish | source
+    if type -q starship
+        starship init fish | source
+    end
     if test -f /home/linuxbrew/.linuxbrew/bin/brew
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
     end
