@@ -110,7 +110,7 @@ The following are the non-obvious dependencies of the scripts under
 | Desktop-entry creator | `desktop-file-validate` and `update-desktop-database` are optional; `chezmoi` is used when available |
 | Thunderbird backup | `pgrep`, `pkill`, `tar`, and `xz` |
 | QEMU launcher | `qemu-system-x86_64` and `qemu-img` |
-| `infisical-env` Fish function | `infisical` and a local Infisical project configuration |
+| `infisical-env` Fish function | `infisical`, `jq`, and a local Infisical project configuration |
 | Pi launcher and Codex meter | `pi`, a terminal, Python, and the OpenAI Codex CLI |
 
 Most remaining commands come from standard Arch/base-system packages:
