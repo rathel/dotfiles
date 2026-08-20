@@ -207,7 +207,7 @@ if [[ -z $hosts ]]; then
     exit 1
 fi
 
-if ! host=$(printf '%s\n' "$hosts" | fuzzel --dmenu --only-match --prompt='SSH host: '); then
+if ! host=$(printf '%s\n' "$hosts" | fuzzel --dmenu --prompt='SSH host: '); then
     exit 0
 fi
 
