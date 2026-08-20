@@ -185,6 +185,17 @@ Scope {
         bluetoothText = line === "yes" ? "󰂯 on" : "󰂲 off"
     }
 
+    function formatMemorySize(megabytes) {
+        const value = Math.max(0, megabytes)
+
+        if (value >= 1024) {
+            const gibibytes = value / 1024
+            return `${gibibytes.toFixed(gibibytes >= 10 ? 0 : 1)}G`
+        }
+
+        return `${Math.round(value)}M`
+    }
+
     function setMemory(output) {
         const line = String(output).trim()
         const parts = line.split(/\s+/)
@@ -194,7 +205,7 @@ Scope {
         const swapTotal = parseInt(parts[3]) || 0
 
         memoryText = ` ${Math.round((memoryUsed / memoryTotal) * 100)}%`
-        swapText = swapTotal > 0 ? `󰓡 ${Math.round((swapUsed / swapTotal) * 100)}%` : ""
+        swapText = swapTotal > 0 ? `󰓡 ${formatMemorySize(swapUsed)}/${formatMemorySize(swapTotal)}` : ""
     }
 
     function setCpu(output) {
