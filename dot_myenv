@@ -1,4 +1,0 @@
-export SKIM_DEFAULT_OPTIONS="$SKIM_DEFAULT_OPTIONS --color=fg:#d8dee9,bg:#2e3440,matched:#2e3440,matched_bg:#88c0d0,current:#eceff4,current_bg:#434c5e,current_match:#2e3440,current_match_bg:#8fbcbb,spinner:#a3be8c,info:#b48ead,prompt:#81a1c1,cursor:#88c0d0,selected:#d08770,header:#8fbcbb,border:#4c566a"
-export BAT_THEME="Nord"
-
-export DEFAULT_BROWSER="$HOME/Applications/zen-x86_64.AppImage"
