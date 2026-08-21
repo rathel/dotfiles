@@ -278,8 +278,8 @@ spawn-sh-at-startup "$HOME/.local/bin/shadow-aware-swayidle"
 spawn-sh-at-startup "$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard"
 {{- end }}
 
-// Resolve the user-local build explicitly; session startup may not have the interactive PATH.
-spawn-sh-at-startup "exec $HOME/.local/bin/quickshell --no-duplicate"
+// Use the system-wide stable Quickshell installation.
+spawn-sh-at-startup "exec /usr/local/bin/quickshell --no-duplicate"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "/home/rathel/.guix-profile/bin/xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"
