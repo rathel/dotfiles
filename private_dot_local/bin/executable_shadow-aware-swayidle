@@ -1,0 +1,113 @@
+#!/usr/bin/env python3
+"""Run swayidle only while Shadow PC is not running."""
+
+from __future__ import annotations
+
+import json
+import signal
+import subprocess
+import sys
+import time
+from typing import Optional
+
+POLL_INTERVAL = 1.0
+NIRI_QUERY_TIMEOUT = 2.0
+SHADOW_WINDOWS = {"Shadow PC", "Shadow PC - Display"}
+SHADOW_PROCESSES = ("ShadowPCDisplay", "shadow-launcher")
+
+SWAYIDLE_COMMAND = [
+    "swayidle",
+    "-w",
+    "timeout",
+    "601",
+    "niri msg action power-off-monitors",
+    "timeout",
+    "600",
+    "swaylock -f -c 2e3440",
+    "before-sleep",
+    "swaylock -f -c 2e3440",
+]
+
+idle_process: Optional[subprocess.Popen[bytes]] = None
+
+
+def shadow_is_running() -> bool:
+    """Return whether Shadow has a window or one of its native processes."""
+    try:
+        result = subprocess.run(
+            ["niri", "msg", "-j", "windows"],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=NIRI_QUERY_TIMEOUT,
+        )
+        windows = json.loads(result.stdout)
+    except (OSError, subprocess.SubprocessError, json.JSONDecodeError, TypeError, ValueError):
+        # Do not enable the lock manager while the compositor is unavailable or
+        # its window list cannot be read; Shadow may still be running.
+        return True
+
+    if any(
+        window.get("app_id") in SHADOW_WINDOWS or window.get("title") in SHADOW_WINDOWS
+        for window in windows
+        if isinstance(window, dict)
+    ):
+        return True
+
+    return any(
+        subprocess.run(
+            ["pgrep", "-x", process_name],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        ).returncode
+        == 0
+        for process_name in SHADOW_PROCESSES
+    )
+
+
+def start_idle() -> None:
+    global idle_process
+
+    if idle_process is not None and idle_process.poll() is None:
+        return
+
+    idle_process = subprocess.Popen(SWAYIDLE_COMMAND)
+    print("Shadow PC is not running; swayidle enabled", file=sys.stderr, flush=True)
+
+
+def stop_idle() -> None:
+    global idle_process
+
+    if idle_process is None:
+        return
+
+    if idle_process.poll() is None:
+        idle_process.terminate()
+        try:
+            idle_process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            idle_process.kill()
+            idle_process.wait()
+
+    idle_process = None
+    print("Shadow PC is running; swayidle disabled", file=sys.stderr, flush=True)
+
+
+def stop_on_signal(signum: int, _frame: object) -> None:
+    stop_idle()
+    raise SystemExit(128 + signum)
+
+
+for signal_number in (signal.SIGINT, signal.SIGTERM):
+    signal.signal(signal_number, stop_on_signal)
+
+try:
+    while True:
+        if shadow_is_running():
+            stop_idle()
+        else:
+            start_idle()
+        time.sleep(POLL_INTERVAL)
+finally:
+    stop_idle()
