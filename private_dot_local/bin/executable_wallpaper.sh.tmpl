@@ -1,20 +1,56 @@
 #!/usr/bin/env bash
 
-sleep 2
-
-# wallpapers="$HOME/Wallpapers"
+# Wallpapers are on an NFS automount, so wait for the file instead of racing
+# the network mount during session startup.
 wallpaper="$HOME/Wallpapers/snowymountainnord.png"
+wait_timeout=300
+poll_interval=2
 
-if command -v awww &> /dev/null; then
-	if ! pgrep -x "awww-daemon" > /dev/null; then
+elapsed=0
+while [[ ! -r "$wallpaper" && "$elapsed" -lt "$wait_timeout" ]]; do
+	sleep "$poll_interval"
+	elapsed=$((elapsed + poll_interval))
+done
+
+if [[ ! -r "$wallpaper" ]]; then
+	printf 'wallpaper: timed out waiting for %s\n' "$wallpaper" >&2
+	exit 1
+fi
+
+if command -v awww >/dev/null 2>&1; then
+	if ! pgrep -x "awww-daemon" >/dev/null 2>&1; then
 		nohup awww-daemon >/dev/null 2>&1 &
 	fi
-	sleep 1 && awww img "$wallpaper"
-elif command -v swaybg &> /dev/null; then
-	echo "awww command not found; falling back to swaybg."
+
+	# Wait until the daemon is connected to Wayland and accepting requests.
+	elapsed=0
+	while ! awww query >/dev/null 2>&1 && [[ "$elapsed" -lt 30 ]]; do
+		sleep 1
+		elapsed=$((elapsed + 1))
+	done
+
+	if ! awww query >/dev/null 2>&1; then
+		printf 'wallpaper: awww-daemon is not ready\n' >&2
+		exit 1
+	fi
+
+	# The client can return before the daemon has finished reading the image,
+	# so retry and verify that both outputs report the requested image.
+	for attempt in {1..10}; do
+		if awww img "$wallpaper" >/dev/null 2>&1 && \
+			awww query 2>/dev/null | grep -Fq "image: $wallpaper"; then
+			exit 0
+		fi
+		sleep 2
+	done
+
+	printf 'wallpaper: failed to set %s with awww\n' "$wallpaper" >&2
+	exit 1
+elif command -v swaybg >/dev/null 2>&1; then
+	printf 'wallpaper: awww not found; falling back to swaybg\n' >&2
 	nohup swaybg -i "$wallpaper" >/dev/null 2>&1 &
 else
-	echo "Neither awww nor swaybg was found. Please install one to set the wallpaper."
+	printf 'wallpaper: neither awww nor swaybg was found\n' >&2
 	exit 1
 fi
 

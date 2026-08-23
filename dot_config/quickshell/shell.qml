@@ -1,5 +1,5 @@
 //@ pragma UseQApplication
-//@ pragma IconTheme Surfn-Arc
+//@ pragma IconTheme Nord-Breeze
 import Quickshell
 
 Scope {
