@@ -64,9 +64,9 @@ backends, and `gnome-keyring` for the configured Secret portal.
 
 Install these only when using the corresponding configuration or helper:
 
-- **Editors**: `emacs` and `evil` (Evil is installed automatically from
-  NonGNU ELPA by `~/.emacs.d/init.el`; Eshell is built into Emacs), plus
-  `zed`/`zeditor`.
+- **Editors**: `emacs`, `evil`, and `markdown-mode` (Evil and Markdown mode
+  are installed automatically from NonGNU ELPA by `~/.emacs.d/init.el`;
+  Eshell is built into Emacs), plus `zed`/`zeditor`.
 - **Terminal multiplexer integration**: `herdr`. It is required by the SSH host
   picker for non-special hosts.
 - **Media and documents**: `mpv` and `zathura`.
