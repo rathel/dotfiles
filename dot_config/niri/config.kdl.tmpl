@@ -280,6 +280,8 @@ spawn-sh-at-startup "$HOME/git/niri-shadow-guard-gui-src/target/release/niri-sha
 
 // Use the system-wide stable Quickshell installation.
 spawn-sh-at-startup "exec /usr/local/bin/quickshell --no-duplicate"
+// Start Steam in the background without opening its main window.
+spawn-at-startup "steam" "-silent"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
 spawn-at-startup "/home/rathel/.guix-profile/bin/xwayland-satellite"
 spawn-at-startup "kdeconnect-indicator"
