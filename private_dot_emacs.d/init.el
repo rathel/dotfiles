@@ -18,6 +18,11 @@
       inhibit-startup-message t
       visible-bell t)
 
+;; Vim-style relative line numbers: the current line is absolute, while
+;; surrounding lines show their distance from it.
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode 1)
+
 ;; Nord - Polar Night palette.
 (let ((polar-night-0 "#2e3440")
       (polar-night-1 "#3b4252")
