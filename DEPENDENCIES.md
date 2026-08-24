@@ -1,6 +1,29 @@
 # Dependencies
 
-This is an inventory of software referenced by the managed files in this repository. It is not a single install command: install the core items, then add the optional groups for the features you use. Command names are shown in backticks; package hints use Arch/CachyOS names where they are useful.
+This is the dependency reference for the home configuration. It was developed on CachyOS/Arch Linux, but it does not prescribe a package manager. The names below are commands, services, or applications; map them to the native package names for the target system.
+
+## Fresh-install baseline
+
+Install native packages that provide these commands and applications. An AI
+can use this list to select the best package manager and package names for the
+target system:
+
+- **Bootstrap:** `git`, `chezmoi`
+- **Shell:** `bash`, `fish`, `starship`
+- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, `swayidle`,
+  `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
+  `udiskie`, and `awww` or `swaybg`
+- **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
+  `eza`, `nvim`, `curl`, and `python3`
+- **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
+  `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
+  XDG desktop portals, GNOME Keyring, `notify-send`, and `xdg-open`
+- **Editor:** `emacs`
+
+Install fonts, cursor/icon themes, and optional applications from the sections
+below as needed. Prefer native distribution packages; use an alternative
+source only when a native package is unavailable. Verify installed commands
+with `command -v` before applying the configuration.
 
 ## Core setup
 
@@ -15,8 +38,8 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
   `fuzzel`.
 - **Interactive CLI helpers**: `skim` (`sk`), `fd`, `jq`, `bat`, `eza`, and
   `neovim` (`nvim`).
-- **Terminal workflow**: `tmux` and `openssh` (`ssh`).
-- **General tools**: `curl` and `python` (`python3`).
+- **Terminal workflow**: `tmux` and an OpenSSH-compatible `ssh` client.
+- **General tools**: `curl` and `python3`.
 - **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
   config initializes them only when they are present.
 - **Fonts and cursors**: Iosevka Nerd Font variants (`Iosevka Nerd Font` and
@@ -108,18 +131,20 @@ The following are the non-obvious dependencies of the scripts under
 | `infisical-env` Fish function | `infisical`, `jq`, and a local Infisical project configuration |
 | Pi launcher and Codex meter | `pi`, a terminal, Python, and the OpenAI Codex CLI |
 
-Most remaining commands come from standard Arch/base-system packages:
-`coreutils`, `findutils`, `gawk`, `grep`, `sed`, `procps-ng`, `util-linux`,
-`systemd`, `tar`, `xz`, and `gzip`. `jq` and `skim` are the notable non-base
-command-line tools used by multiple helpers.
+Most remaining commands are provided by the target system's base utilities:
+filesystem tools, `awk`, `grep`, `sed`, process tools, `util-linux`, `systemd`,
+`tar`, `xz`, and `gzip`. They normally do not need separate installation.
+`jq` and `skim` (`sk`) are the notable extra command-line tools used by
+multiple helpers.
 
 ## Optional external integrations
 
 These are referenced conditionally or through local paths and are not needed
 to apply the core dotfiles:
 
-- Pi's Brave search package: `npm:@firstpick/pi-extension-brave-search`,
-  configured with `/brave-search-setup`.
+- Pi's Brave search extension: `@firstpick/pi-extension-brave-search`,
+  configured with `/brave-search-setup`; install it through the extension's
+  supported package mechanism.
 - The OpenClaw completion file, OpenCode, LM Studio CLI, Google Cloud SDK, and
   Linuxbrew are sourced only when their local installations exist.
 - `ollama-chat` uses only Python's standard library and connects to a remote
@@ -137,8 +162,7 @@ to apply the core dotfiles:
   helper.
 - `swww` and `wallust` are not used by the active configuration. The wallpaper
   script uses `awww` with a `swaybg` fallback.
-- `pacman`, `paru`, Flatpak, Distrobox, and Linuxbrew are not runtime
-  dependencies of this repository. They are package-management or optional
-  environment choices.
+- No specific package manager is a runtime dependency of this repository.
+  Flatpak, Distrobox, and Linuxbrew are optional environment choices.
 - Nord colors are embedded in the managed configurations, and Herdr plus
   native tmux styling do not require an external theme package.

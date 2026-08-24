@@ -1,5 +1,9 @@
 key.txt.age
 
+# Repository documentation (not home configuration)
+/README.md
+/DEPENDENCIES.md
+
 # Repository-only agent instructions
 AGENTS.md
 

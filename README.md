@@ -1,102 +1,60 @@
 # Dotfiles
 
-Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/).
+Personal CachyOS/Arch Linux desktop configuration managed with
+[chezmoi](https://www.chezmoi.io/).
 
-## Overview
+## Home configuration
 
-This repository contains configuration files for my Linux desktop.
+This repository manages the following parts of `$HOME`:
 
-## Managed Applications
+- **Desktop session:** Niri, Quickshell, Fuzzel, XDG portals, GTK/Qt settings,
+  wallpapers, idle/lock helpers, and desktop services.
+- **Shell and terminal:** Fish, Bash, Starship, `.myenv`, tmux, Foot, Alacritty,
+  Ghostty, and WezTerm.
+- **Editors:** Emacs with Evil, Markdown mode, Eshell, and Vim-style relative
+  line numbers; Zed with age-encrypted settings.
+- **Applications:** mpv, Zathura, Thunderbird, Vivaldi/Edge settings, QEMU,
+  and Dropbox integration through rclone.
+- **Utilities:** custom commands and launchers under `~/.local/bin`, systemd
+  user units, desktop entries, icons, and the Nord - Polar Night theme.
+- **Pi:** a Nord-themed Pi coding-agent configuration and extensions.
 
-### Terminal & Shell
-- **alacritty** - Terminal emulator
-- **foot** - Wayland terminal
-- **ghostty** - Terminal emulator
-- **wezterm** - Terminal emulator
-- **fish** - Shell configuration (private)
-- **starship** - Shell prompt
-- **tmux** - Terminal multiplexer with Nord - Polar Night theme
-- **pi** - Coding agent with a custom Nord - Polar Night TUI theme and Brave web search (`/brave-search-setup`)
+The detailed dependency inventory is in
+[`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-### Editors
-- **Emacs** - Minimal UI with Evil (Vim) mode, Markdown support, and built-in Eshell (`C-c e`)
-- **Zed** - Editor with age-encrypted settings and a custom Nord - Polar Night theme
+## Fresh install
 
-### Wayland & Desktop
-- **niri** - Niri compositor
-- **quickshell** - Wayland shell/bar + notification stack
-- **fuzzel** - Application launcher
+The setup was developed on CachyOS/Arch Linux, but the dependency list is
+package-manager agnostic. Install the native packages that provide these
+commands and applications on the target system. An AI can map these names to
+the best package manager and package names for that system:
 
-#### Niri keybindings
-`Mod` is Super on TTY and Alt when running in a window.
+- **Bootstrap:** `git`, `chezmoi`
+- **Shell:** `bash`, `fish`, `starship`
+- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, `swayidle`,
+  `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
+  `udiskie`, and `awww` or `swaybg`
+- **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
+  `eza`, `nvim`, `curl`, and `python3`
+- **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
+  `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
+  XDG desktop portals, GNOME Keyring, `notify-send`, and `xdg-open`
+- **Editor:** `emacs`
 
-- `Mod+T` — foot terminal
-- `Mod+P` — scratch editor
-- `Mod+M` — media/player launcher
-- `Mod+Z` / `Mod+Shift+Z` — Zed / Obsidian
-- `Mod+Grave` — scratch shell
-- `Alt+Tab` — switch windows
-- `Mod+D` — app launcher
-- `Mod+Shift+D` — Discord
-- `Mod+S` — Steam launcher
-- `Super+Shift+T` — Thunderbird
-- `Mod+B` / `Mod+Shift+B` — Firefox Dev / Beeper
-- `Super+Alt+L` — lock screen
-- `Mod+G` — ShadowTech
-- `Mod+Q` — close window
-- `Mod+O` — overview
-- `Mod+H/J/K/L` or arrow keys — move focus
-- `Mod+Ctrl+H/J/K/L` or arrow keys — move windows/columns
-- `Mod+1..9` — switch workspaces
-- `Mod+Ctrl+1..9` — move column to workspace
-- `Mod+PageUp/PageDown` or `Mod+U/I` — workspace focus
-- `Mod+Shift+PageUp/PageDown` or `Mod+Shift+U/I` — move workspace
-- `Mod+BracketLeft/BracketRight` — consume/expel window
-- `Mod+Comma` / `Mod+Period` — consume/expel window in column
-- `Mod+R` / `Mod+Shift+R` / `Mod+Ctrl+R` — column width / window height / reset height
-- `Mod+F` / `Mod+Shift+F` / `Mod+Ctrl+F` — maximize / fullscreen / expand column
-- `Mod+C` / `Mod+Ctrl+C` — center column(s)
-- `Mod+V` / `Mod+Shift+V` — toggle floating / switch focus floating-tiling
-- `Mod+W` — tabbed column view
-- `Mod+F12` / `Mod+Ctrl+F12` / `Mod+Alt+F12` — screenshots
-- `Mod+Escape` — toggle keyboard shortcut inhibition
-- `Mod+Shift+E` / `Ctrl+Alt+Delete` — quit
-- `Mod+Shift+P` — power off monitors
+Install fonts, cursor/icon themes, and optional applications from
+`DEPENDENCIES.md` as needed. Prefer native distribution packages; use an
+alternative source only when the native package is unavailable. Verify the
+result with `command -v` before applying the configuration.
 
-### Utilities
-- **eza** - Modern ls replacement with custom theme
-- **mpv** - Media player (private)
+Before applying the encrypted Zed settings, restore the age identity from a
+secure backup and configure chezmoi:
 
-### Customization & Scripts
-- Custom helper scripts (`~/.local/bin`)
-- Custom desktop entries and icons (`~/.local/share/applications`, `~/.local/share/icons`)
-
-### Browsers
-- Microsoft Edge flags
-- Vivaldi configuration
-
-## Usage
-
-### Install chezmoi and apply dotfiles
 ```bash
-# Install chezmoi
-sh -c "$(curl -fsLS get.chezmoi.io)"
-
-# Initialize with this repository
-chezmoi init <your-repo-url>
-
-# Preview changes
-chezmoi diff
-
-# Apply dotfiles
-chezmoi apply
+mkdir -p ~/.config/chezmoi
+install -m 600 /path/to/backup/key.txt ~/.config/chezmoi/key.txt
 ```
 
-### Encrypted configuration
-
-`~/.config/zed/settings.json` is encrypted with chezmoi's built-in age support. The age identity is intentionally stored outside this repository at `~/.config/chezmoi/key.txt` and must be restored from a secure backup before applying on a new machine.
-
-Configure chezmoi with the public recipient:
+Use the following in `~/.config/chezmoi/chezmoi.toml`:
 
 ```toml
 encryption = "age"
@@ -106,39 +64,12 @@ identity = "~/.config/chezmoi/key.txt"
 recipient = "age1jmm8sxaqyp34pwn4ep5tyy8pgfr7zjf848m8m75w5nzlhhy4j4gqk0py72"
 ```
 
-The recipient is public; never commit the identity file.
+Then initialize and apply the repository:
 
-### Update dotfiles
 ```bash
-# Add a new file
-chezmoi add ~/.config/newapp/config.toml
-
-# Edit a file
-chezmoi edit ~/.config/fish/config.fish
-
-# Apply changes
+chezmoi init <repository-url>
+chezmoi diff
 chezmoi apply
 ```
 
-### Sync changes
-```bash
-# Pull and apply updates
-chezmoi update
-
-# Push local changes
-chezmoi cd
-git add .
-git commit -m "Update configuration"
-git push
-```
-
-## Theme
-
-Configuration uses the canonical **Nord - Polar Night** color scheme across terminals, multiplexers, launchers, bars, notifications, and Pi. Polar Night provides the dark UI surfaces, with Snow Storm, Frost, and Aurora colors used for text and semantic accents.
-
-## Notes
-
-- Private configurations use chezmoi age encryption; the identity key must be stored and backed up separately
-- Custom environment variables are defined in `.myenv`
-- Browser launches via Zen AppImage by default
-- Quickshell now handles the bar and desktop notifications; disable Waybar/Dunst/Mako when using it
+Never commit the age identity or other private credentials.
