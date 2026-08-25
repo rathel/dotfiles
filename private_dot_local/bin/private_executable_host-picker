@@ -5,6 +5,22 @@ set -euo pipefail
 ssh_config=${HOST_PICKER_SSH_CONFIG:-"$HOME/.ssh/config"}
 default_ssh_config=$HOME/.ssh/config
 terminal=${HOST_PICKER_TERMINAL:-foot}
+
+# Niri may launch this without the interactive shell's Homebrew PATH.
+if [[ $terminal == foot ]] &&
+    ! command -v foot >/dev/null 2>&1; then
+    for candidate in \
+        "$HOME/.linuxbrew/bin/foot" \
+        "/home/linuxbrew/.linuxbrew/bin/foot" \
+        "/usr/local/bin/foot" \
+        "/usr/bin/foot"; do
+        if [[ -x $candidate ]]; then
+            terminal=$candidate
+            break
+        fi
+    done
+fi
+
 special_host=${HOST_PICKER_SSH_TMUX_HOST:-netbook}
 tmux_session=${HOST_PICKER_TMUX_SESSION:-main}
 

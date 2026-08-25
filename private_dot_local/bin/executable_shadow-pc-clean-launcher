@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Launch Shadow outside Steam's overlay/runtime environment.
+set -euo pipefail
+
+unset LD_PRELOAD
+unset LIBVA_DRIVER_NAME
+unset SteamGameId SteamAppId STEAM_COMPAT_DATA_PATH STEAM_COMPAT_CLIENT_INSTALL_PATH
+export ELECTRON_OZONE_PLATFORM_HINT=wayland
+
+exec "$HOME/Applications/Utilities/ShadowPC.AppImage" "$@"

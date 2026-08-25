@@ -166,9 +166,6 @@ printf '%s\n' "$selection" | cut -f2 | while IFS= read -r cmd; do
     google-chrome*|vivaldi-stable|brave|chromium|opera)
       cmd="$cmd --ozone-platform=wayland"
       ;;
-    ShadowPC.AppImage)
-      cmd="gamescope -H 1080 -W 1920 -- $cmd"
-      ;;
     *.sh)
       cmd="alacritty --title=scratch $cmd"
       ;;
