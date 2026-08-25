@@ -94,7 +94,7 @@ Install these only when using the corresponding configuration or helper:
   picker for non-special hosts.
 - **Media and documents**: `mpv` and `zathura`.
 - **Email**: Thunderbird, either the portable copy under
-  `~/Applications/Utilities/thunderbird` or a `thunderbird`/`thunderbird-bin`
+  `~/Applications/Communication/thunderbird` or a `thunderbird`/`thunderbird-bin`
   executable in `PATH`.
 - **Dropbox mount**: `rclone` and `fusermount3` for
   `dot_config/systemd/user/rclone-dropbox.service`; configure the `dropbox:`

@@ -2,7 +2,7 @@
 
 set -u
 
-preferred="${HOME:-}/Applications/Utilities/thunderbird/thunderbird"
+preferred="${HOME:-}/Applications/Communication/thunderbird/thunderbird"
 
 # Use the portable build whenever its launcher is available. If its mount is
 # unavailable, continue to the locally installed Thunderbird below.

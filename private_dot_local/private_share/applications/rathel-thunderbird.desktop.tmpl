@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Thunderbird
+Comment=Email, calendar and contacts
+Exec="{{ .chezmoi.homeDir }}/.local/bin/thunderbird" %u
+TryExec={{ .chezmoi.homeDir }}/.local/bin/thunderbird
+Icon=thunderbird
+Terminal=false
+Categories=Network;Email;
+MimeType=x-scheme-handler/mailto;message/rfc822;x-scheme-handler/mid;x-scheme-handler/feed;application/rss+xml;application/x-extension-rss;x-scheme-handler/webcal;text/calendar;application/x-extension-ics;x-scheme-handler/webcals;x-scheme-handler/net.thunderbird;x-scheme-handler/news;x-scheme-handler/snews;x-scheme-handler/nntp;
+StartupNotify=true
+StartupWMClass=thunderbird
