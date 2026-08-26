@@ -31,9 +31,12 @@ if status is-interactive
     if type -q starship
         starship init fish | source
     end
-    if test -f /home/linuxbrew/.linuxbrew/bin/brew
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
-    end
+end
+
+# Keep Homebrew ahead of package-manager profiles in every Fish invocation, so
+# scripts and interactive shells select the current chezmoi release.
+if test -x /home/linuxbrew/.linuxbrew/bin/brew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
 end
 
 # Added by LM Studio CLI (lms)
