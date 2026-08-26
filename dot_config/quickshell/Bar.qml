@@ -72,7 +72,8 @@ Scope {
     property string codexText: ""
     property string weatherText: ""
     property bool rebootNeeded: false
-    property int codexUsage: 0
+    property int codexFiveHourUsage: 0
+    property int codexWeeklyUsage: 0
     property string networkLastIface: ""
     property real networkLastSampleMs: 0
     property real networkLastRxBytes: 0
@@ -245,15 +246,17 @@ Scope {
     }
 
     function setCodexUsage(output) {
-        const weekly = parseInt(String(output).trim())
-        if (isNaN(weekly) || weekly < 0) {
+        const parts = String(output).trim().split(String.fromCharCode(9))
+        const fiveHour = parseInt(parts[0])
+        const weekly = parseInt(parts[1])
+        if (isNaN(fiveHour) || isNaN(weekly) || fiveHour < 0 || weekly < 0) {
             // Keep the last good value when the helper has a transient failure.
             return
         }
 
-        const value = Math.min(100, weekly)
-        codexUsage = value
-        codexText = `󰚩 7d ${value}%`
+        codexFiveHourUsage = Math.min(100, fiveHour)
+        codexWeeklyUsage = Math.min(100, weekly)
+        codexText = `󰚩 5h ${codexFiveHourUsage}% 7d ${codexWeeklyUsage}%`
     }
 
     function setWeather(output) {
@@ -591,7 +594,9 @@ Scope {
 
                     StatusTab {
                         text: root.codexText
-                        textColor: root.codexUsage >= 90 ? root.red : root.codexUsage >= 70 ? root.yellow : root.green
+                        textColor: Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 90
+                            ? root.red
+                            : Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 70 ? root.yellow : root.green
                         visible: root.codexText.length > 0
                     }
 
