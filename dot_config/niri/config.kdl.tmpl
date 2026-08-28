@@ -296,8 +296,12 @@ environment {
 	ELECTRON_OZONE_PLATFORM_HINT "auto"
 	GDK_BACKEND "wayland"
 	LIBVA_DRIVER_NAME "i965"
+	// Include Linuxbrew for applications launched directly by niri.
+	PATH "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:{{ .chezmoi.homeDir }}/.local/bin:{{ .chezmoi.homeDir }}/.cargo/bin:{{ .chezmoi.homeDir }}/.guix-profile/bin:{{ .chezmoi.homeDir }}/.guix-profile/sbin:{{ .chezmoi.homeDir }}/.config/guix/current/bin:{{ .chezmoi.homeDir }}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games"
+	// Use the Debian Qt 6.8 plugin set; the Guix profile contains Qt 6.9 plugins.
+	QT_PLUGIN_PATH "/usr/lib/x86_64-linux-gnu/qt6/plugins"
 	QT_QPA_PLATFORM "wayland;xcb"
-	QT_QPA_PLATFORMTHEME "qt6ct"
+	QT_QPA_PLATFORMTHEME "lxqt"
 	SDL_VIDEODRIVER "wayland,x11"
 	WARP_ENABLE_WAYLAND "1"
 	XCURSOR_THEME "breeze_cursors"
