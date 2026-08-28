@@ -283,7 +283,10 @@ spawn-sh-at-startup "exec /usr/local/bin/quickshell --no-duplicate"
 // Start Steam in the background without opening its main window.
 spawn-at-startup "steam" "-silent"
 spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
-spawn-at-startup "/home/rathel/.guix-profile/bin/xwayland-satellite"
+// Use the locally compiled xwayland-satellite through Niri's on-demand integration.
+xwayland-satellite {
+	path "{{ .chezmoi.homeDir }}/.local/bin/xwayland-satellite"
+}
 spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-t"
@@ -292,7 +295,6 @@ spawn-sh-at-startup "$HOME/.local/bin/wallpaper.sh"
 
 environment {
 	CHROME_USE_OZONE "1"
-	DISPLAY ":0"
 	ELECTRON_OZONE_PLATFORM_HINT "auto"
 	GDK_BACKEND "wayland"
 	LIBVA_DRIVER_NAME "i965"
