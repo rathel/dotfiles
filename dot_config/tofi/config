@@ -1,0 +1,34 @@
+# Nord Polar Night theme for Tofi
+font = "Iosevka Nerd Font"
+font-size = 14
+
+background-color = #2e3440
+text-color = #d8dee9
+prompt-text = "apps: "
+prompt-color = #e5e9f0
+input-color = #d8dee9
+placeholder-color = #4c566a
+default-result-color = #d8dee9
+selection-color = #eceff4
+selection-background = #434c5e
+selection-match-color = #8fbcbb
+
+outline-width = 0
+border-width = 1
+border-color = #88c0d0
+corner-radius = 0
+
+width = 30%
+height = 100%
+anchor = left
+margin-top = 0
+margin-left = 0
+padding-top = 12
+padding-bottom = 12
+padding-left = 16
+padding-right = 16
+
+fuzzy-match = true
+drun-launch = true
+hide-cursor = true
+history = true
