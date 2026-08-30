@@ -10,7 +10,7 @@ target system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, `swayidle`,
+- **Desktop session:** `niri`, `quickshell` (`qs`), `tofi`, `fuzzel`, `swayidle`,
   `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
   `udiskie`, and `awww` or `swaybg`
 - **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
@@ -36,8 +36,8 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
   `~/.config/chezmoi/key.txt` before applying encrypted files. A separate `age`
   executable is not required by default.
 - **Shell and prompt**: `fish`, `bash`, `starship`.
-- **Niri desktop**: `niri`, `quickshell` (the session starts it as `qs`), and
-  `fuzzel`.
+- **Niri desktop**: `niri`, `quickshell` (the session starts it as `qs`),
+  `tofi`, and `fuzzel`.
 - **Interactive CLI helpers**: `skim` (`sk`), `fd`, `jq`, `bat`, `eza`, and
   `neovim` (`nvim`).
 - **Terminal workflow**: `tmux` and an OpenSSH-compatible `ssh` client.
@@ -127,7 +127,7 @@ The following are the non-obvious dependencies of the scripts under
 | Volume notifications | `wpctl`, `pactl`, `notify-send`, `awk`, `grep`, and `stdbuf` |
 | Stream recording helper | `yt-dlp` and `awk` |
 | Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, a terminal, and `tmux`; `wezterm` enables its tab/pane integration |
-| SSH host picker | `fuzzel`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and `tmux` for the special host |
+| SSH host picker | `tofi`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and `tmux` for the special host |
 | Microsoft Edge installer | `curl`, `gzip`, `awk`, `ar` (`binutils`), `tar`, and `sha256sum` |
 | Desktop-entry creator | `desktop-file-validate` and `update-desktop-database` are optional; `chezmoi` is used when available |
 | Thunderbird backup | `pgrep`, `pkill`, `tar`, and `xz` |

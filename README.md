@@ -7,7 +7,7 @@ Personal CachyOS/Arch Linux desktop configuration managed with
 
 This repository manages the following parts of `$HOME`:
 
-- **Desktop session:** Niri, Quickshell, Fuzzel, XDG portals, GTK/Qt settings,
+- **Desktop session:** Niri, Quickshell, Tofi, Fuzzel, XDG portals, GTK/Qt settings,
   wallpapers, idle/lock helpers, and desktop services.
 - **Shell and terminal:** Fish, Bash, Starship, `.myenv`, tmux, Foot, Alacritty,
   Ghostty, and WezTerm.
@@ -31,7 +31,7 @@ the best package manager and package names for that system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, `swayidle`,
+- **Desktop session:** `niri`, `quickshell` (`qs`), `tofi`, `fuzzel`, `swayidle`,
   `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
   `udiskie`, and `awww` or `swaybg`
 - **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
