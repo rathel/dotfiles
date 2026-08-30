@@ -39,6 +39,12 @@ if test -x /home/linuxbrew/.linuxbrew/bin/brew
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
 end
 
+# Zathura's Guix plugin is installed in the user profile, not in Zathura's
+# store package directory.
+if test -d "$HOME/.guix-profile/lib/zathura"
+    set -gx ZATHURA_PLUGINS_PATH "$HOME/.guix-profile/lib/zathura"
+end
+
 # Added by LM Studio CLI (lms)
 set -gx PATH $PATH /home/rathel/.lmstudio/bin
 # End of LM Studio CLI section

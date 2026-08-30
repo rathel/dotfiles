@@ -540,6 +540,7 @@ binds {
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
 	Mod+T { spawn-sh "if [ -x /home/linuxbrew/.linuxbrew/bin/foot ]; then exec /home/linuxbrew/.linuxbrew/bin/foot; else exec foot; fi"; }
 	Mod+P { spawn-sh "foot --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
+	Mod+Alt+P hotkey-overlay-title="Pi Prompt" { spawn-sh "$HOME/.local/bin/pi-tofi.sh"; }
 	Mod+M hotkey-overlay-title="Streaming Services" { spawn-sh "$HOME/.local/bin/launch-players.sh"; }
 
 	Mod+Z hotkey-overlay-title="Zed" { spawn "niri-app" "-c" "zeditor"; }
@@ -548,7 +549,7 @@ binds {
 	Alt+Tab { spawn-sh "$HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "tofi-drun"; }
 	Mod+Shift+D { spawn-sh "niri-app -c ~/Applications/Communication/Discord/discord"; }
-	Mod+S hotkey-overlay-title="Steam Launcher" { spawn-sh "$HOME/git/fuzzel-steam-launcher/fuzzel-steam.sh"; }
+	Mod+S hotkey-overlay-title="Steam Launcher" { spawn "fish" "-c" "infisical-env steam -- $HOME/git/fuzzel-steam-launcher/tofi-steam.sh"; }
 	Mod+Shift+S hotkey-overlay-title="SSH Host Picker" { spawn-sh "$HOME/.local/bin/host-picker"; }
 	Super+Shift+T { spawn-sh "niri-app -c thunderbird"; }
 	Mod+B { spawn-sh "niri-app firefox"; }
