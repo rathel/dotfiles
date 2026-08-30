@@ -91,7 +91,7 @@ if [[ ${1:-} == --herdr-remote ]]; then
     run_remote_herdr "$@"
 fi
 
-for command in fuzzel "$terminal" ssh python3; do
+for command in tofi "$terminal" ssh python3; do
     require_command "$command"
 done
 
@@ -223,7 +223,7 @@ if [[ -z $hosts ]]; then
     exit 1
 fi
 
-if ! host=$(printf '%s\n' "$hosts" | fuzzel --dmenu --prompt='SSH host: '); then
+if ! host=$(printf '%s\n' "$hosts" | tofi --prompt-text='SSH host: '); then
     exit 0
 fi
 
