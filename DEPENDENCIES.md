@@ -17,7 +17,9 @@ target system:
   `eza`, `nvim`, `curl`, and `python3`
 - **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
   `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
-  XDG desktop portals, GNOME Keyring, `notify-send`, and `xdg-open`
+  XDG desktop portals (`xdg-desktop-portal`, `xdg-desktop-portal-gtk`, and
+  `xdg-desktop-portal-wlr` plus `slurp` for Niri/Wayland), GNOME Keyring,
+  `notify-send`, and `xdg-open`
 - **Editor:** `emacs`
 
 Install fonts, cursor/icon themes, and optional applications from the sections
@@ -80,8 +82,10 @@ The Quickshell bar calls these tools for status data:
 The Quickshell notification server replaces the legacy notification daemons.
 `libnotify` (`notify-send`) is still used by several helper scripts.
 
-The portal configuration expects `xdg-desktop-portal` plus the GNOME and GTK
-backends, and `gnome-keyring` for the configured Secret portal.
+The portal configuration expects `xdg-desktop-portal`, the GTK backend, and
+`xdg-desktop-portal-wlr` plus `slurp` for Niri/Wayland screenshots. It also
+uses `gnome-keyring` for the configured Secret portal. The GNOME portal backend
+is only needed when using a GNOME session.
 
 ## Managed applications and feature groups
 
