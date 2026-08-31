@@ -55,7 +55,7 @@ Scope {
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             color: statusTab.textColor
-            font.family: "Iosevka Nerd Font"
+            font.family: "Monaspace Neon NF"
             font.pixelSize: root.fontSize
         }
     }
@@ -570,7 +570,7 @@ Scope {
                     anchors.centerIn: parent
                     text: Qt.formatDateTime(clock.date, "ddd MMM d HH:mm")
                     color: root.text
-                    font.family: "Iosevka Nerd Font"
+                    font.family: "Monaspace Neon NF"
                     font.pixelSize: root.fontSize
                     font.bold: true
                 }

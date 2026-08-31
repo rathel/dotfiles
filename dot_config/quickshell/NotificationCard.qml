@@ -61,7 +61,7 @@ Item {
                     width: 280
                     text: notification.appName && notification.appName.length > 0 ? notification.appName : "Notification"
                     color: theme.text
-                    font.family: "Iosevka Nerd Font"
+                    font.family: "Monaspace Neon NF"
                     font.pixelSize: 16
                     font.bold: true
                     elide: Text.ElideRight
@@ -71,7 +71,7 @@ Item {
                     width: 280
                     text: notification.summary
                     color: theme.rosewater
-                    font.family: "Iosevka Nerd Font"
+                    font.family: "Monaspace Neon NF"
                     font.pixelSize: 16
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -81,7 +81,7 @@ Item {
                     width: 280
                     text: notification.body
                     color: theme.subtext0
-                    font.family: "Iosevka Nerd Font"
+                    font.family: "Monaspace Neon NF"
                     font.pixelSize: 16
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     maximumLineCount: 4
@@ -112,7 +112,7 @@ Item {
                                 anchors.centerIn: parent
                                 text: modelData.text || "Action"
                                 color: theme.text
-                                font.family: "Iosevka Nerd Font"
+                                font.family: "Monaspace Neon NF"
                                 font.pixelSize: 16
                             }
                         }
@@ -134,7 +134,7 @@ Item {
                             anchors.centerIn: parent
                             text: "Close"
                             color: theme.text
-                            font.family: "Iosevka Nerd Font"
+                            font.family: "Monaspace Neon NF"
                             font.pixelSize: 16
                         }
                     }

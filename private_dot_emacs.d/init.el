@@ -38,7 +38,7 @@
       (aurora-green "#a3be8c")
       (aurora-purple "#b48ead"))
   (custom-set-faces
-   `(default ((t (:background ,polar-night-0 :foreground ,snow-storm-1))))
+   `(default ((t (:family "Monaspace Neon NF" :background ,polar-night-0 :foreground ,snow-storm-1))))
    `(cursor ((t (:background ,frost-2))))
    `(fringe ((t (:background ,polar-night-0 :foreground ,polar-night-3))))
    `(region ((t (:background ,polar-night-2))))

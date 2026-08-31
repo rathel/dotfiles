@@ -18,19 +18,19 @@ history = 10000
 size = 12.5
 
 [font.normal]
-family = "IosevkaTerm Nerd Font"
+family = "Monaspace Neon NF"
 style = "Regular"
 
 [font.bold]
-family = "IosevkaTerm Nerd Font"
+family = "Monaspace Neon NF"
 style = "Bold"
 
 [font.italic]
-family = "IosevkaTerm Nerd Font"
+family = "Monaspace Neon NF"
 style = "Italic"
 
 [font.bold_italic]
-family = "IosevkaTerm Nerd Font"
+family = "Monaspace Neon NF"
 style = "Bold Italic"
 
 [bell]

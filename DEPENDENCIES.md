@@ -44,8 +44,7 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
 - **General tools**: `curl` and `python3`.
 - **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
   config initializes them only when they are present.
-- **Fonts and cursors**: Iosevka Nerd Font variants (`Iosevka Nerd Font` and
-  `IosevkaTerm Nerd Font`) and the `breeze_cursors` cursor theme.
+- **Fonts and cursors**: Monaspace Neon NF and the `breeze_cursors` cursor theme.
 - **Quickshell icons**: the `Surfn-Arc` icon theme is selected by the shell.
 
 ## Configured terminal emulators
