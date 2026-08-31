@@ -205,7 +205,7 @@ Scope {
         const swapUsed = parseInt(parts[2]) || 0
         const swapTotal = parseInt(parts[3]) || 0
 
-        memoryText = ` ${Math.round((memoryUsed / memoryTotal) * 100)}%`
+        memoryText = `󰍛 ${Math.round((memoryUsed / memoryTotal) * 100)}%`
         swapText = swapTotal > 0 ? `󰓡 ${formatMemorySize(swapUsed)}/${formatMemorySize(swapTotal)}` : ""
     }
 
