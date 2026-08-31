@@ -33,6 +33,11 @@ if status is-interactive
     end
 end
 
+# Load the system-wide Nix environment in Fish shells.
+if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+end
+
 # Keep Homebrew ahead of package-manager profiles in every Fish invocation, so
 # scripts and interactive shells select the current chezmoi release.
 if test -x /home/linuxbrew/.linuxbrew/bin/brew
