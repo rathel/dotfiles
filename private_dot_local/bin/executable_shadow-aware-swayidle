@@ -1,59 +1,102 @@
 #!/usr/bin/env python3
-"""Run swayidle only while Shadow PC is not running."""
+"""Run swayidle only while Shadow PC is not running.
+
+Supports both Hyprland and Niri sessions. The conservative failure mode keeps
+idle locking disabled when compositor state cannot be queried, because Shadow
+may still be active.
+"""
 
 from __future__ import annotations
 
 import json
+import os
 import signal
 import subprocess
 import sys
 import time
-from typing import Optional
+from typing import Any, Optional
 
 POLL_INTERVAL = 1.0
-NIRI_QUERY_TIMEOUT = 2.0
+QUERY_TIMEOUT = 2.0
+LOCK_COMMAND = "swaylock -f -c 2e3440"
 SHADOW_WINDOWS = {"Shadow PC", "Shadow PC - Display"}
 SHADOW_PROCESSES = ("ShadowPCDisplay", "shadow-launcher")
-
-SWAYIDLE_COMMAND = [
-    "swayidle",
-    "-w",
-    "timeout",
-    "601",
-    "niri msg action power-off-monitors",
-    "timeout",
-    "600",
-    "swaylock -f -c 2e3440",
-    "before-sleep",
-    "swaylock -f -c 2e3440",
-]
 
 idle_process: Optional[subprocess.Popen[bytes]] = None
 
 
-def shadow_is_running() -> bool:
-    """Return whether Shadow has a window or one of its native processes."""
-    try:
-        result = subprocess.run(
-            ["niri", "msg", "-j", "windows"],
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=NIRI_QUERY_TIMEOUT,
+def detect_compositor() -> str:
+    desktop = ":".join(
+        filter(
+            None,
+            (
+                os.environ.get("XDG_CURRENT_DESKTOP"),
+                os.environ.get("XDG_SESSION_DESKTOP"),
+            ),
         )
-        windows = json.loads(result.stdout)
-    except (OSError, subprocess.SubprocessError, json.JSONDecodeError, TypeError, ValueError):
-        # Do not enable the lock manager while the compositor is unavailable or
-        # its window list cannot be read; Shadow may still be running.
-        return True
+    ).lower()
 
-    if any(
-        window.get("app_id") in SHADOW_WINDOWS or window.get("title") in SHADOW_WINDOWS
-        for window in windows
-        if isinstance(window, dict)
-    ):
-        return True
+    if os.environ.get("HYPRLAND_INSTANCE_SIGNATURE") or "hyprland" in desktop:
+        return "hyprland"
+    if os.environ.get("NIRI_SOCKET") or "niri" in desktop:
+        return "niri"
+    raise RuntimeError("neither a Hyprland nor Niri session was detected")
 
+
+def swayidle_command(compositor: str) -> list[str]:
+    command = [
+        "swayidle",
+        "-w",
+        "timeout",
+        "600",
+        LOCK_COMMAND,
+        "timeout",
+        "601",
+    ]
+
+    if compositor == "hyprland":
+        command.extend(
+            [
+                "hyprctl dispatch dpms off",
+                "resume",
+                "hyprctl dispatch dpms on",
+            ]
+        )
+    else:
+        command.append("niri msg action power-off-monitors")
+
+    command.extend(["before-sleep", LOCK_COMMAND])
+    return command
+
+
+def query_windows(compositor: str) -> list[dict[str, Any]]:
+    if compositor == "hyprland":
+        command = ["hyprctl", "clients", "-j"]
+    else:
+        command = ["niri", "msg", "-j", "windows"]
+
+    result = subprocess.run(
+        command,
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=QUERY_TIMEOUT,
+    )
+    windows = json.loads(result.stdout)
+    if not isinstance(windows, list):
+        raise TypeError("compositor window query did not return a list")
+    return [window for window in windows if isinstance(window, dict)]
+
+
+def window_is_shadow(window: dict[str, Any], compositor: str) -> bool:
+    if compositor == "hyprland":
+        fields = ("class", "initialClass", "title", "initialTitle")
+    else:
+        fields = ("app_id", "title")
+    return any(window.get(field) in SHADOW_WINDOWS for field in fields)
+
+
+def shadow_process_is_running() -> bool:
     return any(
         subprocess.run(
             ["pgrep", "-x", process_name],
@@ -66,13 +109,24 @@ def shadow_is_running() -> bool:
     )
 
 
-def start_idle() -> None:
+def shadow_is_running(compositor: str) -> bool:
+    """Return whether Shadow has a window or one of its native processes."""
+    try:
+        windows = query_windows(compositor)
+    except (OSError, subprocess.SubprocessError, json.JSONDecodeError, TypeError, ValueError):
+        # Do not enable the lock manager while compositor state is unavailable.
+        return True
+
+    return any(window_is_shadow(window, compositor) for window in windows) or shadow_process_is_running()
+
+
+def start_idle(command: list[str]) -> None:
     global idle_process
 
     if idle_process is not None and idle_process.poll() is None:
         return
 
-    idle_process = subprocess.Popen(SWAYIDLE_COMMAND)
+    idle_process = subprocess.Popen(command)
     print("Shadow PC is not running; swayidle enabled", file=sys.stderr, flush=True)
 
 
@@ -99,15 +153,39 @@ def stop_on_signal(signum: int, _frame: object) -> None:
     raise SystemExit(128 + signum)
 
 
-for signal_number in (signal.SIGINT, signal.SIGTERM):
-    signal.signal(signal_number, stop_on_signal)
+def main() -> int:
+    try:
+        compositor = detect_compositor()
+    except RuntimeError as error:
+        print(f"shadow-aware-swayidle: {error}", file=sys.stderr)
+        return 1
 
-try:
-    while True:
-        if shadow_is_running():
-            stop_idle()
-        else:
-            start_idle()
-        time.sleep(POLL_INTERVAL)
-finally:
-    stop_idle()
+    command = swayidle_command(compositor)
+    if sys.argv[1:] == ["--check"]:
+        state = "running" if shadow_is_running(compositor) else "not running"
+        print(f"compositor={compositor}")
+        print(f"shadow={state}")
+        print("swayidle=" + repr(command))
+        return 0
+    if sys.argv[1:]:
+        print("usage: shadow-aware-swayidle [--check]", file=sys.stderr)
+        return 2
+
+    for signal_number in (signal.SIGINT, signal.SIGTERM):
+        signal.signal(signal_number, stop_on_signal)
+
+    try:
+        while True:
+            if shadow_is_running(compositor):
+                stop_idle()
+            else:
+                start_idle(command)
+            time.sleep(POLL_INTERVAL)
+    finally:
+        stop_idle()
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
