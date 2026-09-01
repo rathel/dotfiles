@@ -4,7 +4,346 @@
 local mainMod = "SUPER"
 local profileBin = "/home/rathel/.local/state/nix/profiles/profile/bin"
 
--- Monitors, input, and environment
+-- A master pane with a vertically scrolling stack on the right. Hyprland's
+-- built-in master and scrolling layouts cannot be combined, so this keeps the
+-- useful parts of both in a small Lua layout.
+local masterStackState = {}
+local masterStackRatio = 0.60
+local masterStackGap = 10
+local masterStackCardRatio = 0.70
+
+local function clamp(value, low, high)
+    return math.max(low, math.min(high, value))
+end
+
+local function masterStackTargetId(target)
+    local window = target.window
+    return window and tostring(window.stable_id) or tostring(target.index)
+end
+
+local function masterStackWorkspaceKey(target)
+    local window = target.window
+    local workspace = window and window.workspace
+    if workspace then
+        return tostring(workspace.id)
+    end
+    return "default"
+end
+
+local function masterStackIndexOf(values, value)
+    for index, candidate in ipairs(values) do
+        if candidate == value then
+            return index
+        end
+    end
+end
+
+local function masterStackSync(ctx)
+    local stateKey = masterStackWorkspaceKey(ctx.targets[1])
+    local state = masterStackState[stateKey]
+    local restoring = false
+    if not state then
+        state = { order = {}, master = nil, offset = 0 }
+        masterStackState[stateKey] = state
+        restoring = true
+    end
+
+    local targets = {}
+    local present = {}
+    for _, target in ipairs(ctx.targets) do
+        local id = masterStackTargetId(target)
+        targets[id] = target
+        present[id] = true
+    end
+
+    local order = {}
+    if restoring then
+        -- A Lua reload destroys this table, but the layout targets retain their
+        -- last boxes. Reconstruct the master and stack order from those boxes
+        -- so a reload does not reset the visible stack position.
+        local positioned = {}
+        for _, target in ipairs(ctx.targets) do
+            local box = target.box
+            if box and box.w > 0 and box.h > 0 then
+                table.insert(positioned, {
+                    id = masterStackTargetId(target),
+                    box = box,
+                })
+            end
+        end
+
+        table.sort(positioned, function(left, right)
+            return left.box.w > right.box.w
+        end)
+
+        local looksLikeMasterStack = #positioned == #ctx.targets
+            and (#positioned == 1 or positioned[1].box.w > positioned[2].box.w * 1.1)
+        if looksLikeMasterStack then
+            state.master = positioned[1].id
+            table.insert(order, state.master)
+
+            local stack = {}
+            for index = 2, #positioned do
+                table.insert(stack, positioned[index])
+            end
+            table.sort(stack, function(left, right)
+                return left.box.y < right.box.y
+            end)
+            for _, entry in ipairs(stack) do
+                table.insert(order, entry.id)
+            end
+
+            if #stack > 0 then
+                local cardHeight = ctx.area.h
+                if #stack > 1 then
+                    cardHeight = math.max(1, ctx.area.h * masterStackCardRatio)
+                end
+                local maxOffset = math.max(0,
+                    #stack * cardHeight + (#stack - 1) * masterStackGap - ctx.area.h)
+                state.offset = clamp(ctx.area.y - stack[1].box.y, 0, maxOffset)
+            end
+        end
+    end
+    for _, id in ipairs(state.order) do
+        if present[id] then
+            table.insert(order, id)
+        end
+    end
+
+    -- Insert newly opened windows before the existing stack, rather than at
+    -- its bottom. Keep the order in which multiple windows arrive.
+    local newIds = {}
+    for _, target in ipairs(ctx.targets) do
+        local id = masterStackTargetId(target)
+        if not masterStackIndexOf(order, id) then
+            table.insert(newIds, id)
+        end
+    end
+
+    local insertAt
+    for index, id in ipairs(order) do
+        if id ~= state.master then
+            insertAt = index
+            break
+        end
+    end
+    if not insertAt then
+        insertAt = #order + 1
+    end
+    for _, id in ipairs(newIds) do
+        table.insert(order, insertAt, id)
+        insertAt = insertAt + 1
+    end
+    state.order = order
+
+    if not state.master or not present[state.master] then
+        state.master = order[1]
+        state.offset = 0
+    end
+
+    return state, targets
+end
+
+local function masterStackGeometry(area, stackCount)
+    local masterWidth = (area.w - masterStackGap) * masterStackRatio
+    local stackX = area.x + masterWidth + masterStackGap
+    local stackWidth = math.max(1, area.w - masterWidth - masterStackGap)
+    local cardHeight = area.h
+
+    if stackCount > 1 then
+        cardHeight = math.max(1, area.h * masterStackCardRatio)
+    end
+
+    local step = cardHeight + masterStackGap
+    local contentHeight = stackCount * cardHeight + math.max(0, stackCount - 1) * masterStackGap
+    local maxOffset = math.max(0, contentHeight - area.h)
+
+    return {
+        masterWidth = math.max(1, masterWidth),
+        stackX = stackX,
+        stackWidth = stackWidth,
+        cardHeight = cardHeight,
+        step = step,
+        maxOffset = maxOffset,
+    }
+end
+
+hl.layout.register("master-stack", {
+    recalculate = function(ctx)
+        if #ctx.targets == 0 then
+            return
+        end
+
+        local state, targets = masterStackSync(ctx)
+        local master = targets[state.master]
+        if not master then
+            return
+        end
+
+        local area = ctx.area
+        local stackIds = {}
+        for _, id in ipairs(state.order) do
+            if id ~= state.master then
+                table.insert(stackIds, id)
+            end
+        end
+
+        if #stackIds == 0 then
+            master:place(area)
+            return
+        end
+
+        local geometry = masterStackGeometry(area, #stackIds)
+        state.offset = clamp(state.offset or 0, 0, geometry.maxOffset)
+
+        master:place({
+            x = area.x,
+            y = area.y,
+            w = geometry.masterWidth,
+            h = area.h,
+        })
+
+        for index, id in ipairs(stackIds) do
+            local target = targets[id]
+            if target then
+                target:place({
+                    x = geometry.stackX,
+                    y = area.y + (index - 1) * geometry.step - state.offset,
+                    w = geometry.stackWidth,
+                    h = geometry.cardHeight,
+                })
+            end
+        end
+    end,
+
+    layout_msg = function(ctx, message)
+        if #ctx.targets == 0 then
+            return true
+        end
+
+        local command, argument = message:match("^(%S+)%s*(.*)$")
+        local state, targets = masterStackSync(ctx)
+        local stackCount = #state.order - 1
+        local geometry = masterStackGeometry(ctx.area, math.max(0, stackCount))
+
+        if command == "scroll" then
+            local amount = math.max(ctx.area.h * 0.45, geometry.cardHeight * 0.65)
+            if argument == "up" then
+                state.offset = (state.offset or 0) - amount
+            elseif argument == "down" then
+                state.offset = (state.offset or 0) + amount
+            else
+                return "master-stack: expected scroll up or scroll down"
+            end
+            state.offset = clamp(state.offset, 0, geometry.maxOffset)
+        elseif command == "reset" then
+            state.offset = 0
+        elseif command == "select" then
+            -- Directional focus is unreliable here because the stack cards
+            -- overlap. Select explicitly from the layout's stable order.
+            if argument == "master" then
+                local selected = targets[state.master]
+                if selected and selected.window then
+                    hl.dispatch(hl.dsp.focus({ window = selected.window }))
+                end
+            elseif stackCount > 0 then
+                local stackIds = {}
+                for _, id in ipairs(state.order) do
+                    if id ~= state.master then
+                        table.insert(stackIds, id)
+                    end
+                end
+
+                local activeIndex
+                for index, id in ipairs(stackIds) do
+                    local target = targets[id]
+                    if target and target.window and target.window.active then
+                        activeIndex = index
+                        break
+                    end
+                end
+
+                local selectedIndex
+                if argument == "next" then
+                    selectedIndex = activeIndex and (activeIndex % #stackIds) + 1 or 1
+                elseif argument == "previous" then
+                    selectedIndex = activeIndex and ((activeIndex - 2) % #stackIds) + 1 or #stackIds
+                else
+                    return "master-stack: expected select master, select next, or select previous"
+                end
+
+                local selected = targets[stackIds[selectedIndex]]
+                if selected and selected.window then
+                    -- Explicit selection recenters; unrelated focus changes
+                    -- (for example switching monitors) leave the offset alone.
+                    local centeredOffset = (selectedIndex - 1) * geometry.step
+                        + geometry.cardHeight / 2 - ctx.area.h / 2
+                    state.offset = clamp(centeredOffset, 0, geometry.maxOffset)
+                    hl.dispatch(hl.dsp.focus({ window = selected.window }))
+                end
+            end
+        elseif command == "reorder" then
+            local stackIds = {}
+            for _, id in ipairs(state.order) do
+                if id ~= state.master then
+                    table.insert(stackIds, id)
+                end
+            end
+
+            local activeIndex
+            for index, id in ipairs(stackIds) do
+                local target = targets[id]
+                if target and target.window and target.window.active then
+                    activeIndex = index
+                    break
+                end
+            end
+
+            local delta
+            if argument == "up" then
+                delta = -1
+            elseif argument == "down" then
+                delta = 1
+            else
+                return "master-stack: expected reorder up or reorder down"
+            end
+
+            local newIndex = activeIndex and activeIndex + delta
+            if newIndex and newIndex >= 1 and newIndex <= #stackIds then
+                stackIds[activeIndex], stackIds[newIndex] = stackIds[newIndex], stackIds[activeIndex]
+                state.order = { state.master }
+                for _, id in ipairs(stackIds) do
+                    table.insert(state.order, id)
+                end
+
+                -- Follow the moved window so it remains visible as it is
+                -- reordered through the vertically scrolling stack.
+                local centeredOffset = (newIndex - 1) * geometry.step
+                    + geometry.cardHeight / 2 - ctx.area.h / 2
+                state.offset = clamp(centeredOffset, 0, geometry.maxOffset)
+            end
+        elseif command == "promote" then
+            for id, target in pairs(targets) do
+                if target.window and target.window.active then
+                    state.master = id
+                    state.offset = 0
+                    break
+                end
+            end
+        else
+            return "master-stack: expected select master, select next, select previous, scroll up, scroll down, reset, reorder up, reorder down, or promote"
+        end
+
+        return true
+    end,
+})
+
+-- The stack offset is workspace-local and is intentionally not changed by
+-- ordinary focus events, so monitor/workspace switches restore the same view.
+
+-- Monitors, input, and environment. DP-2 is now left of DP-1.
+hl.monitor({ output = "DP-2", mode = "preferred", position = "0x0", scale = 1 })
+hl.monitor({ output = "DP-1", mode = "preferred", position = "1920x0", scale = 1 })
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
 hl.config({
     input = {
@@ -24,7 +363,7 @@ hl.config({
             active_border = "rgb(88c0d0)",
             inactive_border = "rgb(4c566a)",
         },
-        layout = "dwindle",
+        layout = "lua:master-stack",
         resize_on_border = true,
     },
     decoration = {
@@ -43,6 +382,9 @@ hl.config({
     misc = {
         disable_hyprland_logo = true,
         disable_splash_rendering = true,
+        -- Permit focus requests under a maximized window by transferring
+        -- maximize state instead of trapping focus on the old window.
+        on_focus_under_fullscreen = 1,
         vrr = 0,
     },
 })
@@ -79,13 +421,16 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("nm-applet")
     hl.exec_cmd("udiskie -t")
     hl.exec_cmd("/home/rathel/.local/bin/wallpaper.sh")
+    -- Keep clipboard contents after the source application exits.
+    hl.exec_cmd(profileBin .. "/wl-paste --type text --watch " .. profileBin .. "/cliphist store")
+    hl.exec_cmd(profileBin .. "/wl-paste --type image --watch " .. profileBin .. "/cliphist store")
 end)
 
 -- Applications and utility actions
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("foot --title=scratch -e /home/rathel/.local/bin/cm-edit.sh"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd("/home/rathel/.local/bin/pi-tofi.sh"))
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("/home/rathel/.local/bin/launch-players.sh"))
+hl.bind(mainMod .. " + M", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
 hl.bind(mainMod .. " + grave", hl.dsp.exec_cmd("foot --title=scratch -e sh"))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("tofi-drun"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("fish -c 'infisical-env steam -- /home/rathel/git/fuzzel-steam-launcher/tofi-steam.sh'"))
@@ -114,8 +459,10 @@ for _, key in ipairs({ "left", "down", "up", "right" }) do
     hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = key }))
 end
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
-hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
+-- Explicit stack selection avoids directional-focus ambiguity caused by the
+-- overlapping stack cards. Selecting a stack item also recenters the stack.
+hl.bind(mainMod .. " + J", hl.dsp.layout("select next"))
+hl.bind(mainMod .. " + K", hl.dsp.layout("select previous"))
 hl.bind(mainMod .. " + L", hl.dsp.focus({ direction = "right" }))
 hl.bind("ALT + TAB", hl.dsp.focus({ last = true }))
 
@@ -155,6 +502,7 @@ hl.bind(mainMod .. " + CTRL + SHIFT + L", hl.dsp.window.move({ monitor = "r" }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ action = "unset" }))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(profileBin .. "/cliphist list | tofi --prompt-text clipboard | " .. profileBin .. "/cliphist decode | " .. profileBin .. "/wl-copy"))
 hl.bind(mainMod .. " + minus", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
 hl.bind(mainMod .. " + equal", hl.dsp.window.resize({ x = 100, y = 0, relative = true }))
 hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.resize({ x = 0, y = -100, relative = true }))
@@ -163,6 +511,18 @@ hl.bind(mainMod .. " + O", hl.dsp.workspace.toggle_special("overview"))
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exit())
 hl.bind("CTRL + ALT + delete", hl.dsp.exit())
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("hyprctl dispatch dpms off"))
+
+-- Keyboard navigation selects a stack item and automatically scrolls it into
+-- view. Mouse scrolling remains focus-neutral.
+hl.bind(mainMod .. " + ALT + H", hl.dsp.layout("select master"))
+hl.bind(mainMod .. " + ALT + J", hl.dsp.layout("select next"))
+hl.bind(mainMod .. " + ALT + K", hl.dsp.layout("select previous"))
+hl.bind(mainMod .. " + CTRL + J", hl.dsp.layout("reorder down"))
+hl.bind(mainMod .. " + CTRL + K", hl.dsp.layout("reorder up"))
+hl.bind(mainMod .. " + ALT + R", hl.dsp.layout("reset"))
+hl.bind(mainMod .. " + ALT + Return", hl.dsp.layout("promote"))
+hl.bind(mainMod .. " + ALT + mouse_down", hl.dsp.layout("scroll down"))
+hl.bind(mainMod .. " + ALT + mouse_up", hl.dsp.layout("scroll up"))
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
@@ -191,5 +551,7 @@ rule("fladder", { class = "^(Fladder)$" }, { float = true, workspace = "3", moni
 rule("mpv-popup", { class = "^(mpv)$" }, { float = true, size = "20% 20%", move = "79% 1%", immediate = true })
 rule("mpv-otmpv", { class = "^(mpv)$", title = "^otmpv$" }, { move = "79% 58%" })
 rule("mpv-streamers", { class = "^(mpv)$", title = "^Streamers$" }, { move = "79% 35%" })
-rule("thunderbird-compose", { class = "^(thunderbird)$", title = "^Write:" }, { float = true })
+-- Keep all Thunderbird windows out of the master-stack layout. Thunderbird
+-- opens compose/reply windows separately and their titles change after opening.
+rule("thunderbird-floating", { class = "^(thunderbird)$" }, { float = true })
 rule("thunderbird-reminders", { class = "^(thunderbird-beta)$", title = "^Reminders$" }, { float = true, size = "30% 30%" })
