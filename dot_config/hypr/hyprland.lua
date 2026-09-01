@@ -9,7 +9,7 @@ local profileBin = "/home/rathel/.local/state/nix/profiles/profile/bin"
 -- useful parts of both in a small Lua layout.
 local masterStackState = {}
 local masterStackRatio = 0.60
-local masterStackGap = 10
+local masterStackGap = 3
 -- Keep the master and stack columns logically adjacent so directional focus
 -- can move between them; target placement still supplies the visual gaps.
 local masterStackColumnGap = 0
@@ -359,7 +359,7 @@ hl.config({
         },
     },
     general = {
-        gaps_in = 10,
+        gaps_in = 12,
         gaps_out = 10,
         border_size = 2,
         col = {
@@ -370,14 +370,21 @@ hl.config({
         resize_on_border = true,
     },
     decoration = {
-        rounding = 0,
+        rounding = 5,
         blur = {
             enabled = true,
             size = 30,
             passes = 3,
             new_optimizations = true,
         },
-        shadow = { enabled = false },
+        dim_inactive = true,
+        dim_strength = 0.08,
+        shadow = {
+            enabled = true,
+            range = 8,
+            render_power = 3,
+            color = "rgba(00000055)",
+        },
     },
     dwindle = {
         preserve_split = true,
@@ -415,7 +422,7 @@ hl.animation({ leaf = "windows", enabled = true, speed = 5, bezier = "easeOutQui
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "easeOutQuint", style = "popin 80%" })
 hl.animation({ leaf = "border", enabled = true, speed = 5, bezier = "default" })
 hl.animation({ leaf = "fade", enabled = true, speed = 5, bezier = "easeOutQuint" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "easeOutQuint", style = "slide" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "easeOutQuint", style = "slidevert" })
 
 -- Autostart only programs present on this system. Personal missing helpers from
 -- the legacy config are intentionally not started.
@@ -481,8 +488,58 @@ hl.bind(mainMod .. " + 0", hl.dsp.focus({ workspace = 10 }))
 hl.bind(mainMod .. " + CTRL + 0", hl.dsp.window.move({ workspace = 10 }))
 hl.bind(mainMod .. " + PAGE_DOWN", hl.dsp.focus({ workspace = "e+1" }))
 hl.bind(mainMod .. " + PAGE_UP", hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + U", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + I", hl.dsp.focus({ workspace = "e-1" }))
+-- These bindings are defined below, after the dynamic workspace helper.
+-- Niri-like monitor-local workspace navigation. Hyprland's m+1/m-1
+-- only visit workspaces that already exist, so create the next one when
+-- moving down past the last workspace on this monitor.
+local function focusVerticalWorkspace(direction)
+    local monitor = hl.get_active_monitor()
+    local current = hl.get_active_workspace(monitor)
+    if not monitor or not current then
+        return
+    end
+
+    local workspaces = {}
+    for _, workspace in ipairs(hl.get_workspaces()) do
+        local owner = workspace.monitor
+        local sameMonitor = owner == monitor
+            or owner == monitor.name
+            or owner == monitor.id
+        if not workspace.special and sameMonitor then
+            table.insert(workspaces, workspace)
+        end
+    end
+
+    table.sort(workspaces, function(left, right)
+        return left.id < right.id
+    end)
+
+    local currentIndex
+    for index, workspace in ipairs(workspaces) do
+        if workspace.id == current.id then
+            currentIndex = index
+            break
+        end
+    end
+
+    if not currentIndex then
+        return
+    end
+
+    local target = workspaces[currentIndex + direction]
+    if target then
+        hl.dispatch(hl.dsp.focus({ workspace = target.id }))
+    elseif direction > 0 then
+        hl.dispatch(hl.dsp.focus({ workspace = "emptynm" }))
+    end
+end
+
+hl.bind(mainMod .. " + U", function()
+    focusVerticalWorkspace(1)
+end)
+hl.bind(mainMod .. " + I", function()
+    focusVerticalWorkspace(-1)
+end)
 hl.bind(mainMod .. " + CTRL + PAGE_DOWN", hl.dsp.window.move({ workspace = "e+1" }))
 hl.bind(mainMod .. " + CTRL + PAGE_UP", hl.dsp.window.move({ workspace = "e-1" }))
 hl.bind(mainMod .. " + CTRL + U", hl.dsp.window.move({ workspace = "e+1" }))
