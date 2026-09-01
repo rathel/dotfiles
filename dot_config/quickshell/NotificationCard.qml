@@ -62,7 +62,7 @@ Item {
                     text: notification.appName && notification.appName.length > 0 ? notification.appName : "Notification"
                     color: theme.text
                     font.family: "Monaspace Neon NF"
-                    font.pixelSize: 16
+                    font.pixelSize: 18
                     font.bold: true
                     elide: Text.ElideRight
                 }
@@ -72,7 +72,7 @@ Item {
                     text: notification.summary
                     color: theme.rosewater
                     font.family: "Monaspace Neon NF"
-                    font.pixelSize: 16
+                    font.pixelSize: 18
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
@@ -82,7 +82,7 @@ Item {
                     text: notification.body
                     color: theme.subtext0
                     font.family: "Monaspace Neon NF"
-                    font.pixelSize: 16
+                    font.pixelSize: 18
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     maximumLineCount: 4
                     elide: Text.ElideRight
@@ -113,7 +113,7 @@ Item {
                                 text: modelData.text || "Action"
                                 color: theme.text
                                 font.family: "Monaspace Neon NF"
-                                font.pixelSize: 16
+                                font.pixelSize: 18
                             }
                         }
                     }
@@ -135,7 +135,7 @@ Item {
                             text: "Close"
                             color: theme.text
                             font.family: "Monaspace Neon NF"
-                            font.pixelSize: 16
+                            font.pixelSize: 18
                         }
                     }
                 }

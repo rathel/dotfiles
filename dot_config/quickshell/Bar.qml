@@ -22,7 +22,7 @@ Scope {
     readonly property color greenDim: theme.greenDim
     readonly property color yellow: theme.yellow
     readonly property color red: theme.red
-    readonly property int fontSize: 16
+    readonly property int fontSize: 18
 
     component StatusTab: Item {
         id: statusTab
