@@ -10,6 +10,9 @@ local profileBin = "/home/rathel/.local/state/nix/profiles/profile/bin"
 local masterStackState = {}
 local masterStackRatio = 0.60
 local masterStackGap = 10
+-- Keep the master and stack columns logically adjacent so directional focus
+-- can move between them; target placement still supplies the visual gaps.
+local masterStackColumnGap = 0
 local masterStackCardRatio = 0.70
 
 local function clamp(value, low, high)
@@ -145,9 +148,9 @@ local function masterStackSync(ctx)
 end
 
 local function masterStackGeometry(area, stackCount)
-    local masterWidth = (area.w - masterStackGap) * masterStackRatio
-    local stackX = area.x + masterWidth + masterStackGap
-    local stackWidth = math.max(1, area.w - masterWidth - masterStackGap)
+    local masterWidth = (area.w - masterStackColumnGap) * masterStackRatio
+    local stackX = area.x + masterWidth + masterStackColumnGap
+    local stackWidth = math.max(1, area.w - masterWidth - masterStackColumnGap)
     local cardHeight = area.h
 
     if stackCount > 1 then
@@ -386,6 +389,10 @@ hl.config({
         -- maximize state instead of trapping focus on the old window.
         on_focus_under_fullscreen = 1,
         vrr = 0,
+    },
+    binds = {
+        -- Let directional focus continue onto an adjacent monitor at the edge.
+        window_direction_monitor_fallback = true,
     },
 })
 
