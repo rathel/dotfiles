@@ -1,0 +1,301 @@
+#!/usr/bin/env bash
+set -u
+
+command_name=${1:-}
+
+format_size() {
+    local megabytes=${1:-0}
+
+    if (( megabytes >= 1024 )); then
+        awk -v megabytes="$megabytes" 'BEGIN {
+            gibibytes = megabytes / 1024
+            if (gibibytes >= 10) printf "%.0fG", gibibytes
+            else printf "%.1fG", gibibytes
+        }'
+    else
+        printf '%dM' "$megabytes"
+    fi
+}
+
+format_rate() {
+    local bytes_per_second=${1:-0}
+
+    if (( bytes_per_second >= 1024 * 1024 )); then
+        awk -v rate="$bytes_per_second" 'BEGIN {
+            mib = rate / (1024 * 1024)
+            if (mib >= 10) printf "%.0f MiB/s", mib
+            else printf "%.1f MiB/s", mib
+        }'
+    elif (( bytes_per_second >= 1024 )); then
+        awk -v rate="$bytes_per_second" 'BEGIN {
+            kib = rate / 1024
+            if (kib >= 10) printf "%.0f KiB/s", kib
+            else printf "%.1f KiB/s", kib
+        }'
+    else
+        printf '%d B/s' "$bytes_per_second"
+    fi
+}
+
+network_status() {
+    local iface kind name rx tx now last_time last_rx last_tx elapsed
+    local down_rate=0 up_rate=0 rate_text='' state_dir state_file
+
+    iface=$(ip route show default 2>/dev/null | awk '
+        NR == 1 {
+            for (i = 1; i <= NF; i++) {
+                if ($i == "dev") {
+                    print $(i + 1)
+                    exit
+                }
+            }
+        }
+    ')
+
+    if [[ -z "$iface" ]] && command -v nmcli >/dev/null 2>&1; then
+        iface=$(nmcli -t -f DEVICE,TYPE,STATE device 2>/dev/null |
+            awk -F: '$2 ~ /^(wifi|ethernet)$/ && $3 ~ /^connected/ {print $1; exit}')
+    fi
+
+    if [[ -z "$iface" ]]; then
+        printf '󰤭 offline\n'
+        return
+    fi
+
+    kind=$(nmcli -g GENERAL.TYPE device show "$iface" 2>/dev/null | head -n1 || true)
+    if [[ "$kind" != 'wifi' && "$kind" != 'ethernet' ]]; then
+        if [[ -d "/sys/class/net/$iface/wireless" ]]; then
+            kind=wifi
+        else
+            kind=ethernet
+        fi
+    fi
+
+    name=$(nmcli -g GENERAL.CONNECTION device show "$iface" 2>/dev/null | head -n1 || true)
+    [[ "$name" == '--' ]] && name=''
+    [[ -n "$name" ]] || name=$iface
+
+    rx=$(cat "/sys/class/net/$iface/statistics/rx_bytes" 2>/dev/null || echo 0)
+    tx=$(cat "/sys/class/net/$iface/statistics/tx_bytes" 2>/dev/null || echo 0)
+    now=$(date +%s)
+    state_dir="${XDG_RUNTIME_DIR:-/tmp}"
+    [[ -d "$state_dir" && -w "$state_dir" ]] || state_dir=/tmp
+    state_file="$state_dir/polybar-network-${UID:-$(id -u)}-${MONITOR:-primary}"
+    state_file=${state_file//[^[:alnum:]_.\/-]/_}
+
+    if [[ -r "$state_file" ]] && read -r last_time last_rx last_tx < "$state_file" &&
+        [[ "$last_time" =~ ^[0-9]+$ && "$last_rx" =~ ^[0-9]+$ && "$last_tx" =~ ^[0-9]+$ ]]; then
+        elapsed=$((now - last_time))
+        (( elapsed > 0 )) || elapsed=1
+        down_rate=$(( (rx - last_rx) / elapsed ))
+        up_rate=$(( (tx - last_tx) / elapsed ))
+        (( down_rate >= 0 )) || down_rate=0
+        (( up_rate >= 0 )) || up_rate=0
+        rate_text=" $(format_rate "$down_rate")↓ $(format_rate "$up_rate")↑"
+    fi
+
+    if [[ "$kind" == wifi ]]; then
+        printf '󰖩 %s%s\n' "$name" "$rate_text"
+    else
+        printf '󰈀%s\n' "$rate_text"
+    fi
+    printf '%s %s %s\n' "$now" "$rx" "$tx" > "$state_file" 2>/dev/null || true
+}
+
+bluetooth_status() {
+    local powered
+    powered=$(bluetoothctl show 2>/dev/null |
+        awk -F': ' '/^[[:space:]]*Powered:/ {print tolower($2); exit}')
+
+    if [[ "$powered" == 'yes' ]]; then
+        printf '󰂯 on\n'
+    else
+        printf '󰂲 off\n'
+    fi
+}
+
+brightness_status() {
+    local device current maximum percent
+    shopt -s nullglob
+
+    for device in /sys/class/backlight/*; do
+        current=$(<"$device/brightness")
+        maximum=$(<"$device/max_brightness")
+        if [[ "$current" =~ ^[0-9]+$ && "$maximum" =~ ^[0-9]+$ && "$maximum" -gt 0 ]]; then
+            percent=$((current * 100 / maximum))
+            printf '󰃟 %d%%\n' "$percent"
+            return
+        fi
+    done
+}
+
+swap_status() {
+    local used=0 total=0
+    read -r used total < <(awk '
+        /^SwapTotal:/ {total = $2}
+        /^SwapFree:/ {free = $2}
+        END {
+            if (total > 0) printf "%d %d\n", (total - free) / 1024, total / 1024
+        }
+    ' /proc/meminfo)
+
+    if [[ "$total" =~ ^[0-9]+$ && "$total" -gt 0 ]]; then
+        printf '󰓡 %s/%s\n' "$(format_size "$used")" "$(format_size "$total")"
+    fi
+}
+
+battery_status() {
+    local device capacity status charging icon
+    shopt -s nullglob
+
+    for device in /sys/class/power_supply/BAT*; do
+        capacity=$(<"$device/capacity")
+        status=$(<"$device/status")
+        [[ "$capacity" =~ ^[0-9]+$ ]] || continue
+
+        charging=0
+        [[ "$status" == 'Charging' || "$status" == 'Full' ]] && charging=1
+        icon='󰁺'
+        if (( charging )); then
+            icon='󰂄'
+        elif (( capacity >= 95 )); then
+            icon='󰁹'
+        elif (( capacity >= 80 )); then
+            icon='󰂂'
+        elif (( capacity >= 60 )); then
+            icon='󰂀'
+        elif (( capacity >= 40 )); then
+            icon='󰁾'
+        elif (( capacity >= 20 )); then
+            icon='󰁼'
+        fi
+
+        printf '%s %s%%\n' "$icon" "$capacity"
+        return
+    done
+}
+
+reboot_status() {
+    local status=current
+
+    if [[ -e /etc/arch-release ]]; then
+        [[ -f "/usr/lib/modules/$(uname -r)/pkgbase" ]] || status=needed
+    elif [[ -e /etc/debian_version && -e /run/reboot-required ]]; then
+        if [[ ! -s /run/reboot-required.pkgs ]] ||
+            grep -Eq '^linux-(image|binary|modules)(-unsigned)?-' /run/reboot-required.pkgs; then
+            status=needed
+        fi
+    fi
+
+    if [[ "$status" == needed ]]; then
+        printf '%%{F#bf616a}󰡕%%{F-}\n'
+    else
+        printf '%%{F#a3be8c}󰸞%%{F-}\n'
+    fi
+}
+
+weather_status() {
+    local raw condition temperature icon
+
+    command -v curl >/dev/null 2>&1 || return
+    raw=$(curl -fsSL --max-time 10 'https://wttr.in/?u&format=%C%09%t' 2>/dev/null || true)
+    [[ "$raw" == *$'\t'* ]] || return
+
+    condition=${raw%%$'\t'*}
+    temperature=${raw#*$'\t'}
+    temperature=${temperature//$'\r'/}
+    [[ -n "$temperature" ]] || return
+
+    case "${condition,,}" in
+        *thunder*|*storm*) icon='󰖓' ;;
+        *snow*|*blizzard*|*sleet*|*ice*) icon='󰖘' ;;
+        *rain*|*drizzle*|*shower*) icon='󰖗' ;;
+        *fog*|*mist*|*haze*) icon='󰖑' ;;
+        *cloud*|*overcast*)
+            if [[ "${condition,,}" == *partly* || "${condition,,}" == *few* || "${condition,,}" == *scattered* ]]; then
+                icon='󰖕'
+            else
+                icon='󰖐'
+            fi
+            ;;
+        *) icon='󰖙' ;;
+    esac
+
+    printf '%s %s\n' "$icon" "$temperature"
+}
+
+codex_status() {
+    local state_dir cache lock output five weekly max_usage color now cache_time
+
+    [[ -x "$HOME/.local/bin/codex-usage" ]] || return
+
+    state_dir="${XDG_RUNTIME_DIR:-/tmp}"
+    [[ -d "$state_dir" && -w "$state_dir" ]] || state_dir=/tmp
+    cache="$state_dir/polybar-codex-${UID:-$(id -u)}.cache"
+    lock="$cache.lock"
+
+    format_cached() {
+        local cached_five cached_weekly cached_max cached_color
+
+        [[ -r "$cache" ]] || return 1
+        read -r cached_five cached_weekly < "$cache" || return 1
+        [[ "$cached_five" =~ ^[0-9]+$ && "$cached_weekly" =~ ^[0-9]+$ ]] || return 1
+
+        cached_max=$cached_five
+        (( cached_weekly > cached_max )) && cached_max=$cached_weekly
+        if (( cached_max >= 90 )); then
+            cached_color='bf616a'
+        elif (( cached_max >= 70 )); then
+            cached_color='ebcb8b'
+        else
+            cached_color='a3be8c'
+        fi
+
+        printf '%%{F#%s}󰚩 5h %s%% 7d %s%%{F-}\n' \
+            "$cached_color" "$cached_five" "$cached_weekly"
+    }
+
+    cache_is_fresh() {
+        [[ -r "$cache" ]] || return 1
+        now=$(date +%s)
+        cache_time=$(stat -c %Y "$cache" 2>/dev/null || echo 0)
+        (( now - cache_time < 50 ))
+    }
+
+    if ! cache_is_fresh && command -v flock >/dev/null 2>&1; then
+        (
+            flock -x 9
+            if ! cache_is_fresh; then
+                output=$("$HOME/.local/bin/codex-usage" 2>/dev/null || true)
+                five=''
+                weekly=''
+                IFS=$'\t' read -r five weekly <<< "$output" || true
+                if [[ "$five" =~ ^[0-9]+$ && "$weekly" =~ ^[0-9]+$ ]]; then
+                    printf '%s %s\n' "$five" "$weekly" > "$cache.tmp.$$" &&
+                        mv -f "$cache.tmp.$$" "$cache"
+                fi
+            fi
+        ) 9>"$lock"
+    elif ! cache_is_fresh; then
+        output=$("$HOME/.local/bin/codex-usage" 2>/dev/null || true)
+        five=''
+        weekly=''
+        IFS=$'\t' read -r five weekly <<< "$output" || true
+        if [[ "$five" =~ ^[0-9]+$ && "$weekly" =~ ^[0-9]+$ ]]; then
+            printf '%s %s\n' "$five" "$weekly" > "$cache"
+        fi
+    fi
+
+    format_cached || true
+}
+
+case "$command_name" in
+    battery) battery_status ;;
+    bluetooth) bluetooth_status ;;
+    brightness) brightness_status ;;
+    codex) codex_status ;;
+    network) network_status ;;
+    reboot) reboot_status ;;
+    swap) swap_status ;;
+    weather) weather_status ;;
+esac

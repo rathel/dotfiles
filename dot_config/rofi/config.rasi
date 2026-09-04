@@ -1,0 +1,123 @@
+/* Nord Polar Night theme matching ~/.config/tofi/config. */
+
+configuration {
+    show-icons: false;
+}
+
+* {
+    background: #2e3440;
+    foreground: #d8dee9;
+    prompt: #e5e9f0;
+    input: #d8dee9;
+    placeholder: #4c566a;
+    selection-background: #434c5e;
+    selection-foreground: #eceff4;
+    selection-match: #8fbcbb;
+    border: #88c0d0;
+
+    /* Override Rofi's default Solarized state colors. */
+    lightbg: #2e3440;
+    lightfg: #d8dee9;
+    red: #bf616a;
+    blue: #88c0d0;
+    separatorcolor: #4c566a;
+    normal-background: @background;
+    normal-foreground: @foreground;
+    alternate-normal-background: @background;
+    alternate-normal-foreground: @foreground;
+    active-background: @background;
+    active-foreground: @selection-match;
+    alternate-active-background: @background;
+    alternate-active-foreground: @selection-match;
+    urgent-background: @background;
+    urgent-foreground: @foreground;
+    alternate-urgent-background: @background;
+    alternate-urgent-foreground: @foreground;
+    selected-normal-background: @selection-background;
+    selected-normal-foreground: @selection-foreground;
+    selected-active-background: @selection-background;
+    selected-active-foreground: @selection-foreground;
+    selected-urgent-background: @selection-background;
+    selected-urgent-foreground: @selection-foreground;
+}
+
+window {
+    location: west;
+    anchor: west;
+    width: 30%;
+    height: 100%;
+    padding: 12px 16px;
+    border: 1px;
+    border-color: @border;
+    border-radius: 0px;
+    background-color: @background;
+    font: "Monaspace Neon NF 14";
+}
+
+mainbox {
+    padding: 0px;
+    border: 0px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    padding: 0px;
+    spacing: 0px;
+    text-color: @input;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    spacing: 0px;
+    text-color: @prompt;
+}
+
+entry {
+    spacing: 0px;
+    text-color: @input;
+    placeholder: "Games: ";
+    placeholder-color: @placeholder;
+    cursor-color: @input;
+    hide-cursor-on-empty: true;
+}
+
+listview {
+    padding: 12px 0px 0px;
+    spacing: 2px;
+    scrollbar: false;
+    fixed-height: false;
+}
+
+element {
+    padding: 3px 0px;
+    spacing: 0px;
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element selected.normal {
+    background-color: @selection-background;
+    text-color: @selection-foreground;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    highlight: @selection-match;
+}
+
+textbox-prompt-colon {
+    enabled: false;
+}
+
+case-indicator,
+num-filtered-rows,
+num-rows,
+textbox-num-sep {
+    enabled: false;
+}

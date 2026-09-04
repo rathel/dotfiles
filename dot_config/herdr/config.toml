@@ -31,3 +31,9 @@ navigate_workspace_up = "k"
 
 [ui]
 prompt_new_tab_name = false
+
+# Show Codex subscription usage in the tab bar.
+tab_bar_right = [
+    { type = "command", command = "~/.local/bin/codex-usage --herdr", interval_seconds = 60, timeout_seconds = 45 },
+]
+tab_bar_right_separator = " "

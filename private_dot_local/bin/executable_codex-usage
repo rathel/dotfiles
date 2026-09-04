@@ -117,7 +117,10 @@ def main() -> int:
                 if short_used < 0 or weekly_used < 0:
                     return 1
 
-                print(f"{short_used}\t{weekly_used}")
+                if "--herdr" in sys.argv[1:]:
+                    print(f"󰚩 5h {short_used}% 7d {weekly_used}%")
+                else:
+                    print(f"{short_used}\t{weekly_used}")
                 return 0
 
         return 1

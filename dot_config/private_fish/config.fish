@@ -1,8 +1,18 @@
+# The persistent user service can start shells before the graphical session exports DISPLAY.
+# Use the active local X server when the variable was not inherited.
+if test -z "$DISPLAY"; and test -S /tmp/.X11-unix/X0
+    set -gx DISPLAY :0
+end
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
     set -g fish_key_bindings fish_vi_key_bindings
     set -gx EDITOR nvim
     fish_add_path $HOME/.local/bin
+    fish_add_path $HOME/.local/state/nix/profiles/profile/bin
+    if test -d "$HOME/.local/state/nix/profiles/profile/share"
+        set -gx XDG_DATA_DIRS "$HOME/.local/state/nix/profiles/profile/share:"$XDG_DATA_DIRS
+    end
     fish_add_path $HOME/.cargo/bin
     fish_add_path $HOME/.npm-global/bin
     set fish_greeting

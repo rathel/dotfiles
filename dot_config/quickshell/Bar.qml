@@ -92,6 +92,11 @@ Scope {
 
     function setBrightness(output) {
         const line = String(output).trim()
+        if (!line) {
+            brightnessText = ""
+            return
+        }
+
         const parts = line.split(",")
         const percent = parts.length >= 4 ? parseInt(parts[3].replace("%", "")) || 0 : 0
 
@@ -308,7 +313,8 @@ Scope {
 
     Process {
         id: brightnessProc
-        command: ["bash", "-lc", "brightnessctl -m 2>/dev/null || true"]
+        // Do not expose keyboard LEDs as display brightness.
+        command: ["bash", "-lc", "brightnessctl -m -c backlight 2>/dev/null || true"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setBrightness(this.text)
