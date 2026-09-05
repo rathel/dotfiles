@@ -524,7 +524,7 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-	geometry-corner-radius 0
+	geometry-corner-radius 2
 	clip-to-geometry true
 }
 
@@ -558,7 +558,7 @@ binds {
 	Mod+S hotkey-overlay-title="Steam Launcher" { spawn "fish" "-c" "infisical-env steam -- $HOME/git/fuzzel-steam-launcher/tofi-steam.sh"; }
 	Mod+Shift+S hotkey-overlay-title="SSH Host Picker" { spawn-sh "$HOME/.local/bin/host-picker"; }
 	Super+Shift+T { spawn-sh "niri-app -c thunderbird"; }
-	Mod+B { spawn-sh "niri-app firefox"; }
+	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/firefox-beta/firefox"; }
 	Mod+Shift+B { spawn-sh "niri-app -c $HOME/Applications/Communication/beeper.AppImage"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "2e3440"; }
 	Mod+G { spawn-sh "$HOME/.local/bin/launch-shadowtech.sh"; }

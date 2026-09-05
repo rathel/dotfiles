@@ -2,14 +2,14 @@
 set -euo pipefail
 
 # Usage:
-#   cm-edit                 # pick file(s), open in nvim
-#   cm-edit helix           # pick file(s), open in helix
-#   cm-edit code --wait     # pick file(s), open in VS Code and wait
+#   cm-edit                 # pick a file in tofi, open it in Zed, and wait
+#   cm-edit helix           # pick a file in tofi, open it in helix
+#   cm-edit -- nvim         # pick a file in tofi, open it in nvim
 #
 # Tip: if you want to pass editor flags reliably, use:
-#   cm-edit -- code --wait
+#   cm-edit -- zed --wait
 
-default_editor="nvim"
+default_editor=(zed --wait)
 
 # If user provides an editor command, use it. Support `--` to separate.
 editor=()
@@ -27,33 +27,76 @@ else
 fi
 
 if [[ ${#editor[@]} -eq 0 ]]; then
-  editor=("$default_editor")
+  editor=("${default_editor[@]}")
 fi
 
-# Build the list (absolute target paths) and select (multi-select enabled with -m).
-# We convert each target path to its chezmoi source path for editing.
-mapfile -t selected < <(
-  chezmoi managed --include=files --path-style=absolute |
-    sk -m --prompt='chezmoi> '
-)
+# Build a small, hand-editable list. Tofi selects one item, unlike sk's
+# multi-select mode. Keep vendor/generated and presentation-only files out.
+is_editable_target() {
+  local target="$1"
+  local source
 
-# If user hit escape / no selection
-[[ ${#selected[@]} -gt 0 ]] || exit 0
+  case "$target" in
+    "$HOME"/.config/*|"$HOME"/.emacs.d/*|"$HOME"/.local/bin/*|"$HOME"/.pi/agent/*)
+      ;;
+    *)
+      return 1
+      ;;
+  esac
 
-# Convert target path(s) -> source path(s)
-sources=()
-filenames=()
-for target in "${selected[@]}"; do
-  src="$(chezmoi source-path "$target")"
-  if [[ ! -e "$src" ]]; then
-    printf 'Refusing to edit missing chezmoi source: %s\n' "$src" >&2
-    exit 1
+  case "$target" in
+    */themes/*|*/plugins/*|*/colors/*|*/assets/*|*/docs/*|*/tests/*|\
+    */workflows/*|*/ISSUE_TEMPLATE/*|*/__pycache__/*|\
+    *.md|*.age|*.gif|*.png|*.svg|*.webp|*.pyc|*/.keep)
+      return 1
+      ;;
+  esac
+
+  # Never open an encrypted chezmoi source directly in Zed.
+  source="$(chezmoi source-path "$target" 2>/dev/null)" || return 1
+  [[ "$source" != *.age ]]
+}
+
+candidates=()
+while IFS= read -r target; do
+  if is_editable_target "$target"; then
+    candidates+=("$target")
   fi
-  sources+=("$src")
-  filenames+=("$(basename "$target")")
+done < <(chezmoi managed --include=files --path-style=absolute)
+
+((${#candidates[@]} > 0)) || {
+  printf 'No editable chezmoi files found.\n' >&2
+  exit 1
+}
+
+display_targets=()
+for target in "${candidates[@]}"; do
+  display_targets+=("~${target#"$HOME"}")
 done
 
-# Open editor with all selected source files
+if ! selected_display=$(
+  printf '%s\n' "${display_targets[@]}" |
+    tofi --prompt-text 'edit: ' --require-match=true --fuzzy-match=true
+); then
+  # Escape cancels the picker.
+  exit 0
+fi
+
+[[ -n "$selected_display" ]] || exit 0
+target="${selected_display/#\~/$HOME}"
+
+# Convert the selected target path to its chezmoi source path.
+sources=()
+filenames=()
+src="$(chezmoi source-path "$target")"
+if [[ ! -e "$src" ]]; then
+  printf 'Refusing to edit missing chezmoi source: %s\n' "$src" >&2
+  exit 1
+fi
+sources+=("$src")
+filenames+=("$(basename "$target")")
+
+# Open editor with the selected source file
 "${editor[@]}" "${sources[@]}"
 
 # Commit only the selected source paths, and only if they changed.
