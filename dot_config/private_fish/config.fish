@@ -48,16 +48,47 @@ if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
     source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
 end
 
+# Load Guix profiles in Fish shells. Guix's generated `etc/profile` files
+# contain Bash syntax, so initialize their search paths with Fish commands.
+function __guix_prepend_path --argument-names variable value
+    set -l current $$variable
+    if not contains -- "$value" $current
+        set --path --global --export $variable "$value" $current
+    end
+end
+
+if test -d "$HOME/.config/guix/current"
+    fish_add_path --path "$HOME/.config/guix/current/bin"
+    __guix_prepend_path INFOPATH "$HOME/.config/guix/current/share/info"
+    __guix_prepend_path MANPATH "$HOME/.config/guix/current/share/man"
+    __guix_prepend_path GUILE_LOAD_PATH "$HOME/.config/guix/current/share/guile/site/3.0"
+    __guix_prepend_path GUILE_LOAD_COMPILED_PATH "$HOME/.config/guix/current/lib/guile/3.0/site-ccache"
+end
+
+if test -f "$HOME/.guix-profile/etc/profile"
+    set -gx GUIX_PROFILE "$HOME/.guix-profile"
+    fish_add_path --path "$GUIX_PROFILE/bin" "$GUIX_PROFILE/sbin"
+    __guix_prepend_path TREE_SITTER_GRAMMAR_PATH "$GUIX_PROFILE/lib/tree-sitter"
+    __guix_prepend_path INFOPATH "$GUIX_PROFILE/share/info"
+    __guix_prepend_path EMACSLOADPATH "$GUIX_PROFILE/share/emacs/site-lisp"
+    __guix_prepend_path QT_PLUGIN_PATH "$GUIX_PROFILE/lib/qt6/plugins"
+    __guix_prepend_path GUIX_GDK_PIXBUF_MODULE_FILES "$GUIX_PROFILE/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    __guix_prepend_path XDG_DATA_DIRS "$GUIX_PROFILE/share"
+    __guix_prepend_path GIO_EXTRA_MODULES "$GUIX_PROFILE/lib/gio/modules"
+    __guix_prepend_path XCURSOR_PATH "$GUIX_PROFILE/share/icons"
+    __guix_prepend_path VDPAU_DRIVER_PATH "$GUIX_PROFILE/lib/vdpau"
+    __guix_prepend_path GUIX_GTK3_PATH "$GUIX_PROFILE/lib/gtk-3.0"
+    __guix_prepend_path GUIX_LOCPATH "$GUIX_PROFILE/lib/locale"
+    __guix_prepend_path MANPATH "$GUIX_PROFILE/share/man"
+    __guix_prepend_path ZATHURA_PLUGINS_PATH "$GUIX_PROFILE/lib/zathura"
+end
+
+functions --erase __guix_prepend_path
+
 # Keep Homebrew ahead of package-manager profiles in every Fish invocation, so
 # scripts and interactive shells select the current chezmoi release.
 if test -x /home/linuxbrew/.linuxbrew/bin/brew
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
-end
-
-# Zathura's Guix plugin is installed in the user profile, not in Zathura's
-# store package directory.
-if test -d "$HOME/.guix-profile/lib/zathura"
-    set -gx ZATHURA_PLUGINS_PATH "$HOME/.guix-profile/lib/zathura"
 end
 
 # Added by LM Studio CLI (lms)
@@ -81,3 +112,7 @@ fish_add_path "/home/rathel/.local/share/pi-node/node-v22.23.2-linux-x64/bin"
 
 # Aardwolf MUD
 alias aardwolf='telnet aardmud.org 4000'
+
+# >>> grok installer >>>
+fish_add_path $HOME/.grok/bin
+# <<< grok installer <<<
