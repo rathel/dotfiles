@@ -9,28 +9,47 @@ set -u
 json=$(niri msg -j windows)
 
 mapfile -t window_ids < <(jq -r '.[].id' <<<"$json")
-
-# Use fuzzel to pick a window by title. Select by index so the window ID stays hidden.
-if ! selected_index=$(
+mapfile -t window_labels < <(
   jq -r '.[] | [(.app_id // ""), (.title // "")] | @tsv' <<<"$json" |
     while IFS=$'\t' read -r app_id title; do
-      icon="${app_id:-application-x-executable}"
-      lower_icon="$(tr '[:upper:]' '[:lower:]' <<<"$icon")"
-      printf '%s - %s\0icon\x1f%s\n' \
-        "${app_id:-Unknown}" "${title:-Untitled}" "$lower_icon"
-    done |
-    fuzzel --dmenu \
-      --index \
-      --no-run-if-empty \
-      --no-sort \
-      --prompt "Switch window: " \
-      --lines=15
+      printf '%s - %s\n' "${app_id:-Unknown}" "${title:-Untitled}"
+    done
+)
+
+# Tofi prints the selected label rather than an index. Disambiguate duplicate
+# labels so the selected label can still be mapped back to the window ID.
+((${#window_ids[@]} > 0)) || exit 0
+declare -A label_counts=()
+for label in "${window_labels[@]}"; do
+  label_counts["$label"]=$(( ${label_counts["$label"]:-0} + 1 ))
+done
+
+for i in "${!window_labels[@]}"; do
+  label="${window_labels[i]}"
+  if (( label_counts["$label"] > 1 )); then
+    window_labels[i]="$label [window $((i + 1))]"
+  fi
+done
+
+if ! selected_label=$(
+  printf '%s\n' "${window_labels[@]}" |
+    tofi \
+      --prompt-text "Switch window: " \
+      --num-results=15 \
+      --fuzzy-match=true
 ); then
   exit 0
 fi
 
-# Exit if nothing was selected or the index is invalid.
-[[ "$selected_index" =~ ^[0-9]+$ ]] || exit 1
-(( selected_index < ${#window_ids[@]} )) || exit 1
+[[ -n "$selected_label" ]] || exit 0
 
-niri msg action focus-window --id "${window_ids[selected_index]}"
+selected_id=
+for i in "${!window_labels[@]}"; do
+  if [[ "${window_labels[i]}" == "$selected_label" ]]; then
+    selected_id="${window_ids[i]}"
+    break
+  fi
+done
+
+[[ -n "$selected_id" ]] || exit 1
+niri msg action focus-window --id "$selected_id"

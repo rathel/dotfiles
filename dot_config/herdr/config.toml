@@ -12,9 +12,10 @@ panel_bg = "#2e3440"
 surface0 = "#434c5e"
 surface1 = "#3b4252"
 surface_dim = "#2e3440"
-overlay0 = "#4c566a"
-overlay1 = "#81a1c1"
-text = "#d8dee9"
+# Higher-contrast secondary labels and inactive borders.
+overlay0 = "#a8b8cc"
+overlay1 = "#d8dee9"
+text = "#eceff4"
 subtext0 = "#e5e9f0"
 mauve = "#b48ead"
 green = "#a3be8c"
@@ -26,14 +27,41 @@ peach = "#d08770"
 accent = "#88c0d0"
 
 [keys]
-navigate_workspace_down = "j"
-navigate_workspace_up = "k"
+# Vim-style pane movement in Navigate mode; workspace movement stays on arrows.
+navigate_workspace_down = "down"
+navigate_workspace_up = "up"
+navigate_pane_left = "h"
+navigate_pane_down = "j"
+navigate_pane_up = "k"
+navigate_pane_right = "l"
+
+# Keep Vim-style pane movement in prefix mode too.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
 
 [ui]
 prompt_new_tab_name = false
+
+# Use a shared divider line between split panes.
+pane_borders = "auto"
+pane_outer_borders = true
+pane_gaps = false
 
 # Show Codex subscription usage in the tab bar.
 tab_bar_right = [
     { type = "command", command = "~/.local/bin/codex-usage --herdr", interval_seconds = 60, timeout_seconds = 45 },
 ]
 tab_bar_right_separator = " "
+
+# Brighten the agent list: inactive secondary tokens otherwise inherit a dim style.
+[ui.sidebar.agents]
+rows = [
+    ["state_icon", { token = "machine", fg = "#d8dee9", dim = false }, { token = "workspace", fg = "#eceff4", bold = true, dim = false }, { token = "tab", fg = "#d8dee9", dim = false }],
+    [{ token = "agent", fg = "#eceff4", bold = true, dim = false }],
+]
+
+[experimental]
+# Forward pane images through the Kitty graphics protocol.
+kitty_graphics = true
