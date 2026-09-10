@@ -271,7 +271,7 @@ layout {
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
-// This line starts quickshell, which replaces waybar + notifications.
+// This line starts quickshell, which provides the bar and notifications.
 // spawn-at-startup "qs" --no-duplicate
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
 spawn-sh-at-startup "$HOME/.local/bin/shadow-aware-swayidle"
