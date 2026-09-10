@@ -6,6 +6,5 @@
 .config/ghostty/themes/catppuccin-mocha.conf
 .config/qutebrowser/config.py
 .config/kitty/kitty.conf
-.config/waybar/mocha.css
 .config/zellij/config.kdl
 .pi/agent/themes/catppuccin-mocha.json

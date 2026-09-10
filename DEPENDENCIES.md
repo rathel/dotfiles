@@ -154,15 +154,11 @@ to apply the core dotfiles:
   Ollama service; a local Ollama installation is not required.
 - Obsidian, Discord, Beeper, Steam's external Fuzzel launcher, Shadow PC, and
   local AppImages are host-specific applications referenced by the Niri binds.
-- The `upgrade.sh` and `waybar_timer` helpers referenced by the Fish/Waybar
-  setup live outside this repository.
 
 ## Legacy and deliberately omitted dependencies
 
-- Quickshell now provides the bar and notifications. `waybar`, `dunst`, and
-  `mako` remain as legacy/fallback configurations; install them only if those
-  paths are used. The Waybar fallback also needs the external `waybar_timer`
-  helper.
+- Quickshell provides the bar and notifications in the active configuration;
+  no separate bar or notification daemon is required.
 - `swww` and `wallust` are not used by the active configuration. The wallpaper
   script uses `awww` with a `swaybg` fallback.
 - No specific package manager is a runtime dependency of this repository.
