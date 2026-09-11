@@ -4,27 +4,29 @@ onboarding = false
 new_cwd = "home"
 
 [theme]
-# Nord - Polar Night
-name = "nord"
+# Forest Green
+name = "terminal"
 
 [theme.custom]
-panel_bg = "#2e3440"
-surface0 = "#434c5e"
-surface1 = "#3b4252"
-surface_dim = "#2e3440"
-# Higher-contrast secondary labels and inactive borders.
-overlay0 = "#a8b8cc"
-overlay1 = "#d8dee9"
-text = "#eceff4"
-subtext0 = "#e5e9f0"
-mauve = "#b48ead"
-green = "#a3be8c"
-yellow = "#ebcb8b"
-red = "#bf616a"
-blue = "#81a1c1"
-teal = "#8fbcbb"
-peach = "#d08770"
-accent = "#88c0d0"
+panel_bg = "#192324"
+sidebar_bg = "#213230"
+active_row_bg = "#29463d"
+selection_bg = "#345b4b"
+surface0 = "#29463d"
+surface1 = "#345b4b"
+surface_dim = "#192324"
+overlay0 = "#a9beb3"
+overlay1 = "#dce8e1"
+text = "#dce8e1"
+subtext0 = "#a9beb3"
+mauve = "#6f9a91"
+green = "#5a8e73"
+yellow = "#b9a66c"
+red = "#b97872"
+blue = "#6f9a91"
+teal = "#6f9a91"
+peach = "#b9a66c"
+accent = "#5a8e73"
 
 [keys]
 # Vim-style pane movement in Navigate mode; workspace movement stays on arrows.
@@ -59,8 +61,8 @@ tab_bar_right_separator = " "
 # Brighten the agent list: inactive secondary tokens otherwise inherit a dim style.
 [ui.sidebar.agents]
 rows = [
-    ["state_icon", { token = "machine", fg = "#d8dee9", dim = false }, { token = "workspace", fg = "#eceff4", bold = true, dim = false }, { token = "tab", fg = "#d8dee9", dim = false }],
-    [{ token = "agent", fg = "#eceff4", bold = true, dim = false }],
+    ["state_icon", { token = "machine", fg = "#a9beb3", dim = false }, { token = "workspace", fg = "#dce8e1", bold = true, dim = false }, { token = "tab", fg = "#a9beb3", dim = false }],
+    [{ token = "agent", fg = "#dce8e1", bold = true, dim = false }],
 ]
 
 [experimental]
