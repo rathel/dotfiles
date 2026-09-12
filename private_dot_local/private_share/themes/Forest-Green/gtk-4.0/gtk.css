@@ -1,0 +1,87 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita-dark/gtk.css");
+
+@define-color forest0 #192324;
+@define-color forest1 #213230;
+@define-color forest2 #345b4b;
+@define-color forest3 #43725d;
+@define-color forest4 #dce8e1;
+@define-color forest6 #f3f7f5;
+@define-color forest7 #6f9a91;
+@define-color forest8 #5a8e73;
+
+.background,
+window {
+  background-color: @forest0;
+  color: @forest4;
+}
+
+headerbar,
+.titlebar {
+  background-color: @forest0;
+  color: @forest6;
+}
+
+button {
+  background-color: @forest1;
+  color: @forest4;
+  border-color: @forest3;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: @forest2;
+  color: @forest6;
+}
+
+button:active,
+button:checked {
+  background-color: @forest8;
+  color: @forest6;
+}
+
+entry,
+textview,
+textview text,
+view,
+listview,
+columnview {
+  background-color: @forest0;
+  color: @forest4;
+}
+
+entry:focus {
+  border-color: @forest8;
+  box-shadow: 0 0 0 1px @forest8;
+}
+
+popover,
+popover.background,
+menu,
+tooltip {
+  background-color: @forest2;
+  color: @forest4;
+}
+
+row:hover,
+modelbutton:hover {
+  background-color: @forest2;
+  color: @forest6;
+}
+
+selection {
+  background-color: @forest8;
+  color: @forest6;
+}
+
+scale highlight,
+progressbar progress {
+  background-color: @forest8;
+}
+
+scrollbar slider {
+  background-color: @forest3;
+}
+
+*:disabled {
+  color: @forest3;
+}

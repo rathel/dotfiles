@@ -28,28 +28,28 @@ progress_bar_frame_width = 1
 separator_height = 2
 ignore_dbusclose = false
 force_xwayland = false
-# Nord - Polar Night
-frame_color = "#88C0D0"
-highlight = "#88C0D0"
-separator_color = "#434C5E"
+# Forest Green
+frame_color = "#5A8E73"
+highlight = "#5A8E73"
+separator_color = "#345B4B"
 
 [experimental]
 per_monitor_dpi = false
 
 [urgency_low]
 timeout = 2
-background = "#2E3440EE"
-foreground = "#D8DEE9"
-frame_color = "#4C566A"
+background = "#192324EE"
+foreground = "#DCE8E1"
+frame_color = "#43725D"
 
 [urgency_normal]
 timeout = 3
-background = "#2E344080"
-foreground = "#D8DEE9"
-frame_color = "#88C0D0"
+background = "#19232480"
+foreground = "#DCE8E1"
+frame_color = "#5A8E73"
 
 [urgency_critical]
 timeout = 4
-background = "#2E3440EE"
-foreground = "#ECEFF4"
-frame_color = "#BF616A"
+background = "#192324EE"
+foreground = "#F3F7F5"
+frame_color = "#B97872"

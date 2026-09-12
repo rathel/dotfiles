@@ -1,0 +1,161 @@
+@import url("file:///usr/share/themes/Adwaita-dark/gtk-3.0/gtk.css");
+
+@define-color forest0 #192324;
+@define-color forest1 #213230;
+@define-color forest2 #345b4b;
+@define-color forest3 #43725d;
+@define-color forest4 #dce8e1;
+@define-color forest5 #a9beb3;
+@define-color forest6 #f3f7f5;
+@define-color forest7 #6f9a91;
+@define-color forest8 #5a8e73;
+@define-color forest9 #b9a66c;
+@define-color forest10 #b97872;
+
+@define-color theme_fg_color @forest4;
+@define-color theme_text_color @forest4;
+@define-color theme_bg_color @forest0;
+@define-color theme_base_color @forest0;
+@define-color theme_selected_bg_color @forest8;
+@define-color theme_selected_fg_color @forest6;
+@define-color insensitive_fg_color @forest3;
+@define-color insensitive_bg_color @forest1;
+@define-color borders @forest3;
+@define-color unfocused_borders @forest2;
+@define-color link_color @forest7;
+@define-color warning_color @forest9;
+@define-color error_color @forest10;
+@define-color success_color @forest8;
+@define-color content_view_bg @forest0;
+@define-color theme_unfocused_fg_color @forest4;
+@define-color theme_unfocused_text_color @forest4;
+@define-color theme_unfocused_bg_color @forest0;
+
+.background,
+window,
+dialog {
+  background-color: @forest0;
+  color: @forest4;
+}
+
+headerbar,
+.titlebar {
+  background-color: @forest0;
+  background-image: none;
+  color: @forest6;
+  box-shadow: none;
+}
+
+button,
+combobox button,
+spinbutton button {
+  background-color: @forest1;
+  background-image: none;
+  color: @forest4;
+  border: 1px solid @forest3;
+  box-shadow: none;
+}
+
+button:hover,
+combobox button:hover,
+spinbutton button:hover {
+  background-color: @forest2;
+  color: @forest6;
+}
+
+button:active,
+button:checked,
+button:selected {
+  background-color: @forest8;
+  color: @forest6;
+}
+
+entry,
+spinbutton,
+textview,
+textview text,
+view,
+treeview.view,
+iconview {
+  background-color: @forest0;
+  color: @forest4;
+  border-color: @forest3;
+}
+
+entry:focus,
+spinbutton:focus,
+view:focus,
+treeview.view:focus {
+  border-color: @forest8;
+  box-shadow: 0 0 0 1px @forest8;
+}
+
+selection,
+*:selected {
+  background-color: @forest8;
+  color: @forest6;
+}
+
+menu,
+.menu,
+popover,
+.popover,
+tooltip {
+  background-color: @forest2;
+  color: @forest4;
+  border: 1px solid @forest3;
+}
+
+menu menuitem,
+.menu menuitem,
+popover modelbutton {
+  color: @forest4;
+}
+
+menu menuitem:hover,
+.menu menuitem:hover,
+popover modelbutton:hover {
+  background-color: @forest2;
+  color: @forest6;
+}
+
+scale trough,
+progressbar trough {
+  background-color: @forest1;
+}
+
+scale highlight,
+progressbar progress {
+  background-color: @forest8;
+}
+
+scrollbar trough {
+  background-color: @forest0;
+}
+
+scrollbar slider {
+  background-color: @forest3;
+}
+
+checkbutton check,
+radiobutton radio,
+switch {
+  background-color: @forest1;
+  border-color: @forest3;
+}
+
+checkbutton check:checked,
+radiobutton radio:checked,
+switch:checked {
+  background-color: @forest8;
+  border-color: @forest7;
+}
+
+*:disabled {
+  color: @forest3;
+}
+
+.link,
+*:link {
+  color: @forest7;
+}

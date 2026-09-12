@@ -1,6 +1,6 @@
 # Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
 add_newline = true
-palette = "nord_polar_night"
+palette = "forest_green"
 
 format = """
 [](fg:dim_bg)$username$directory$git_branch$git_status$cmd_duration$nodejs$rust$python$time[](fg:dim_bg)
@@ -60,11 +60,11 @@ disabled = false
 threshold = 30
 style = 'bold err'
 
-[palettes.nord_polar_night]
-fg = "#d8dee9"
-dim_fg = "#8fbcbb"
-dim_bg = "#3b4252"
-accent = "#88c0d0"
-err = "#bf616a"
-warn = "#ebcb8b"
-good = "#a3be8c"
+[palettes.forest_green]
+fg = "#dce8e1"
+dim_fg = "#a9beb3"
+dim_bg = "#213230"
+accent = "#5a8e73"
+err = "#b97872"
+warn = "#b9a66c"
+good = "#5a8e73"

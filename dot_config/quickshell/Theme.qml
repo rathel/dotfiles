@@ -1,49 +1,45 @@
 import QtQuick
 
 QtObject {
-    // Nord - Polar Night with Snow Storm, Frost, and Aurora accents.
-    readonly property color nord0: "#2e3440"
-    readonly property color nord1: "#3b4252"
-    readonly property color nord2: "#434c5e"
-    readonly property color nord3: "#4c566a"
-    readonly property color nord4: "#d8dee9"
-    readonly property color nord5: "#e5e9f0"
-    readonly property color nord6: "#eceff4"
-    readonly property color nord7: "#8fbcbb"
-    readonly property color nord8: "#88c0d0"
-    readonly property color nord9: "#81a1c1"
-    readonly property color nord10: "#5e81ac"
-    readonly property color nord11: "#bf616a"
-    readonly property color nord12: "#d08770"
-    readonly property color nord13: "#ebcb8b"
-    readonly property color nord14: "#a3be8c"
-    readonly property color nord15: "#b48ead"
+    // Forest Green shared palette.
+    readonly property color forestBackground: "#192324"
+    readonly property color forestBackgroundAlt: "#213230"
+    readonly property color forestSurface: "#29463d"
+    readonly property color forestSelection: "#345b4b"
+    readonly property color forestBorder: "#43725d"
+    readonly property color forestAccent: "#5a8e73"
+    readonly property color forestForeground: "#dce8e1"
+    readonly property color forestBrightForeground: "#f3f7f5"
+    readonly property color forestMuted: "#a9beb3"
+    readonly property color forestInfo: "#6f9a91"
+    readonly property color forestWarning: "#b9a66c"
+    readonly property color forestError: "#b97872"
 
     // Semantic roles used by the shell components.
-    readonly property color crust: nord0
-    readonly property color mantle: nord0
-    readonly property color base: nord1
-    readonly property color surface0: nord2
-    readonly property color surface1: nord3
-    readonly property color surface2: nord3
-    readonly property color overlay0: nord3
-    readonly property color overlay1: nord10
-    readonly property color overlay2: nord9
-    readonly property color subtext0: nord4
-    readonly property color subtext1: nord5
-    readonly property color text: nord4
-    readonly property color brightText: nord6
+    readonly property color crust: forestBackground
+    readonly property color mantle: forestBackgroundAlt
+    readonly property color base: forestSurface
+    readonly property color surface0: forestSelection
+    readonly property color surface1: forestBorder
+    readonly property color surface2: forestAccent
+    readonly property color overlay0: forestMuted
+    readonly property color overlay1: forestInfo
+    readonly property color overlay2: forestBrightForeground
+    readonly property color subtext0: forestMuted
+    readonly property color subtext1: forestInfo
+    readonly property color text: forestForeground
+    readonly property color brightText: forestBrightForeground
 
-    readonly property color green: nord14
-    readonly property color greenSoft: nord7
-    readonly property color greenDim: nord10
-    readonly property color teal: nord7
-    readonly property color cyan: nord8
-    readonly property color blue: nord9
-    readonly property color yellow: nord13
-    readonly property color peach: nord12
-    readonly property color red: nord11
-    readonly property color magenta: nord15
+    readonly property color green: forestAccent
+    readonly property color greenSoft: forestInfo
+    readonly property color greenDim: forestBorder
+    readonly property color teal: forestInfo
+    readonly property color cyan: forestInfo
+    readonly property color blue: forestInfo
+    readonly property color yellow: forestWarning
+    readonly property color peach: forestWarning
+    readonly property color red: forestError
+    readonly property color magenta: forestBorder
 
     // Compatibility aliases for existing components.
     readonly property color rosewater: brightText

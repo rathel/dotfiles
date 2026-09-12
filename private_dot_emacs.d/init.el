@@ -1,7 +1,7 @@
 ;;; init.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Minimal Nord-themed Emacs setup with Evil and Eshell.
+;; Minimal Forest Green-themed Emacs setup with Evil and Eshell.
 
 ;;; Code:
 
@@ -23,39 +23,10 @@
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
 
-;; Nord - Polar Night palette.
-(let ((polar-night-0 "#2e3440")
-      (polar-night-1 "#3b4252")
-      (polar-night-2 "#434c5e")
-      (polar-night-3 "#4c566a")
-      (snow-storm-1 "#e5e9f0")
-      (snow-storm-2 "#eceff4")
-      (frost-2 "#88c0d0")
-      (frost-3 "#81a1c1")
-      (aurora-red "#bf616a")
-      (aurora-orange "#d08770")
-      (aurora-yellow "#ebcb8b")
-      (aurora-green "#a3be8c")
-      (aurora-purple "#b48ead"))
-  (custom-set-faces
-   `(default ((t (:family "Monaspace Neon NF" :background ,polar-night-0 :foreground ,snow-storm-1))))
-   `(cursor ((t (:background ,frost-2))))
-   `(fringe ((t (:background ,polar-night-0 :foreground ,polar-night-3))))
-   `(region ((t (:background ,polar-night-2))))
-   `(highlight ((t (:background ,polar-night-1))))
-   `(mode-line ((t (:background ,polar-night-2 :foreground ,snow-storm-2 :box nil))))
-   `(mode-line-inactive ((t (:background ,polar-night-1 :foreground ,polar-night-3 :box nil))))
-   `(minibuffer-prompt ((t (:foreground ,frost-2 :weight bold))))
-   `(link ((t (:foreground ,frost-2 :underline t))))
-   `(font-lock-comment-face ((t (:foreground ,frost-3))))
-   `(font-lock-keyword-face ((t (:foreground ,frost-3 :weight bold))))
-   `(font-lock-function-name-face ((t (:foreground ,frost-2))))
-   `(font-lock-variable-name-face ((t (:foreground ,aurora-purple))))
-   `(font-lock-type-face ((t (:foreground ,aurora-yellow))))
-   `(font-lock-constant-face ((t (:foreground ,aurora-orange))))
-   `(font-lock-string-face ((t (:foreground ,aurora-green))))
-   `(error ((t (:foreground ,aurora-red :weight bold))))
-   `(warning ((t (:foreground ,aurora-yellow :weight bold))))))
+;; Load the shared Forest Green theme from ~/.emacs.d/themes.
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "themes" user-emacs-directory))
+(load-theme 'forest t)
 
 ;; Install Evil and Markdown support from NonGNU ELPA when they are not available.
 (require 'package)

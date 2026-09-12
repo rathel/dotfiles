@@ -1,21 +1,21 @@
-# Nord Polar Night theme for Tofi
+# Forest Green theme for Tofi
 font = "Monaspace Neon NF"
 font-size = 14
 
-background-color = #2e3440
-text-color = #d8dee9
+background-color = #192324
+text-color = #dce8e1
 prompt-text = "apps: "
-prompt-color = #e5e9f0
-input-color = #d8dee9
-placeholder-color = #4c566a
-default-result-color = #d8dee9
-selection-color = #eceff4
-selection-background = #434c5e
-selection-match-color = #8fbcbb
+prompt-color = #f3f7f5
+input-color = #dce8e1
+placeholder-color = #a9beb3
+default-result-color = #dce8e1
+selection-color = #f3f7f5
+selection-background = #345b4b
+selection-match-color = #6f9a91
 
 outline-width = 0
 border-width = 1
-border-color = #88c0d0
+border-color = #5a8e73
 corner-radius = 0
 
 width = 30%

@@ -28,81 +28,77 @@ config.window_close_confirmation = "AlwaysPrompt"
 config.default_cursor_style = "SteadyBlock"
 config.cursor_blink_rate = 0
 
--- Nord - Polar Night
-local nord = {
-  nord0 = "#2e3440",
-  nord1 = "#3b4252",
-  nord2 = "#434c5e",
-  nord3 = "#4c566a",
-  nord4 = "#d8dee9",
-  nord5 = "#e5e9f0",
-  nord6 = "#eceff4",
-  nord7 = "#8fbcbb",
-  nord8 = "#88c0d0",
-  nord9 = "#81a1c1",
-  nord10 = "#5e81ac",
-  nord11 = "#bf616a",
-  nord12 = "#d08770",
-  nord13 = "#ebcb8b",
-  nord14 = "#a3be8c",
-  nord15 = "#b48ead",
+-- Forest Green
+local forest = {
+  background = "#192324",
+  background_alt = "#213230",
+  surface = "#29463d",
+  selection = "#345b4b",
+  border = "#43725d",
+  accent = "#5a8e73",
+  foreground = "#dce8e1",
+  bright = "#f3f7f5",
+  muted = "#a9beb3",
+  info = "#6f9a91",
+  warning = "#b9a66c",
+  error = "#b97872",
 }
 
 config.colors = {
-  foreground = nord.nord4,
-  background = nord.nord0,
-  cursor_bg = nord.nord8,
-  cursor_fg = nord.nord0,
-  cursor_border = nord.nord8,
-  selection_fg = nord.nord6,
-  selection_bg = nord.nord2,
-  scrollbar_thumb = nord.nord3,
-  split = nord.nord3,
+  foreground = forest.foreground,
+  background = forest.background,
+  cursor_bg = forest.accent,
+  cursor_fg = forest.background,
+  cursor_border = forest.accent,
+  selection_fg = forest.bright,
+  selection_bg = forest.selection,
+  scrollbar_thumb = forest.border,
+  split = forest.border,
   ansi = {
-    nord.nord1,
-    nord.nord11,
-    nord.nord14,
-    nord.nord13,
-    nord.nord9,
-    nord.nord15,
-    nord.nord8,
-    nord.nord5,
+    forest.background_alt,
+    forest.error,
+    forest.accent,
+    forest.warning,
+    forest.info,
+    forest.border,
+    forest.info,
+    forest.foreground,
   },
   brights = {
-    nord.nord3,
-    nord.nord11,
-    nord.nord14,
-    nord.nord13,
-    nord.nord9,
-    nord.nord15,
-    nord.nord7,
-    nord.nord6,
+    forest.border,
+    forest.error,
+    forest.accent,
+    forest.warning,
+    forest.info,
+    forest.accent,
+    forest.info,
+    forest.bright,
   },
   indexed = {
-    [16] = nord.nord12,
-    [17] = nord.nord11,
+    [16] = forest.warning,
+    [17] = forest.error,
   },
   tab_bar = {
-    background = nord.nord0,
+    background = forest.background,
     active_tab = {
-      bg_color = nord.nord8,
-      fg_color = nord.nord0,
+      bg_color = forest.accent,
+      fg_color = forest.background,
     },
     inactive_tab = {
-      bg_color = nord.nord1,
-      fg_color = nord.nord4,
+      bg_color = forest.surface,
+      fg_color = forest.foreground,
     },
     inactive_tab_hover = {
-      bg_color = nord.nord2,
-      fg_color = nord.nord6,
+      bg_color = forest.selection,
+      fg_color = forest.bright,
     },
     new_tab = {
-      bg_color = nord.nord1,
-      fg_color = nord.nord4,
+      bg_color = forest.surface,
+      fg_color = forest.foreground,
     },
     new_tab_hover = {
-      bg_color = nord.nord2,
-      fg_color = nord.nord6,
+      bg_color = forest.selection,
+      fg_color = forest.bright,
     },
   },
 }
@@ -116,15 +112,15 @@ config.show_new_tab_button_in_tab_bar = false
 local left_arrow = wezterm.nerdfonts.pl_right_hard_divider
 local right_arrow = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, _, _, _, hover)
-  local background = nord.nord1
-  local foreground = nord.nord4
+  local background = forest.surface
+  local foreground = forest.foreground
 
   if tab.is_active then
-    background = nord.nord8
-    foreground = nord.nord0
+    background = forest.accent
+    foreground = forest.background
   elseif hover then
-    background = nord.nord2
-    foreground = nord.nord6
+    background = forest.selection
+    foreground = forest.bright
   end
 
   local title = tab.tab_title
@@ -133,13 +129,13 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover)
   end
 
   return {
-    { Background = { Color = nord.nord0 } },
+    { Background = { Color = forest.background } },
     { Foreground = { Color = background } },
     { Text = left_arrow },
     { Background = { Color = background } },
     { Foreground = { Color = foreground } },
     { Text = " " .. title .. " " },
-    { Background = { Color = nord.nord0 } },
+    { Background = { Color = forest.background } },
     { Foreground = { Color = background } },
     { Text = right_arrow },
   }

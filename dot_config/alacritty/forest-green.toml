@@ -1,0 +1,67 @@
+# Forest Green shared terminal palette.
+
+[colors.primary]
+background = "#192324"
+foreground = "#dce8e1"
+dim_foreground = "#a9beb3"
+bright_foreground = "#f3f7f5"
+
+[colors.cursor]
+text = "#192324"
+cursor = "#5a8e73"
+
+[colors.vi_mode_cursor]
+text = "#192324"
+cursor = "#5a8e73"
+
+[colors.search.matches]
+foreground = "#f3f7f5"
+background = "#345b4b"
+
+[colors.search.focused_match]
+foreground = "#192324"
+background = "#5a8e73"
+
+[colors.footer_bar]
+foreground = "#dce8e1"
+background = "#29463d"
+
+[colors.hints.start]
+foreground = "#192324"
+background = "#b9a66c"
+
+[colors.hints.end]
+foreground = "#192324"
+background = "#6f9a91"
+
+[colors.selection]
+text = "#f3f7f5"
+background = "#345b4b"
+
+[colors.normal]
+black = "#213230"
+red = "#b97872"
+green = "#5a8e73"
+yellow = "#b9a66c"
+blue = "#6f9a91"
+magenta = "#43725d"
+cyan = "#6f9a91"
+white = "#dce8e1"
+
+[colors.bright]
+black = "#43725d"
+red = "#b97872"
+green = "#5a8e73"
+yellow = "#b9a66c"
+blue = "#6f9a91"
+magenta = "#5a8e73"
+cyan = "#6f9a91"
+white = "#f3f7f5"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#b9a66c"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#b97872"

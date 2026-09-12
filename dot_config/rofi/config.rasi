@@ -1,26 +1,26 @@
-/* Nord Polar Night theme matching ~/.config/tofi/config. */
+/* Forest Green theme matching ~/.config/tofi/config. */
 
 configuration {
     show-icons: false;
 }
 
 * {
-    background: #2e3440;
-    foreground: #d8dee9;
-    prompt: #e5e9f0;
-    input: #d8dee9;
-    placeholder: #4c566a;
-    selection-background: #434c5e;
-    selection-foreground: #eceff4;
-    selection-match: #8fbcbb;
-    border: #88c0d0;
+    background: #192324;
+    foreground: #dce8e1;
+    prompt: #f3f7f5;
+    input: #dce8e1;
+    placeholder: #a9beb3;
+    selection-background: #345b4b;
+    selection-foreground: #f3f7f5;
+    selection-match: #6f9a91;
+    border: #5a8e73;
 
     /* Override Rofi's default Solarized state colors. */
-    lightbg: #2e3440;
-    lightfg: #d8dee9;
-    red: #bf616a;
-    blue: #88c0d0;
-    separatorcolor: #4c566a;
+    lightbg: #192324;
+    lightfg: #dce8e1;
+    red: #b97872;
+    blue: #6f9a91;
+    separatorcolor: #43725d;
     normal-background: @background;
     normal-foreground: @foreground;
     alternate-normal-background: @background;
