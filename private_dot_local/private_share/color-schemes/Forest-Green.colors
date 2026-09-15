@@ -1,3 +1,5 @@
+# Forest Green KDE color scheme
+
 [ColorEffects:Disabled]
 ChangeSelectionColor=
 Color=52,91,75
@@ -134,26 +136,15 @@ ForegroundVisited=111,154,145
 
 [General]
 ColorScheme=Forest-Green
-ColorSchemeHash=3b0b7b7f6fa70c9f360b5a78837836d8971524f3
-fixed=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-font=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-menuFont=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-smallestReadableFont=Monaspace Neon NF,8,-1,5,50,0,0,0,0,0
-toolBarFont=Monaspace Neon NF,9,-1,5,50,0,0,0,0,0
-
-[Icons]
-Theme=Nord-Breeze
+Name=Forest Green
+shadeSortColumn=true
 
 [KDE]
-LookAndFeelPackage=org.kde.breezedark.desktop
 contrast=4
-frameContrast=0.2
-widgetStyle=Breeze
 
 [WM]
 activeBackground=41,70,61
 activeBlend=220,232,225
-activeFont=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
 activeForeground=220,232,225
 inactiveBackground=33,50,48
 inactiveBlend=169,190,179

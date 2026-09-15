@@ -21,8 +21,8 @@ if status is-interactive
     # wallust_ssh
     # tmux_ssh
     # The upgrade script needs a terminal; skip it for non-TTY startup (for example
-    # `fish -i -c ...`) so it does not print a misleading startup message.
-    if isatty stdin
+    # `fish -i -c ...`) and when the script is unavailable.
+    if isatty stdin; and test -x /home/rathel/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh
         /home/rathel/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh
     end
     if type -q direnv
@@ -39,9 +39,6 @@ if status is-interactive
     end
     if type -q carapace
         carapace _carapace | source
-    end
-    if type -q starship
-        starship init fish | source
     end
 end
 
@@ -91,6 +88,16 @@ functions --erase __guix_prepend_path
 # scripts and interactive shells select the current chezmoi release.
 if test -x /home/linuxbrew/.linuxbrew/bin/brew
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
+end
+
+# Initialize Starship after Homebrew is loaded so it is available even when
+# Fish was started without Homebrew's bin directory in PATH. The config is
+# managed in a subdirectory, so point Starship at it explicitly.
+if status is-interactive
+    if type -q starship
+        set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
+        starship init fish | source
+    end
 end
 
 # Added by LM Studio CLI (lms)
