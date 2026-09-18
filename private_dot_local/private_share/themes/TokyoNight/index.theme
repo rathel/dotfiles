@@ -1,0 +1,9 @@
+[X-GNOME-Metatheme]
+Name=Tokyo Night
+Type=X-GNOME-Metatheme
+Comment=TokyoNight dark theme
+Encoding=UTF-8
+GtkTheme=TokyoNight
+IconTheme=Nord-Breeze
+CursorTheme=breeze_cursors
+CursorSize=24

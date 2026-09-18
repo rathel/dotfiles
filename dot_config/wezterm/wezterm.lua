@@ -28,77 +28,80 @@ config.window_close_confirmation = "AlwaysPrompt"
 config.default_cursor_style = "SteadyBlock"
 config.cursor_blink_rate = 0
 
--- Forest Green
-local forest = {
-  background = "#192324",
-  background_alt = "#213230",
-  surface = "#29463d",
-  selection = "#345b4b",
-  border = "#43725d",
-  accent = "#5a8e73",
-  foreground = "#dce8e1",
-  bright = "#f3f7f5",
-  muted = "#a9beb3",
-  info = "#6f9a91",
-  warning = "#b9a66c",
-  error = "#b97872",
+-- TokyoNight Night
+local tokyo = {
+  background = "#1a1b26",
+  background_alt = "#16161e",
+  surface = "#24283b",
+  selection = "#33467c",
+  border = "#414868",
+  accent = "#7aa2f7",
+  foreground = "#c0caf5",
+  bright = "#e0e6ff",
+  muted = "#565f89",
+  info = "#7dcfff",
+  warning = "#e0af68",
+  error = "#f7768e",
+  green = "#9ece6a",
+  magenta = "#bb9af7",
+  orange = "#ff9e64",
 }
 
 config.colors = {
-  foreground = forest.foreground,
-  background = forest.background,
-  cursor_bg = forest.accent,
-  cursor_fg = forest.background,
-  cursor_border = forest.accent,
-  selection_fg = forest.bright,
-  selection_bg = forest.selection,
-  scrollbar_thumb = forest.border,
-  split = forest.border,
+  foreground = tokyo.foreground,
+  background = tokyo.background,
+  cursor_bg = tokyo.accent,
+  cursor_fg = tokyo.background,
+  cursor_border = tokyo.accent,
+  selection_fg = tokyo.bright,
+  selection_bg = tokyo.selection,
+  scrollbar_thumb = tokyo.border,
+  split = tokyo.border,
   ansi = {
-    forest.background_alt,
-    forest.error,
-    forest.accent,
-    forest.warning,
-    forest.info,
-    forest.border,
-    forest.info,
-    forest.foreground,
+    tokyo.background_alt,
+    tokyo.error,
+    tokyo.green,
+    tokyo.warning,
+    tokyo.accent,
+    tokyo.magenta,
+    tokyo.info,
+    tokyo.foreground,
   },
   brights = {
-    forest.border,
-    forest.error,
-    forest.accent,
-    forest.warning,
-    forest.info,
-    forest.accent,
-    forest.info,
-    forest.bright,
+    tokyo.border,
+    tokyo.error,
+    tokyo.green,
+    tokyo.orange,
+    tokyo.accent,
+    tokyo.magenta,
+    tokyo.info,
+    tokyo.bright,
   },
   indexed = {
-    [16] = forest.warning,
-    [17] = forest.error,
+    [16] = tokyo.warning,
+    [17] = tokyo.error,
   },
   tab_bar = {
-    background = forest.background,
+    background = tokyo.background,
     active_tab = {
-      bg_color = forest.accent,
-      fg_color = forest.background,
+      bg_color = tokyo.accent,
+      fg_color = tokyo.background,
     },
     inactive_tab = {
-      bg_color = forest.surface,
-      fg_color = forest.foreground,
+      bg_color = tokyo.surface,
+      fg_color = tokyo.foreground,
     },
     inactive_tab_hover = {
-      bg_color = forest.selection,
-      fg_color = forest.bright,
+      bg_color = tokyo.selection,
+      fg_color = tokyo.bright,
     },
     new_tab = {
-      bg_color = forest.surface,
-      fg_color = forest.foreground,
+      bg_color = tokyo.surface,
+      fg_color = tokyo.foreground,
     },
     new_tab_hover = {
-      bg_color = forest.selection,
-      fg_color = forest.bright,
+      bg_color = tokyo.selection,
+      fg_color = tokyo.bright,
     },
   },
 }
@@ -112,15 +115,15 @@ config.show_new_tab_button_in_tab_bar = false
 local left_arrow = wezterm.nerdfonts.pl_right_hard_divider
 local right_arrow = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, _, _, _, hover)
-  local background = forest.surface
-  local foreground = forest.foreground
+  local background = tokyo.surface
+  local foreground = tokyo.foreground
 
   if tab.is_active then
-    background = forest.accent
-    foreground = forest.background
+    background = tokyo.accent
+    foreground = tokyo.background
   elseif hover then
-    background = forest.selection
-    foreground = forest.bright
+    background = tokyo.selection
+    foreground = tokyo.bright
   end
 
   local title = tab.tab_title
@@ -129,13 +132,13 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover)
   end
 
   return {
-    { Background = { Color = forest.background } },
+    { Background = { Color = tokyo.background } },
     { Foreground = { Color = background } },
     { Text = left_arrow },
     { Background = { Color = background } },
     { Foreground = { Color = foreground } },
     { Text = " " .. title .. " " },
-    { Background = { Color = forest.background } },
+    { Background = { Color = tokyo.background } },
     { Foreground = { Color = background } },
     { Text = right_arrow },
   }

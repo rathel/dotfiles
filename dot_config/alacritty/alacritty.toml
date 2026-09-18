@@ -1,7 +1,7 @@
 # ~/.config/alacritty/alacritty.toml
 
 [general]
-import = ["forest-green.toml"]
+import = ["tokyonight.toml"]
 
 [window]
 opacity = 1.0

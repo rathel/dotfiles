@@ -4,29 +4,29 @@ onboarding = false
 new_cwd = "home"
 
 [theme]
-# Forest Green
+# TokyoNight Night
 name = "terminal"
 
 [theme.custom]
-panel_bg = "#192324"
-sidebar_bg = "#213230"
-active_row_bg = "#29463d"
-selection_bg = "#345b4b"
-surface0 = "#29463d"
-surface1 = "#345b4b"
-surface_dim = "#192324"
-overlay0 = "#a9beb3"
-overlay1 = "#dce8e1"
-text = "#dce8e1"
-subtext0 = "#a9beb3"
-mauve = "#6f9a91"
-green = "#5a8e73"
-yellow = "#b9a66c"
-red = "#b97872"
-blue = "#6f9a91"
-teal = "#6f9a91"
-peach = "#b9a66c"
-accent = "#5a8e73"
+panel_bg = "#1a1b26"
+sidebar_bg = "#16161e"
+active_row_bg = "#24283b"
+selection_bg = "#33467c"
+surface0 = "#24283b"
+surface1 = "#414868"
+surface_dim = "#1a1b26"
+overlay0 = "#565f89"
+overlay1 = "#c0caf5"
+text = "#c0caf5"
+subtext0 = "#565f89"
+mauve = "#bb9af7"
+green = "#9ece6a"
+yellow = "#e0af68"
+red = "#f7768e"
+blue = "#7aa2f7"
+teal = "#7dcfff"
+peach = "#ff9e64"
+accent = "#7aa2f7"
 
 [keys]
 # Vim-style pane movement in Navigate mode; workspace movement stays on arrows.

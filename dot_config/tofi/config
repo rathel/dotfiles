@@ -1,21 +1,21 @@
-# Forest Green theme for Tofi
+# TokyoNight Night theme for Tofi
 font = "Monaspace Neon NF"
 font-size = 14
 
-background-color = #192324
-text-color = #dce8e1
+background-color = #1a1b26
+text-color = #c0caf5
 prompt-text = "apps: "
-prompt-color = #f3f7f5
-input-color = #dce8e1
-placeholder-color = #a9beb3
-default-result-color = #dce8e1
-selection-color = #f3f7f5
-selection-background = #345b4b
-selection-match-color = #6f9a91
+prompt-color = #e0e6ff
+input-color = #c0caf5
+placeholder-color = #565f89
+default-result-color = #c0caf5
+selection-color = #e0e6ff
+selection-background = #33467c
+selection-match-color = #7dcfff
 
 outline-width = 0
 border-width = 1
-border-color = #5a8e73
+border-color = #7aa2f7
 corner-radius = 0
 
 width = 30%

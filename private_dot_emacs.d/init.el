@@ -1,7 +1,7 @@
 ;;; init.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Minimal Forest Green-themed Emacs setup with Evil and Eshell.
+;; Minimal TokyoNight-themed Emacs setup with Evil and Eshell.
 
 ;;; Code:
 
@@ -23,10 +23,10 @@
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
 
-;; Load the shared Forest Green theme from ~/.emacs.d/themes.
+;; Load the shared TokyoNight theme from ~/.emacs.d/themes.
 (add-to-list 'custom-theme-load-path
              (expand-file-name "themes" user-emacs-directory))
-(load-theme 'forest t)
+(load-theme 'tokyonight t)
 
 ;; Install Evil and Markdown support from NonGNU ELPA when they are not available.
 (require 'package)

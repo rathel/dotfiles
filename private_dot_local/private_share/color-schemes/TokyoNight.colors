@@ -1,3 +1,5 @@
+# TokyoNight KDE color scheme
+
 [ColorEffects:Disabled]
 ChangeSelectionColor=
 Color=51,70,124
@@ -134,26 +136,15 @@ ForegroundVisited=125,207,255
 
 [General]
 ColorScheme=TokyoNight
-ColorSchemeHash=
-fixed=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-font=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-menuFont=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
-smallestReadableFont=Monaspace Neon NF,8,-1,5,50,0,0,0,0,0
-toolBarFont=Monaspace Neon NF,9,-1,5,50,0,0,0,0,0
-
-[Icons]
-Theme=Nord-Breeze
+Name=Tokyo Night
+shadeSortColumn=true
 
 [KDE]
-LookAndFeelPackage=org.kde.breezedark.desktop
 contrast=4
-frameContrast=0.2
-widgetStyle=Breeze
 
 [WM]
 activeBackground=36,40,59
 activeBlend=192,202,245
-activeFont=Monaspace Neon NF,10,-1,5,50,0,0,0,0,0
 activeForeground=192,202,245
 inactiveBackground=22,22,30
 inactiveBlend=86,95,137

@@ -1,26 +1,26 @@
-/* Forest Green theme matching ~/.config/tofi/config. */
+/* TokyoNight Night theme matching ~/.config/tofi/config. */
 
 configuration {
     show-icons: false;
 }
 
 * {
-    background: #192324;
-    foreground: #dce8e1;
-    prompt: #f3f7f5;
-    input: #dce8e1;
-    placeholder: #a9beb3;
-    selection-background: #345b4b;
-    selection-foreground: #f3f7f5;
-    selection-match: #6f9a91;
-    border: #5a8e73;
+    background: #1a1b26;
+    foreground: #c0caf5;
+    prompt: #e0e6ff;
+    input: #c0caf5;
+    placeholder: #565f89;
+    selection-background: #33467c;
+    selection-foreground: #e0e6ff;
+    selection-match: #7dcfff;
+    border: #7aa2f7;
 
     /* Override Rofi's default Solarized state colors. */
-    lightbg: #192324;
-    lightfg: #dce8e1;
-    red: #b97872;
-    blue: #6f9a91;
-    separatorcolor: #43725d;
+    lightbg: #1a1b26;
+    lightfg: #c0caf5;
+    red: #f7768e;
+    blue: #7dcfff;
+    separatorcolor: #414868;
     normal-background: @background;
     normal-foreground: @foreground;
     alternate-normal-background: @background;

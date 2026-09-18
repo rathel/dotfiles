@@ -1,6 +1,6 @@
 # Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
 add_newline = true
-palette = "forest_green"
+palette = "tokyonight"
 
 format = """
 [](fg:dim_bg)$username$directory$git_branch$git_status$cmd_duration$nodejs$rust$python$time[](fg:dim_bg)
@@ -60,11 +60,11 @@ disabled = false
 threshold = 30
 style = 'bold err'
 
-[palettes.forest_green]
-fg = "#dce8e1"
-dim_fg = "#a9beb3"
-dim_bg = "#213230"
-accent = "#5a8e73"
-err = "#b97872"
-warn = "#b9a66c"
-good = "#5a8e73"
+[palettes.tokyonight]
+fg = "#c0caf5"
+dim_fg = "#565f89"
+dim_bg = "#16161e"
+accent = "#7aa2f7"
+err = "#f7768e"
+warn = "#e0af68"
+good = "#9ece6a"

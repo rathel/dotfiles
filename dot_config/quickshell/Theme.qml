@@ -1,45 +1,45 @@
 import QtQuick
 
 QtObject {
-    // Forest Green shared palette.
-    readonly property color forestBackground: "#192324"
-    readonly property color forestBackgroundAlt: "#213230"
-    readonly property color forestSurface: "#29463d"
-    readonly property color forestSelection: "#345b4b"
-    readonly property color forestBorder: "#43725d"
-    readonly property color forestAccent: "#5a8e73"
-    readonly property color forestForeground: "#dce8e1"
-    readonly property color forestBrightForeground: "#f3f7f5"
-    readonly property color forestMuted: "#a9beb3"
-    readonly property color forestInfo: "#6f9a91"
-    readonly property color forestWarning: "#b9a66c"
-    readonly property color forestError: "#b97872"
+    // TokyoNight Night shared palette.
+    readonly property color tokyoBackground: "#1a1b26"
+    readonly property color tokyoBackgroundAlt: "#16161e"
+    readonly property color tokyoSurface: "#24283b"
+    readonly property color tokyoSelection: "#33467c"
+    readonly property color tokyoBorder: "#414868"
+    readonly property color tokyoAccent: "#7aa2f7"
+    readonly property color tokyoForeground: "#c0caf5"
+    readonly property color tokyoBrightForeground: "#e0e6ff"
+    readonly property color tokyoMuted: "#565f89"
+    readonly property color tokyoInfo: "#7dcfff"
+    readonly property color tokyoWarning: "#e0af68"
+    readonly property color tokyoError: "#f7768e"
 
     // Semantic roles used by the shell components.
-    readonly property color crust: forestBackground
-    readonly property color mantle: forestBackgroundAlt
-    readonly property color base: forestSurface
-    readonly property color surface0: forestSelection
-    readonly property color surface1: forestBorder
-    readonly property color surface2: forestAccent
-    readonly property color overlay0: forestMuted
-    readonly property color overlay1: forestInfo
-    readonly property color overlay2: forestBrightForeground
-    readonly property color subtext0: forestMuted
-    readonly property color subtext1: forestInfo
-    readonly property color text: forestForeground
-    readonly property color brightText: forestBrightForeground
+    readonly property color crust: tokyoBackground
+    readonly property color mantle: tokyoBackgroundAlt
+    readonly property color base: tokyoSurface
+    readonly property color surface0: tokyoSelection
+    readonly property color surface1: tokyoBorder
+    readonly property color surface2: tokyoAccent
+    readonly property color overlay0: tokyoMuted
+    readonly property color overlay1: tokyoInfo
+    readonly property color overlay2: tokyoBrightForeground
+    readonly property color subtext0: tokyoMuted
+    readonly property color subtext1: tokyoInfo
+    readonly property color text: tokyoForeground
+    readonly property color brightText: tokyoBrightForeground
 
-    readonly property color green: forestAccent
-    readonly property color greenSoft: forestInfo
-    readonly property color greenDim: forestBorder
-    readonly property color teal: forestInfo
-    readonly property color cyan: forestInfo
-    readonly property color blue: forestInfo
-    readonly property color yellow: forestWarning
-    readonly property color peach: forestWarning
-    readonly property color red: forestError
-    readonly property color magenta: forestBorder
+    readonly property color green: "#9ece6a"
+    readonly property color greenSoft: "#73daca"
+    readonly property color greenDim: tokyoBorder
+    readonly property color teal: "#1abc9c"
+    readonly property color cyan: "#7dcfff"
+    readonly property color blue: "#7aa2f7"
+    readonly property color yellow: "#e0af68"
+    readonly property color peach: "#ff9e64"
+    readonly property color red: "#f7768e"
+    readonly property color magenta: "#bb9af7"
 
     // Compatibility aliases for existing components.
     readonly property color rosewater: brightText
