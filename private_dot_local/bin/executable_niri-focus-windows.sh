@@ -16,7 +16,7 @@ mapfile -t window_labels < <(
     done
 )
 
-# Tofi prints the selected label rather than an index. Disambiguate duplicate
+# Fuzzel prints the selected label rather than an index. Disambiguate duplicate
 # labels so the selected label can still be mapped back to the window ID.
 ((${#window_ids[@]} > 0)) || exit 0
 declare -A label_counts=()
@@ -33,10 +33,12 @@ done
 
 if ! selected_label=$(
   printf '%s\n' "${window_labels[@]}" |
-    tofi \
-      --prompt-text "Switch window: " \
-      --num-results=15 \
-      --fuzzy-match=true
+    fuzzel \
+      --dmenu \
+      --only-match \
+      --prompt='Switch window: ' \
+      --lines=15 \
+      --match-mode=fuzzy
 ); then
   exit 0
 fi

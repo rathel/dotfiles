@@ -193,7 +193,7 @@ immutability=1
 plugin=org.kde.plasma.digitalclock
 
 [Containments][3][Applets][23][Configuration]
-popupHeight=400
+popupHeight=451
 popupWidth=560
 
 [Containments][3][Applets][23][Configuration][Appearance]
@@ -209,7 +209,7 @@ plugin=org.kde.plasma.kickoff
 
 [Containments][3][Applets][4][Configuration]
 popupHeight=509
-popupWidth=647
+popupWidth=663
 
 [Containments][3][Applets][4][Configuration][General]
 favoritesPortedToKAstats=true
@@ -226,6 +226,7 @@ plugin=org.kde.plasma.icontasks
 showOnlyCurrentScreen=true
 
 [Containments][3][Applets][6][Configuration][General]
+launchers=applications:systemsettings.desktop,applications:org.kde.discover.desktop,preferred://filemanager,preferred://browser,applications:local-applications-shadow-pc.desktop,applications:chatgpt.desktop
 showOnlyCurrentScreen=true
 
 [Containments][3][Applets][7]
@@ -326,5 +327,5 @@ knownItems=org.kde.kdeconnect,org.kde.plasma.bluetooth,org.kde.plasma.keyboardla
 AppletOrder=4;5;6;7;8;23;24
 
 [ScreenMapping]
-itemsOnDisabledScreens=
-screenMapping=desktop:/Valheim.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Call of Duty Modern Warfare 2 (2009).desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Factorio.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Command & Conquer Remastered Collection.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900
+itemsOnDisabledScreens=0,2605e878-b252-4850-8295-82ef4b3a3db3,1,desktop:/Snapchat.desktop
+screenMapping=desktop:/Snapchat.desktop,0,2605e878-b252-4850-8295-82ef4b3a3db3,desktop:/Command & Conquer Remastered Collection.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Call of Duty Modern Warfare 2 (2009).desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Valheim.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900,desktop:/Factorio.desktop,0,9e800da8-6531-4cb2-ac81-07e64504c900

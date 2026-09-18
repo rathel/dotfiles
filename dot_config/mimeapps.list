@@ -57,6 +57,7 @@ image/webp=imv.desktop
 image/qoi=imv.desktop
 inode/directory=thunar.desktop
 application/pdf=org.pwmt.zathura.desktop
+x-scheme-handler/codex=chatgpt.desktop
 
 [Added Associations]
 x-scheme-handler/mailto=userapp-Thunderbird-NLAYV3.desktop;userapp-Thunderbird-8J2PU3.desktop;rathel-thunderbird.desktop;

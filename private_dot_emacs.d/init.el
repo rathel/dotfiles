@@ -28,6 +28,9 @@
              (expand-file-name "themes" user-emacs-directory))
 (load-theme 'tokyonight t)
 
+;; Increase the default text size from Emacs's 10-point default to 12 points.
+(set-face-attribute 'default nil :height 120)
+
 ;; Install Evil and Markdown support from NonGNU ELPA when they are not available.
 (require 'package)
 (setq package-archives
