@@ -1,9 +1,3 @@
-# The persistent user service can start shells before the graphical session exports DISPLAY.
-# Use the active local X server when the variable was not inherited.
-if test -z "$DISPLAY"; and test -S /tmp/.X11-unix/X0
-    set -gx DISPLAY :0
-end
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
     set -g fish_key_bindings fish_vi_key_bindings
