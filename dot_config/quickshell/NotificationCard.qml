@@ -4,18 +4,31 @@ import QtQuick
 import QtQuick.Layouts
 
 Item {
+    id: root
+
     Theme { id: theme }
 
     required property var notification
+
+    // Quickshell 0.2.x exposes the D-Bus timeout in milliseconds.
+    // A negative value means the server default; zero means never expire.
+    readonly property int timeoutMs: {
+        const timeout = Number(notification.expireTimeout)
+        if (!isFinite(timeout) || timeout < 0) {
+            return 5000
+        }
+
+        return Math.max(0, Math.round(timeout))
+    }
 
     implicitWidth: 360
     implicitHeight: card.implicitHeight
 
     Timer {
-        interval: notification.expireTimeout > 0 ? notification.expireTimeout * 1000 : 5000
-        running: !notification.resident
+        interval: root.timeoutMs
+        running: !notification.resident && root.timeoutMs > 0
         repeat: false
-        onTriggered: notification.dismiss()
+        onTriggered: notification.expire()
     }
 
     Rectangle {
@@ -48,18 +61,22 @@ Item {
                     anchors.fill: parent
                     anchors.margins: 6
                     source: notification.image && notification.image.length > 0 ? notification.image : Quickshell.iconPath(notification.appIcon, true)
+                    sourceSize: Qt.size(40, 40)
                     fillMode: Image.PreserveAspectFit
+                    asynchronous: true
                     smooth: true
                 }
             }
 
             Column {
                 Layout.fillWidth: true
+                Layout.minimumWidth: 0
                 spacing: 6
 
                 Text {
-                    width: 280
+                    width: parent.width
                     text: notification.appName && notification.appName.length > 0 ? notification.appName : "Notification"
+                    textFormat: Text.PlainText
                     color: theme.text
                     font.family: "Monaspace Neon NF"
                     font.pixelSize: 18
@@ -68,8 +85,9 @@ Item {
                 }
 
                 Text {
-                    width: 280
+                    width: parent.width
                     text: notification.summary
+                    textFormat: Text.PlainText
                     color: theme.rosewater
                     font.family: "Monaspace Neon NF"
                     font.pixelSize: 18
@@ -78,8 +96,9 @@ Item {
                 }
 
                 Text {
-                    width: 280
+                    width: parent.width
                     text: notification.body
+                    textFormat: Text.AutoText
                     color: theme.subtext0
                     font.family: "Monaspace Neon NF"
                     font.pixelSize: 18
@@ -87,9 +106,19 @@ Item {
                     maximumLineCount: 4
                     elide: Text.ElideRight
                     visible: notification.body && notification.body.length > 0
+
+                    onLinkActivated: link => {
+                        const url = String(link)
+                        if (/^(https?|mailto):/i.test(url)) {
+                            Qt.openUrlExternally(url)
+                        }
+                    }
                 }
 
-                RowLayout {
+                Flow {
+                    id: actions
+                    width: parent.width
+                    height: childrenRect.height
                     spacing: 6
 
                     Repeater {
@@ -111,6 +140,7 @@ Item {
                                 id: actionLabel
                                 anchors.centerIn: parent
                                 text: modelData.text || "Action"
+                                textFormat: Text.PlainText
                                 color: theme.text
                                 font.family: "Monaspace Neon NF"
                                 font.pixelSize: 18
@@ -133,6 +163,7 @@ Item {
                             id: closeLabel
                             anchors.centerIn: parent
                             text: "Close"
+                            textFormat: Text.PlainText
                             color: theme.text
                             font.family: "Monaspace Neon NF"
                             font.pixelSize: 18

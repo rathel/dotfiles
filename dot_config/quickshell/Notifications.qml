@@ -15,11 +15,18 @@ Scope {
         keepOnReload: true
 
         onNotification: notification => {
-            notification.tracked = true
+            // Show new transient notifications, but do not carry them across a reload.
+            notification.tracked = !notification.lastGeneration || !notification.transient
         }
     }
 
     PanelWindow {
+        id: notificationWindow
+
+        // Keep notifications on the primary output instead of relying on the
+        // compositor's default when multiple monitors are connected.
+        screen: Quickshell.screens.length > 0 ? Quickshell.screens[0] : null
+
         anchors {
             top: true
             right: true
@@ -34,18 +41,31 @@ Scope {
         exclusionMode: ExclusionMode.Ignore
         color: "transparent"
         implicitWidth: 380
-        implicitHeight: stack.implicitHeight
+        readonly property int maxHeight: screen ? Math.max(1, screen.height - 60) : 720
+        implicitHeight: Math.min(stack.implicitHeight, maxHeight)
 
-        Column {
-            id: stack
-            spacing: 8
+        Flickable {
+            id: viewport
+            anchors.fill: parent
+            clip: true
+            contentWidth: width
+            contentHeight: stack.implicitHeight
+            interactive: contentHeight > height
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
 
-            Repeater {
-                model: server.trackedNotifications ? server.trackedNotifications.values : []
+            Column {
+                id: stack
+                width: viewport.width
+                spacing: 8
 
-                delegate: NotificationCard {
-                    required property var modelData
-                    notification: modelData
+                Repeater {
+                    model: server.trackedNotifications ? server.trackedNotifications.values : []
+
+                    delegate: NotificationCard {
+                        required property var modelData
+                        notification: modelData
+                    }
                 }
             }
         }

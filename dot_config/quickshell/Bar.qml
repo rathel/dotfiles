@@ -83,9 +83,17 @@ Scope {
 
     function setVolume(output) {
         const line = String(output).trim()
+        if (!line) {
+            volumeText = ""
+            return
+        }
+
+        const percentMatch = line.match(/([0-9]+(?:\.[0-9]+)?)%/)
         const match = line.match(/([0-9]+(?:\.[0-9]+)?)/)
-        const percent = match ? Math.round(parseFloat(match[1]) * 100) : 0
-        const muted = /muted/i.test(line)
+        const percent = percentMatch
+            ? Math.max(0, Math.round(parseFloat(percentMatch[1])))
+            : match ? Math.max(0, Math.round(parseFloat(match[1]) * 100)) : 0
+        const muted = /muted|mute:\s*yes/i.test(line)
 
         volumeText = muted ? "󰝟 muted" : `󰕾 ${percent}%`
     }
@@ -97,8 +105,10 @@ Scope {
             return
         }
 
+        // brightnessctl -m prints: device,class,current,max,percent.
         const parts = line.split(",")
-        const percent = parts.length >= 4 ? parseInt(parts[3].replace("%", "")) || 0 : 0
+        const rawPercent = parts.length > 0 ? parts[parts.length - 1].replace("%", "") : ""
+        const percent = Math.max(0, Math.min(100, parseInt(rawPercent, 10) || 0))
 
         brightnessText = `󰃟 ${percent}%`
     }
@@ -159,14 +169,15 @@ Scope {
         }
 
         const parts = line.split(/\s+/)
-        const percent = parseInt(parts[0]) || 0
+        const percent = Math.max(0, Math.min(100, parseInt(parts[0], 10) || 0))
         const status = (parts.slice(1).join(" ") || "").toLowerCase()
-        const charging = status.includes("charging") || status.includes("full")
+        const charging = status === "charging"
+        const full = status === "full"
 
         let icon = "󰁺"
         if (charging) {
             icon = "󰂄"
-        } else if (percent >= 95) {
+        } else if (full || percent >= 95) {
             icon = "󰁹"
         } else if (percent >= 80) {
             icon = "󰂂"
@@ -205,10 +216,16 @@ Scope {
     function setMemory(output) {
         const line = String(output).trim()
         const parts = line.split(/\s+/)
-        const memoryUsed = parseInt(parts[0]) || 0
-        const memoryTotal = parseInt(parts[1]) || 1
-        const swapUsed = parseInt(parts[2]) || 0
-        const swapTotal = parseInt(parts[3]) || 0
+        if (parts.length < 2 || !line) {
+            memoryText = ""
+            swapText = ""
+            return
+        }
+
+        const memoryUsed = parseInt(parts[0], 10) || 0
+        const memoryTotal = parseInt(parts[1], 10) || 1
+        const swapUsed = parseInt(parts[2], 10) || 0
+        const swapTotal = parseInt(parts[3], 10) || 0
 
         memoryText = `󰍛 ${Math.round((memoryUsed / memoryTotal) * 100)}%`
         swapText = swapTotal > 0 ? `󰓡 ${formatMemorySize(swapUsed)}/${formatMemorySize(swapTotal)}` : ""
@@ -271,6 +288,7 @@ Scope {
         const temperature = (parts[1] || "").match(/[+−-]?[0-9]+(?:[.][0-9]+)?°?[CF]/i)
 
         if (!temperature) {
+            weatherText = ""
             return
         }
 
@@ -292,12 +310,22 @@ Scope {
 
     SystemClock {
         id: clock
-        precision: SystemClock.Seconds
+        precision: SystemClock.Minutes
     }
 
     Process {
         id: volumeProc
-        command: ["bash", "-lc", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null || true"]
+        command: [
+            "bash",
+            "-lc",
+            "if command -v wpctl >/dev/null 2>&1; then " +
+                "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null || true; " +
+            "elif command -v pactl >/dev/null 2>&1; then " +
+                "volume=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | head -n1); " +
+                "mute=$(pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | awk '{print $2}'); " +
+                "if [ \"$mute\" = yes ]; then printf '%s MUTED\\n' \"$volume\"; else printf '%s\\n' \"$volume\"; fi; " +
+            "fi"
+        ]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setVolume(this.text)
@@ -314,7 +342,24 @@ Scope {
     Process {
         id: brightnessProc
         // Do not expose keyboard LEDs as display brightness.
-        command: ["bash", "-lc", "brightnessctl -m -c backlight 2>/dev/null || true"]
+        command: [
+            "bash",
+            "-lc",
+            "if command -v brightnessctl >/dev/null 2>&1; then " +
+                "LC_ALL=C brightnessctl -m -c backlight 2>/dev/null | tail -n1; " +
+            "else " +
+                "for b in /sys/class/backlight/*; do " +
+                    "[ -d \"$b\" ] || continue; " +
+                    "current=$(cat \"$b/brightness\" 2>/dev/null || true); " +
+                    "maximum=$(cat \"$b/max_brightness\" 2>/dev/null || true); " +
+                    "if [ -n \"$current\" ] && [ -n \"$maximum\" ] && [ \"$maximum\" -gt 0 ]; then " +
+                        "percent=$((current * 100 / maximum)); " +
+                        "printf 'backlight,backlight,%s,%s,%s%%\\n' \"$current\" \"$maximum\" \"$percent\"; " +
+                        "exit 0; " +
+                    "fi; " +
+                "done; " +
+            "fi"
+        ]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setBrightness(this.text)
@@ -380,7 +425,7 @@ Scope {
 
     Process {
         id: bluetoothProc
-        command: ["bash", "-lc", "bluetoothctl show 2>/dev/null | awk -F': ' '/Powered/ {print $2; exit}' || true"]
+        command: ["bash", "-lc", "LC_ALL=C bluetoothctl show 2>/dev/null | awk -F': ' '/Powered/ {print $2; exit}' || true"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setBluetooth(this.text)
@@ -396,7 +441,7 @@ Scope {
 
     Process {
         id: memoryProc
-        command: ["bash", "-lc", "free -m | awk '/^Mem:/ {used=$3; total=$2} /^Swap:/ {print used, total, $3, $2}'"]
+        command: ["bash", "-lc", "LC_ALL=C free -m | awk '/^Mem:/ {used=$3; total=$2} /^Swap:/ {print used, total, $3, $2}'"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.setMemory(this.text)
@@ -429,22 +474,26 @@ Scope {
     Process {
         id: rebootProc
         // Arch removes the running release's pkgbase on upgrade. Debian-family
-        // systems use reboot-required and identify the triggering package when possible.
+        // systems use reboot-required. Fedora/RHEL systems use dnf's cached
+        // needs-restarting result when available.
         command: [
             "sh",
             "-c",
-            "release=$(uname -r); " +
+            "release=$(uname -r); status=current; " +
             "if [ -e /etc/arch-release ]; then " +
                 "[ -f \"/usr/lib/modules/$release/pkgbase\" ] && status=current || status=needed; " +
-            "elif [ -e /etc/debian_version ] && [ -e /run/reboot-required ]; then " +
-                "if [ ! -s /run/reboot-required.pkgs ] || " +
-                    "grep -Eq '^linux-(image|binary|modules)(-unsigned)?-' /run/reboot-required.pkgs; then " +
+            "elif [ -e /etc/debian_version ]; then " +
+                "if [ -e /run/reboot-required ] || [ -e /var/run/reboot-required ]; then " +
                     "status=needed; " +
-                "else " +
-                    "status=current; " +
                 "fi; " +
-            "else " +
-                "status=current; " +
+            "elif command -v dnf5 >/dev/null 2>&1; then " +
+                "result=$(dnf5 --cacheonly needs-restarting --json 2>/dev/null || true); " +
+                "printf '%s' \"$result\" | grep -Eq 'reboot_required[[:space:]]*:[[:space:]]*true' && status=needed; " +
+            "elif command -v needs-restarting >/dev/null 2>&1; then " +
+                "needs-restarting -r >/dev/null 2>&1; rc=$?; " +
+                "[ \"$rc\" -eq 1 ] && status=needed; " +
+            "elif [ -e /run/reboot-required ] || [ -e /var/run/reboot-required ]; then " +
+                "status=needed; " +
             "fi; " +
             "printf '%s\\n' \"$status\""
         ]
@@ -455,7 +504,9 @@ Scope {
     }
 
     Timer {
-        interval: 60000
+        // Distro reboot checks are cheap except for dnf5, so avoid running
+        // its cached transaction check every minute.
+        interval: 300000
         running: true
         repeat: true
         onTriggered: {
