@@ -1,42 +1,42 @@
 @import url("resource:///org/gtk/libgtk/theme/Adwaita-dark/gtk.css");
 
-@define-color forest0 #1a1b26;
-@define-color forest1 #16161e;
-@define-color forest2 #33467c;
-@define-color forest3 #414868;
-@define-color forest4 #c0caf5;
-@define-color forest6 #e0e6ff;
-@define-color forest7 #7dcfff;
-@define-color forest8 #7aa2f7;
+@define-color tokyo0 #1a1b26;
+@define-color tokyo1 #16161e;
+@define-color tokyo2 #33467c;
+@define-color tokyo3 #414868;
+@define-color tokyo4 #c0caf5;
+@define-color tokyo6 #e0e6ff;
+@define-color tokyo7 #7dcfff;
+@define-color tokyo8 #7aa2f7;
 
 .background,
 window {
-  background-color: @forest0;
-  color: @forest4;
+  background-color: @tokyo0;
+  color: @tokyo4;
 }
 
 headerbar,
 .titlebar {
-  background-color: @forest0;
-  color: @forest6;
+  background-color: @tokyo0;
+  color: @tokyo6;
 }
 
 button {
-  background-color: @forest1;
-  color: @forest4;
-  border-color: @forest3;
+  background-color: @tokyo1;
+  color: @tokyo4;
+  border-color: @tokyo3;
   box-shadow: none;
 }
 
 button:hover {
-  background-color: @forest2;
-  color: @forest6;
+  background-color: @tokyo2;
+  color: @tokyo6;
 }
 
 button:active,
 button:checked {
-  background-color: @forest8;
-  color: @forest6;
+  background-color: @tokyo8;
+  color: @tokyo6;
 }
 
 entry,
@@ -45,43 +45,43 @@ textview text,
 view,
 listview,
 columnview {
-  background-color: @forest0;
-  color: @forest4;
+  background-color: @tokyo0;
+  color: @tokyo4;
 }
 
 entry:focus {
-  border-color: @forest8;
-  box-shadow: 0 0 0 1px @forest8;
+  border-color: @tokyo8;
+  box-shadow: 0 0 0 1px @tokyo8;
 }
 
 popover,
 popover.background,
 menu,
 tooltip {
-  background-color: @forest2;
-  color: @forest4;
+  background-color: @tokyo2;
+  color: @tokyo4;
 }
 
 row:hover,
 modelbutton:hover {
-  background-color: @forest2;
-  color: @forest6;
+  background-color: @tokyo2;
+  color: @tokyo6;
 }
 
 selection {
-  background-color: @forest8;
-  color: @forest6;
+  background-color: @tokyo8;
+  color: @tokyo6;
 }
 
 scale highlight,
 progressbar progress {
-  background-color: @forest8;
+  background-color: @tokyo8;
 }
 
 scrollbar slider {
-  background-color: @forest3;
+  background-color: @tokyo3;
 }
 
 *:disabled {
-  color: @forest3;
+  color: @tokyo3;
 }
