@@ -123,7 +123,6 @@ The following are the non-obvious dependencies of the scripts under
 | PDF launcher | `fd`, `sk`, `zathura`, `notify-send` |
 | Streaming-service launcher | `fuzzel`, `xdg-open` (`xdg-utils`), and optionally `notify-send` |
 | Wallpaper launcher | `awww` **or** `swaybg` |
-| Volume notifications | `wpctl`, `pactl`, `notify-send`, `awk`, `grep`, and `stdbuf` |
 | Stream recording helper | `yt-dlp` and `awk` |
 | Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, a terminal, and `tmux`; `wezterm` enables its tab/pane integration |
 | SSH host picker | `tofi`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and `tmux` for the special host |
