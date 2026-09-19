@@ -1,7 +1,17 @@
 #!/bin/bash
 
-BOOK="$(fd . $HOME/eBooks -e pdf -e epub -e cbr -e cbz | sk)" 
+if command -v sk >/dev/null 2>&1; then
+	picker=sk
+elif command -v fzf >/dev/null 2>&1; then
+	picker=fzf
+else
+	printf 'pdfz: install skim (sk) or fzf for file selection.\n' >&2
+	exit 1
+fi
 
-notify-send "Launching $(basename $BOOK) in zathura."
+BOOK="$(fd . "$HOME/eBooks" -e pdf -e epub -e cbr -e cbz | "$picker")"
+[[ -n "$BOOK" ]] || exit 0
+
+notify-send "Launching $(basename "$BOOK") in zathura."
 
 nohup zathura "$BOOK" >/dev/null 2>&1 & 

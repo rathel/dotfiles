@@ -274,44 +274,46 @@ layout {
 // This line starts quickshell, which provides the bar and notifications.
 // spawn-at-startup "qs" --no-duplicate
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
-spawn-sh-at-startup "$HOME/.local/bin/shadow-aware-swayidle"
-spawn-sh-at-startup "$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard"
+spawn-sh-at-startup "test -x \"$HOME/.local/bin/shadow-aware-swayidle\" && exec \"$HOME/.local/bin/shadow-aware-swayidle\" || true"
+spawn-sh-at-startup "test -x \"$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard\" && exec \"$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard\" || true"
 {{- end }}
 
-// Use the system-wide stable Quickshell installation.
-spawn-at-startup "quickshell" "--no-duplicate"
-// Start Steam in the background without opening its main window.
-spawn-at-startup "steam" "-silent"
-spawn-at-startup "wlsunset" "-l" "34" "-L" "-104"
-// Use the packaged xwayland-satellite through Niri's on-demand integration.
+// Use whichever command name the installed Quickshell package provides.
+spawn-sh-at-startup "if command -v quickshell >/dev/null 2>&1; then exec quickshell --no-duplicate; elif command -v qs >/dev/null 2>&1; then exec qs --no-duplicate; fi"
+// Optional integrations are gated so a missing package does not break startup.
+spawn-sh-at-startup "command -v steam >/dev/null 2>&1 && exec steam -silent || true"
+spawn-sh-at-startup "command -v wlsunset >/dev/null 2>&1 && exec wlsunset -l 34 -L -104 || true"
+{{ if lookPath "xwayland-satellite" }}
+// Use the installed xwayland-satellite through Niri's on-demand integration.
 xwayland-satellite {
-	path "/usr/bin/xwayland-satellite"
+	path "{{ lookPath "xwayland-satellite" }}"
 }
-spawn-at-startup "kdeconnect-indicator"
-spawn-at-startup "nm-applet"
-spawn-at-startup "udiskie" "-t"
-spawn-sh-at-startup "$HOME/.local/bin/wallpaper.sh"
+{{ end }}
+spawn-sh-at-startup "command -v kdeconnect-indicator >/dev/null 2>&1 && exec kdeconnect-indicator || true"
+spawn-sh-at-startup "command -v nm-applet >/dev/null 2>&1 && exec nm-applet || true"
+spawn-sh-at-startup "command -v udiskie >/dev/null 2>&1 && exec udiskie -t || true"
+spawn-sh-at-startup "test -x \"$HOME/.local/bin/wallpaper.sh\" && exec \"$HOME/.local/bin/wallpaper.sh\" || true"
 
 environment {
 	CHROME_USE_OZONE "1"
 	ELECTRON_OZONE_PLATFORM_HINT "auto"
 	GDK_BACKEND "wayland"
-	LIBVA_DRIVER_NAME "i965"
-	// Include Linuxbrew for applications launched directly by niri.
-	PATH "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:{{ .chezmoi.homeDir }}/.local/bin:{{ .chezmoi.homeDir }}/.cargo/bin:{{ .chezmoi.homeDir }}/.guix-profile/bin:{{ .chezmoi.homeDir }}/.guix-profile/sbin:{{ .chezmoi.homeDir }}/.config/guix/current/bin:{{ .chezmoi.homeDir }}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games"
-	// Use the Debian Qt 6.8 plugin set; the Guix profile contains Qt 6.9 plugins.
-	QT_PLUGIN_PATH "/usr/lib/x86_64-linux-gnu/qt6/plugins"
+	// Include Homebrew when it is available, plus the user's common profile paths.
+	PATH "{{ if lookPath "brew" }}{{ output "brew" "--prefix" | trim }}/bin:{{ output "brew" "--prefix" | trim }}/sbin:{{ end }}{{ .chezmoi.homeDir }}/.local/bin:{{ .chezmoi.homeDir }}/.cargo/bin:{{ .chezmoi.homeDir }}/.guix-profile/bin:{{ .chezmoi.homeDir }}/.guix-profile/sbin:{{ .chezmoi.homeDir }}/.config/guix/current/bin:{{ .chezmoi.homeDir }}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games"
+	// Let Qt report its installed plugin directory when qtpaths6 is available.
+	// Without qtpaths6, Qt falls back to its compiled-in default.
+	{{ if lookPath "qtpaths6" }}QT_PLUGIN_PATH "{{ output "qtpaths6" "--query" "QT_INSTALL_PLUGINS" | trim }}"{{ end }}
 	QT_QPA_PLATFORM "wayland;xcb"
 	QT_QPA_PLATFORMTHEME "lxqt"
 	SDL_VIDEODRIVER "wayland,x11"
 	WARP_ENABLE_WAYLAND "1"
-	XCURSOR_THEME "breeze_cursors"
+	XCURSOR_THEME "TokyoNight-Breeze"
 	XCURSOR_SIZE "24"
 	XDG_SESSION_TYPE "wayland"
 }
 
 cursor {
-	xcursor-theme "breeze_cursors"
+	xcursor-theme "TokyoNight-Breeze"
 	xcursor-size 24
 }
 
@@ -323,9 +325,8 @@ cursor {
 prefer-no-csd
 
 // You can change the path where screenshots are saved.
-// A /home/rathel at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "/home/rathel/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "{{ .chezmoi.homeDir }}/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -543,7 +544,7 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn-sh "if [ -x /home/linuxbrew/.linuxbrew/bin/foot ]; then exec /home/linuxbrew/.linuxbrew/bin/foot; else exec foot; fi"; }
+	Mod+T { spawn "foot"; }
 	Mod+P { spawn-sh "foot --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
 	Mod+Alt+P hotkey-overlay-title="Pi Prompt" { spawn-sh "$HOME/.local/bin/pi-fuzzel.sh"; }
 	Mod+M hotkey-overlay-title="Streaming Services" { spawn-sh "$HOME/.local/bin/launch-players.sh"; }

@@ -10,7 +10,16 @@ browsers=(
 
 read -p "Search DuckDuckGo for: " query
 
-browser="$(printf "%s\n" "${browsers[@]}" | sk)"
+if command -v sk >/dev/null 2>&1; then
+	picker=sk
+elif command -v fzf >/dev/null 2>&1; then
+	picker=fzf
+else
+	printf 'ddg: install skim (sk) or fzf for browser selection.\n' >&2
+	exit 1
+fi
+
+browser="$(printf "%s\n" "${browsers[@]}" | "$picker")"
 
 case ${browser} in
 	"firefox")

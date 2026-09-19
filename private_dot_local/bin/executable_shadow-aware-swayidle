@@ -46,6 +46,7 @@ def swayidle_command() -> list[str]:
         "601",
         "niri msg action power-off-monitors",
         "resume",
+        "niri msg action power-on-monitors",
         "before-sleep",
         LOCK_COMMAND,
     ]

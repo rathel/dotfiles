@@ -58,4 +58,4 @@ unset _qoder_dispatcher_entry _qoder_dispatcher_rest _qoder_dispatcher_tail _qod
 
 
 # Added by Antigravity CLI installer
-export PATH="/home/rathel/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"

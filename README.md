@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal CachyOS/Arch Linux desktop configuration managed with
+Personal Linux desktop configuration managed with
 [chezmoi](https://www.chezmoi.io/).
 
 ## Home configuration
@@ -16,26 +16,26 @@ This repository manages the following parts of `$HOME`:
 - **Applications:** mpv, Zathura, Thunderbird, Vivaldi/Edge settings, QEMU,
   and Dropbox integration through rclone.
 - **Utilities:** custom commands and launchers under `~/.local/bin`, systemd
-  user units, desktop entries, icons, and the Nord - Polar Night theme.
-- **Pi:** a Nord-themed Pi coding-agent configuration and extensions.
+  user units, desktop entries, Nord-Breeze icons, and the TokyoNight theme.
+- **Pi:** a TokyoNight-themed Pi coding-agent configuration and extensions.
 
 The detailed dependency inventory is in
 [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
 ## Fresh install
 
-The setup was developed on CachyOS/Arch Linux, but the dependency list is
-package-manager agnostic. Install the native packages that provide these
-commands and applications on the target system. An AI can map these names to
-the best package manager and package names for that system:
+The setup is distribution and package-manager agnostic. Install the native
+packages that provide these commands and applications on the target system. An
+AI can map these names to the best package manager and package names for that
+system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `tofi`, `fuzzel`, `swayidle`,
-  `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
-  `udiskie`, and `awww` or `swaybg`
-- **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
-  `eza`, `nvim`, `curl`, and `python3`
+- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, optional `tofi`,
+  `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
+  `kdeconnect-indicator`, `udiskie`, and `awww` or `swaybg`
+- **Terminals and CLI:** `foot`, optional `tmux`, `ssh`, `fd`, `sk` or `fzf`,
+  `jq`, `bat`, `eza`, `nvim`, `curl`, and `python3`
 - **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
   `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
   XDG desktop portals, GNOME Keyring, `notify-send`, and `xdg-open`

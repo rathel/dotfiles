@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 # Wallpapers are on an NFS automount, so wait for the file instead of racing
-# the network mount during session startup.
-wallpaper="$HOME/Wallpapers/exec-904f07e8-d0b8-4ce3-ab72-a562b7a2febe.png"
+# the network mount during session startup. Override WALLPAPER_PATH for a
+# different image without editing the managed script.
+wallpaper="${WALLPAPER_PATH:-$HOME/Wallpapers/tokyonight.png}"
 wait_timeout=300
 poll_interval=2
 

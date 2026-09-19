@@ -1,6 +1,8 @@
 # Dependencies
 
-This is the dependency reference for the home configuration. It was developed on CachyOS/Arch Linux, but it does not prescribe a package manager. The names below are commands, services, or applications; map them to the native package names for the target system.
+This is the dependency reference for the home configuration. It is distribution
+and package-manager agnostic. The names below are commands, services, or
+applications; map them to the native package names for the target system.
 
 ## Fresh-install baseline
 
@@ -10,11 +12,11 @@ target system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `tofi`, `fuzzel`, `swayidle`,
-  `swaylock`, `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`,
-  `udiskie`, and `awww` or `swaybg`
-- **Terminals and CLI:** `foot`, `tmux`, `ssh`, `fd`, `sk`, `jq`, `bat`,
-  `eza`, `nvim`, `curl`, and `python3`
+- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, optional `tofi`,
+  `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
+  `kdeconnect-indicator`, `udiskie`, and `awww` or `swaybg`
+- **Terminals and CLI:** `foot`, optional `tmux`, `ssh`, `fd`, `sk` or `fzf`,
+  `jq`, `bat`, `eza`, `nvim`, `curl`, and `python3`
 - **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
   `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
   XDG desktop portals (`xdg-desktop-portal`, `xdg-desktop-portal-gtk`, and
@@ -36,16 +38,17 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
   `~/.config/chezmoi/key.txt` before applying encrypted files. A separate `age`
   executable is not required by default.
 - **Shell and prompt**: `fish`, `bash`, `starship`.
-- **Niri desktop**: `niri`, `quickshell` (the session starts it as `qs`),
-  `tofi`, and `fuzzel`.
-- **Interactive CLI helpers**: `skim` (`sk`), `fd`, `jq`, `bat`, `eza`, and
-  `neovim` (`nvim`).
-- **Terminal workflow**: `tmux` and an OpenSSH-compatible `ssh` client.
+- **Niri desktop**: `niri`, `quickshell` (the session accepts `quickshell` or
+  `qs`), and `fuzzel`; `tofi` is an optional preferred picker.
+- **Interactive CLI helpers**: `fd`, `jq`, `bat`, `eza`, and a fuzzy finder
+  (`skim`/`sk` or `fzf`); `neovim` (`nvim`) is optional.
+- **Terminal workflow**: optional `tmux` plus an OpenSSH-compatible `ssh`
+  client.
 - **General tools**: `curl` and `python3`.
 - **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
   config initializes them only when they are present.
-- **Fonts and cursors**: Monaspace Neon NF and the `breeze_cursors` cursor theme.
-- **Quickshell icons**: the `Surfn-Arc` icon theme is selected by the shell.
+- **Fonts and cursors**: Monaspace Neon NF and the bundled `TokyoNight-Breeze` cursor theme, a TokyoNight recolor of Breeze.
+- **Quickshell icons**: the bundled `Nord-Breeze` icon theme is selected by the shell.
 
 ## Configured terminal emulators
 
@@ -61,11 +64,11 @@ often; `alacritty` is the editor helper's preferred terminal. `ghostty` and
 
 ## Niri and Quickshell session services
 
-The Niri template starts these programs directly:
+The Niri template attempts to start these programs when available:
 
 - `swayidle` and `swaylock` on hosts other than `archlinux-beelink`.
 - `wlsunset`, `xwayland-satellite`, `kdeconnect-indicator`, `nm-applet`, and
-  `udiskie` on every host.
+  `udiskie` on every host; missing optional integrations are skipped.
 - A locally built `niri-shadow-guard` binary at
   `~/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard` on hosts
   other than `archlinux-beelink`.
@@ -118,14 +121,14 @@ The following are the non-obvious dependencies of the scripts under
 | Feature | Additional dependencies |
 | --- | --- |
 | `niri-app`, window switching, screenshots | `niri`, `fuzzel`, `jq`, `notify-send` for error notifications |
-| Desktop launcher cache | `fd`, `sk`, `awk`, `findmnt`, `sha256sum`, `stat`, `xargs` |
-| Chezmoi editors | `chezmoi`, `sk`, `bat`, `git`, an editor, and a terminal; `notify-send` is used for errors |
-| PDF launcher | `fd`, `sk`, `zathura`, `notify-send` |
+| Desktop launcher cache | `fd`, `sk` or `fzf`, `awk`, `findmnt`, `sha256sum`, `stat`, `xargs` |
+| Chezmoi editors | `chezmoi`, `sk` or `fzf`, `bat` (optional), `git`, an editor, and a terminal; `cm-edit` accepts `tofi` or `fuzzel`, and `notify-send` is used for errors |
+| PDF launcher | `fd`, `sk` or `fzf`, `zathura`, `notify-send` |
 | Streaming-service launcher | `fuzzel`, `xdg-open` (`xdg-utils`), and optionally `notify-send` |
 | Wallpaper launcher | `awww` **or** `swaybg` |
 | Stream recording helper | `yt-dlp` and `awk` |
-| Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, a terminal, and `tmux`; `wezterm` enables its tab/pane integration |
-| SSH host picker | `tofi`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and `tmux` for the special host |
+| Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, and a terminal; `tmux` enables persistent sessions and `wezterm` enables its tab/pane integration |
+| SSH host picker | `fuzzel`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and optional `tmux` for the special host |
 | Microsoft Edge installer | `curl`, `gzip`, `awk`, `ar` (`binutils`), `tar`, and `sha256sum` |
 | Desktop-entry creator | `desktop-file-validate` and `update-desktop-database` are optional; `chezmoi` is used when available |
 | Thunderbird backup | `pgrep`, `pkill`, `tar`, and `xz` |
@@ -136,8 +139,8 @@ The following are the non-obvious dependencies of the scripts under
 Most remaining commands are provided by the target system's base utilities:
 filesystem tools, `awk`, `grep`, `sed`, process tools, `util-linux`, `systemd`,
 `tar`, `xz`, and `gzip`. They normally do not need separate installation.
-`jq` and `skim` (`sk`) are the notable extra command-line tools used by
-multiple helpers.
+`jq` and a fuzzy finder (`skim`/`sk` or `fzf`) are the notable extra
+command-line tools used by multiple helpers.
 
 ## Optional external integrations
 
@@ -162,5 +165,5 @@ to apply the core dotfiles:
   script uses `awww` with a `swaybg` fallback.
 - No specific package manager is a runtime dependency of this repository.
   Flatpak, Distrobox, and Linuxbrew are optional environment choices.
-- Nord colors are embedded in the managed configurations, and Herdr plus
+- TokyoNight colors are embedded in the managed configurations, and Herdr plus
   native tmux styling do not require an external theme package.

@@ -99,7 +99,7 @@ Item {
                     width: parent.width
                     text: notification.body
                     textFormat: Text.AutoText
-                    color: theme.subtext0
+                    color: theme.text
                     font.family: "Monaspace Neon NF"
                     font.pixelSize: 18
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere

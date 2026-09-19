@@ -4,7 +4,7 @@ set -euo pipefail
 # ============================================================================
 # Chezmoi Interactive Editor
 # 
-# Fuzzy-find and edit chezmoi-managed files, with automatic git commit/push.
+# Fuzzy-find and edit chezmoi-managed files, with optional git commit/push.
 # ============================================================================
 
 # --- Configuration ---
@@ -24,24 +24,38 @@ log() {
     echo "[chezmoi-edit] $*" >&2
 }
 
-# Select target file interactively
+# Select target file. Skim is preferred; Fuzzel is a simpler fallback.
 select_target() {
+    if ! command -v sk >/dev/null 2>&1; then
+        if command -v fuzzel >/dev/null 2>&1; then
+            chezmoi managed -p absolute -x dirs |
+                fuzzel --dmenu --prompt='Edit: '
+            return
+        fi
+        die "File picker required: install sk or fuzzel"
+    fi
+
+    local preview='cat {}'
+    if command -v bat >/dev/null 2>&1; then
+        preview='bat --color=always --style=plain {}'
+    fi
+
     local -a lines
     mapfile -t lines < <(
-        chezmoi managed -p absolute -x dirs | 
+        chezmoi managed -p absolute -x dirs |
         sk --ansi \
            --with-nth=-2,-1 \
            --delimiter='/' \
            --print-query \
            --prompt="Edit: " \
-           --preview='bat --color=always --style=plain {}' \
+           --preview="$preview" \
            --preview-window='right:60%:wrap' || true
     )
-    
+
     local query="${lines[0]:-}"
     local pick="${lines[1]:-}"
-    
-    # Prefer selection, fall back to query
+
+    # Prefer selection, fall back to query.
     echo "${pick:-$query}"
 }
 
@@ -82,6 +96,10 @@ get_source_path() {
         die "Refusing to edit an unmanaged target: $target"
     fi
 
+    if [[ "$src_path" == *.age ]]; then
+        die "Encrypted targets must be edited with 'chezmoi edit': $target"
+    fi
+
     echo "$src_path"
 }
 
@@ -117,7 +135,7 @@ find_terminal() {
     return 1
 }
 
-# Create the edit-commit-push script
+# Create the edit script
 create_edit_script() {
     local repo_root="$1"
     local rel_path="$2"
@@ -138,8 +156,9 @@ cd "$REPO_ROOT"
 echo "Editing: $REL_PATH"
 echo "----------------------------------------"
 
-# Edit the file
-"$EDITOR" "$REL_PATH"
+# Edit the file. Split the common `EDITOR="zed --wait"` form into argv.
+read -r -a editor_cmd <<< "${EDITOR:-nvim}"
+"${editor_cmd[@]}" "$REL_PATH"
 
 # Check for changes
 if git diff --quiet -- "$REL_PATH" && git diff --cached --quiet -- "$REL_PATH"; then
@@ -149,19 +168,24 @@ if git diff --quiet -- "$REL_PATH" && git diff --cached --quiet -- "$REL_PATH"; 
     exit 0
 fi
 
-# Stage changes
-git add "$REL_PATH"
-
-# Show diff
+# Show the diff without staging or publishing anything automatically.
 echo ""
-echo "Changes to be committed:"
+echo "Changes:"
 echo "----------------------------------------"
+git diff -- "$REL_PATH"
 git diff --cached --stat -- "$REL_PATH"
 echo ""
 
-# Commit with descriptive message
+read -rp "Commit this change? [y/N] " commit_answer
+if [[ ! "$commit_answer" =~ ^[Yy]$ ]]; then
+    echo "Leaving changes uncommitted."
+    read -rp "Press Enter to close..." _
+    exit 0
+fi
+
+git add -- "$REL_PATH"
 commit_msg="Update $REL_PATH"
-if git commit -m "$commit_msg"; then
+if git commit --only -m "$commit_msg" -- "$REL_PATH"; then
     echo ""
     echo "✓ Committed successfully"
 else
@@ -171,19 +195,19 @@ else
     exit 1
 fi
 
-# Push changes
-echo ""
-echo "Pushing to remote..."
-if git push; then
-    echo ""
-    echo "✓ Successfully pushed changes"
-    sleep 1
+read -rp "Push this commit to origin? [y/N] " push_answer
+if [[ "$push_answer" =~ ^[Yy]$ ]]; then
+    if git push; then
+        echo "✓ Successfully pushed changes"
+    else
+        echo "✗ Push failed - check your connection and permissions" >&2
+        read -rp "Press Enter to close..." _
+        exit 1
+    fi
 else
-    echo ""
-    echo "✗ Push failed - check your connection and permissions"
-    read -rp "Press Enter to close..." _
-    exit 1
+    echo "Commit kept locally; not pushed."
 fi
+read -rp "Press Enter to close..." _
 SCRIPT_EOF
     
     chmod +x "$script_path"

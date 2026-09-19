@@ -8,12 +8,22 @@ for arg in "$@"; do
   esac
 done
 # --- Requirements -------------------------------------------------------------
-for cmd in sk fd awk sha256sum stat findmnt; do
+for cmd in fd awk sha256sum stat findmnt; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     printf '%s command not found. Please install %s to use this script.\n' "$cmd" "$cmd" >&2
     exit 1
   fi
 done
+
+picker=()
+if command -v sk >/dev/null 2>&1; then
+  picker=(sk)
+elif command -v fzf >/dev/null 2>&1; then
+  picker=(fzf)
+else
+  printf 'A fuzzy finder is required: install skim (sk) or fzf.\n' >&2
+  exit 1
+fi
 # --- Search roots -------------------------------------------------------------
 search_dirs=(
   "$HOME/.local/bin"
@@ -33,7 +43,7 @@ if ((${#find_args[@]} == 0)); then
   exit 1
 fi
 # --- Cache setup --------------------------------------------------------------
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/sk-launch"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/desktop-launch"
 cache_entries="$cache_dir/entries.tsv"
 cache_sig="$cache_dir/sig.txt"
 mkdir -p "$cache_dir"
@@ -147,7 +157,7 @@ fi
 # --- Picker -------------------------------------------------------------------
 selection=$(
   cat "$cache_entries" \
-  | sk --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' --no-sort || true
+  | "${picker[@]}" --prompt="Run: " --ansi --with-nth=1 --delimiter=$'\t' --no-sort || true
 )
 # User escaped or sk had no input
 [[ -z "$selection" ]] && exit 0

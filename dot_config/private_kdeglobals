@@ -142,7 +142,7 @@ smallestReadableFont=Monaspace Neon NF,8,-1,5,50,0,0,0,0,0
 toolBarFont=Monaspace Neon NF,9,-1,5,50,0,0,0,0,0
 
 [Icons]
-Theme=TokyoNight-Breeze
+Theme=Nord-Breeze
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop

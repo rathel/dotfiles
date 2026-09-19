@@ -243,8 +243,12 @@ if [[ $host_is_listed != true ]]; then
 fi
 
 if [[ $host == "$special_host" ]]; then
-    printf -v remote_command 'tmux new-session -A -s %q' "$tmux_session"
-    exec "$terminal" -T "SSH: $host" -e ssh -F "$ssh_config" -t -- "$host" "$remote_command"
+    if command -v tmux >/dev/null 2>&1; then
+        printf -v remote_command 'tmux new-session -A -s %q' "$tmux_session"
+        exec "$terminal" -T "SSH: $host" -e ssh -F "$ssh_config" -t -- "$host" "$remote_command"
+    fi
+    # Fall back to a normal interactive SSH session when tmux is unavailable.
+    exec "$terminal" -T "SSH: $host" -e ssh -F "$ssh_config" -t -- "$host"
 fi
 
 require_command herdr

@@ -14,10 +14,10 @@ if status is-interactive
     set fish_greeting
     # wallust_ssh
     # tmux_ssh
-    # The upgrade script needs a terminal; skip it for non-TTY startup (for example
-    # `fish -i -c ...`) and when the script is unavailable.
-    if isatty stdin; and test -x /home/rathel/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh
-        /home/rathel/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh
+    # Upgrades are opt-in so every new terminal does not run a package/system
+    # update. Set DOTFILES_AUTO_UPGRADE=1 for an interactive startup upgrade.
+    if test "$DOTFILES_AUTO_UPGRADE" = 1; and isatty stdin; and test -x "$HOME/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh"
+        "$HOME/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh"
     end
     if type -q direnv
         direnv hook fish | source
@@ -78,10 +78,23 @@ end
 
 functions --erase __guix_prepend_path
 
-# Keep Homebrew ahead of package-manager profiles in every Fish invocation, so
-# scripts and interactive shells select the current chezmoi release.
-if test -x /home/linuxbrew/.linuxbrew/bin/brew
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv fish)"
+# Keep Homebrew ahead of package-manager profiles when it is installed.
+# Discover common prefixes instead of assuming one distribution or filesystem
+# layout.
+set -l brew_command (command -v brew 2>/dev/null)
+if test -z "$brew_command"
+    for candidate in \
+        "$HOME/.linuxbrew/bin/brew" \
+        "/home/linuxbrew/.linuxbrew/bin/brew" \
+        "/opt/homebrew/bin/brew"
+        if test -x "$candidate"
+            set brew_command "$candidate"
+            break
+        end
+    end
+end
+if test -n "$brew_command"
+    eval "$($brew_command shellenv fish)"
 end
 
 # Initialize Starship after Homebrew is loaded so it is available even when
@@ -95,23 +108,23 @@ if status is-interactive
 end
 
 # Added by LM Studio CLI (lms)
-set -gx PATH $PATH /home/rathel/.lmstudio/bin
+set -gx PATH $PATH "$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
 
 # Added by Antigravity CLI installer
-set -gx PATH "/home/rathel/.local/bin" $PATH
+set -gx PATH "$HOME/.local/bin" $PATH
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/rathel/google-cloud-sdk/path.fish.inc' ]; . '/home/rathel/google-cloud-sdk/path.fish.inc'; end
+if [ -f "$HOME/google-cloud-sdk/path.fish.inc" ]; . "$HOME/google-cloud-sdk/path.fish.inc"; end
 
 # opencode
-fish_add_path /home/rathel/.opencode/bin
+fish_add_path "$HOME/.opencode/bin"
 
 # OpenClaw Completion
-test -f "/home/rathel/.openclaw/completions/openclaw.fish"; and source "/home/rathel/.openclaw/completions/openclaw.fish"
+test -f "$HOME/.openclaw/completions/openclaw.fish"; and source "$HOME/.openclaw/completions/openclaw.fish"
 
 # Pi
-fish_add_path "/home/rathel/.local/share/pi-node/node-v22.23.2-linux-x64/bin"
+fish_add_path "$HOME/.local/share/pi-node/node-v22.23.2-linux-x64/bin"
 
 # Aardwolf MUD
 alias aardwolf='telnet aardmud.org 4000'

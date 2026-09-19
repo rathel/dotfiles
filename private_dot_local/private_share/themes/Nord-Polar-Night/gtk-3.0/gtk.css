@@ -1,4 +1,4 @@
-@import url("file:///usr/share/themes/Adwaita-dark/gtk-3.0/gtk.css");
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
 
 @define-color nord0 #2e3440;
 @define-color nord1 #3b4252;

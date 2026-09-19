@@ -6,8 +6,8 @@ Guidance for AI/coding agents working in this chezmoi dotfiles repository.
 
 - This is a personal Linux desktop dotfiles repo managed by [chezmoi](https://www.chezmoi.io/).
 - Source-state files live here and are applied to `$HOME` with `chezmoi apply`.
-- Primary target platform is CachyOS/Arch Linux.
-- Active configs use the Nord - Polar Night theme with canonical Nord accents.
+- The configuration should remain Linux distribution and package-manager agnostic.
+- Active configs use the TokyoNight theme with Nord-Breeze icons and a bundled TokyoNight-Breeze cursor theme.
 
 ## Chezmoi conventions
 

@@ -5,9 +5,11 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStartPre=/usr/bin/mkdir -p %h/Dropbox
-ExecStart=/usr/bin/rclone mount --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 1h dropbox: %h/Dropbox
-ExecStop=/usr/bin/fusermount3 -u %h/Dropbox
+# Keep this optional unit quiet when rclone is not installed.
+ExecCondition=env sh -c 'command -v rclone >/dev/null 2>&1'
+ExecStartPre=mkdir -p %h/Dropbox
+ExecStart=env rclone mount --vfs-cache-mode full --vfs-cache-max-size 10G --vfs-cache-max-age 1h dropbox: %h/Dropbox
+ExecStop=env fusermount3 -u %h/Dropbox
 Restart=on-failure
 RestartSec=5s
 

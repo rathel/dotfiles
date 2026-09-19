@@ -2,6 +2,8 @@ onboarding = false
 [terminal]
 # Always start new panes, tabs, and workspaces in the home directory.
 new_cwd = "home"
+# Forward pane images through the Kitty graphics protocol.
+kitty_graphics = true
 
 [theme]
 # TokyoNight Night
@@ -15,10 +17,11 @@ selection_bg = "#33467c"
 surface0 = "#24283b"
 surface1 = "#414868"
 surface_dim = "#1a1b26"
-overlay0 = "#565f89"
+# Keep muted and secondary labels readable on the dark surfaces.
+overlay0 = "#9aa5ce"
 overlay1 = "#c0caf5"
 text = "#c0caf5"
-subtext0 = "#565f89"
+subtext0 = "#a9b1d6"
 mauve = "#bb9af7"
 green = "#9ece6a"
 yellow = "#e0af68"
@@ -64,7 +67,3 @@ rows = [
     ["state_icon", { token = "machine", fg = "#a9beb3", dim = false }, { token = "workspace", fg = "#dce8e1", bold = true, dim = false }, { token = "tab", fg = "#a9beb3", dim = false }],
     [{ token = "agent", fg = "#dce8e1", bold = true, dim = false }],
 ]
-
-[experimental]
-# Forward pane images through the Kitty graphics protocol.
-kitty_graphics = true
