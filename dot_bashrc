@@ -1,0 +1,61 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Use Zed for commands that need the default editor, and wait for edits to finish.
+export EDITOR="zed --wait"
+export VISUAL="zed --wait"
+export GIT_EDITOR="zed --wait"
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+    for rc in ~/.bashrc.d/*; do
+        if [ -f "$rc" ]; then
+            . "$rc"
+        fi
+    done
+fi
+unset rc
+
+# Start fish for interactive Bash sessions, but only once in a shell chain.
+# The exported guard prevents a nested Bash from launching another Fish.
+if [[ $- == *i* ]] && [[ -z ${BASHRC_FISH_GUARD:-} ]] && command -v fish >/dev/null 2>&1; then
+    export BASHRC_FISH_GUARD=1
+    exec fish
+fi
+. "$HOME/.cargo/env"
+
+# QODER_DISPATCHER_PATH v1
+_qoder_dispatcher_entry="$HOME/.qoder/entry"
+_qoder_dispatcher_rest=${PATH-}
+_qoder_dispatcher_tail=
+while :; do
+  case $_qoder_dispatcher_rest in
+    *:*) _qoder_dispatcher_part=${_qoder_dispatcher_rest%%:*}; _qoder_dispatcher_rest=${_qoder_dispatcher_rest#*:}; _qoder_dispatcher_more=1 ;;
+    *) _qoder_dispatcher_part=$_qoder_dispatcher_rest; _qoder_dispatcher_more= ;;
+  esac
+  if [ "$_qoder_dispatcher_part" != "$_qoder_dispatcher_entry" ]; then
+    _qoder_dispatcher_tail="${_qoder_dispatcher_tail}:${_qoder_dispatcher_part}"
+  fi
+  [ -n "$_qoder_dispatcher_more" ] || break
+done
+PATH="${_qoder_dispatcher_entry}${_qoder_dispatcher_tail}"
+export PATH
+unset _qoder_dispatcher_entry _qoder_dispatcher_rest _qoder_dispatcher_tail _qoder_dispatcher_part _qoder_dispatcher_more
+# END QODER_DISPATCHER_PATH v1
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/rathel/.local/bin:$PATH"

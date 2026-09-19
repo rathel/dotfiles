@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Allow missing variables while sourcing user env, then re-enable -u
-set +u
-if [ -f "$HOME/.myenv" ]; then 
-	source "$HOME/.myenv"
-fi
-set -u
 # --- Args ---------------------------------------------------------------------
 force_rebuild=false
 for arg in "$@"; do

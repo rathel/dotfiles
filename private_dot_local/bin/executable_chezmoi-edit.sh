@@ -24,14 +24,6 @@ log() {
     echo "[chezmoi-edit] $*" >&2
 }
 
-# Load environment if available
-load_env() {
-    set +u
-    # shellcheck disable=SC1091
-    [[ -f "$HOME/.myenv" ]] && source "$HOME/.myenv"
-    set -u
-}
-
 # Select target file interactively
 select_target() {
     local -a lines
@@ -201,8 +193,6 @@ SCRIPT_EOF
 # --- Main ---
 
 main() {
-    load_env
-    
     # Select target file
     local target
     target=$(select_target)

@@ -3,6 +3,7 @@ key.txt.age
 # Repository documentation (not home configuration)
 README.md
 DEPENDENCIES.md
+docs/**
 
 # Repository-only agent instructions
 AGENTS.md

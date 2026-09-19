@@ -1,10 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-set +u
-source "$HOME/.myenv"
-set -u
-
 # Get JSON from niri
 json=$(niri msg -j windows)
 

@@ -9,7 +9,7 @@ This repository manages the following parts of `$HOME`:
 
 - **Desktop session:** Niri, Quickshell, Tofi, Fuzzel, XDG portals, GTK/Qt settings,
   wallpapers, idle/lock helpers, and desktop services.
-- **Shell and terminal:** Fish, Bash, Starship, `.myenv`, tmux, Foot, Alacritty,
+- **Shell and terminal:** Fish, Bash, Starship, tmux, Foot, Alacritty,
   Ghostty, and WezTerm.
 - **Editors:** Emacs with Evil, Markdown mode, Eshell, and Vim-style relative
   line numbers; Zed with age-encrypted settings.
@@ -73,3 +73,5 @@ chezmoi apply
 ```
 
 Never commit the age identity or other private credentials.
+
+![Blank desktop screenshot](docs/desktop-screenshot.png)

@@ -13,7 +13,6 @@ Guidance for AI/coding agents working in this chezmoi dotfiles repository.
 
 - Chezmoi source names map to home paths:
   - `dot_config/foo` -> `~/.config/foo`
-  - `dot_myenv` -> `~/.myenv`
   - `private_dot_local/bin/executable_script` -> `~/.local/bin/script` with private permissions and executable bit
   - `*.tmpl` files are chezmoi templates; keep Go-template syntax intact.
 - Use `chezmoi add <target-path>` to import a file from `$HOME` into this repo.

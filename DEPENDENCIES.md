@@ -106,7 +106,7 @@ Install these only when using the corresponding configuration or helper:
 - **System upgrades**: `topgrade` for `dot_config/topgrade.toml`.
 
 Browser launchers can use any of the following, depending on the selected
-entry: Firefox, Zen (the default in `.myenv`), Vivaldi, Brave, Chromium/Chrome,
+entry: Firefox, Zen, Vivaldi, Brave, Chromium/Chrome,
 or Microsoft Edge. The Edge installer extracts the official package into
 `~/Applications/Utilities/microsoft-edge` without root privileges.
 
