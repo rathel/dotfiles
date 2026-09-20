@@ -14,9 +14,9 @@ if status is-interactive
     set fish_greeting
     # wallust_ssh
     # tmux_ssh
-    # Upgrades are opt-in so every new terminal does not run a package/system
-    # update. Set DOTFILES_AUTO_UPGRADE=1 for an interactive startup upgrade.
-    if test "$DOTFILES_AUTO_UPGRADE" = 1; and isatty stdin; and test -x "$HOME/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh"
+    # The upgrade script needs a terminal; skip it for non-TTY startup (for example
+    # `fish -i -c ...`) and when the script is unavailable.
+    if isatty stdin; and test -x "$HOME/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh"
         "$HOME/pg4uk-f7ecq/50_scripts/scripts/upgrade.sh"
     end
     if type -q direnv
