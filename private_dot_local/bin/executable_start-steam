@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Prefer a native Steam installation, then fall back to the Flatpak.
+if command -v steam >/dev/null 2>&1; then
+    exec steam -silent
+fi
+
+if command -v flatpak >/dev/null 2>&1 \
+    && flatpak info com.valvesoftware.Steam >/dev/null 2>&1; then
+    exec flatpak run com.valvesoftware.Steam -silent
+fi
+
+printf '%s\n' 'start-steam: neither native Steam nor the Steam Flatpak is installed' >&2
+exit 1

@@ -282,8 +282,8 @@ spawn-sh-at-startup "test -x \"$HOME/git/niri-shadow-guard-gui-src/target/releas
 spawn-sh-at-startup "if command -v quickshell >/dev/null 2>&1; then exec quickshell --no-duplicate; elif command -v qs >/dev/null 2>&1; then exec qs --no-duplicate; fi"
 // Ferdium reads startMinimized=true from ~/.config/Ferdium/config/settings.json.
 spawn-at-startup "{{ .chezmoi.homeDir }}/Applications/Communication/Ferdium-linux-Portable-7.2.3-x86_64.AppImage"
-// Optional integrations are gated so a missing package does not break startup.
-spawn-sh-at-startup "command -v steam >/dev/null 2>&1 && exec steam -silent || true"
+// Start native Steam when available, otherwise use the installed Flatpak.
+spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-steam"
 spawn-sh-at-startup "command -v wlsunset >/dev/null 2>&1 && exec wlsunset -l 34 -L -104 || true"
 {{ if lookPath "xwayland-satellite" }}
 // Use the installed xwayland-satellite through Niri's on-demand integration.
