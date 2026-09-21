@@ -156,21 +156,41 @@ main() {
   case "${1:-}" in
   -h | --help | "")
     echo "Usage:"
-    echo "  niri-app [--close] COMMAND [ARGS...]"
+    echo "  niri-app [--close] [--match APP_ID]... COMMAND [ARGS...]"
     echo
     echo "Examples:"
     echo "  niri-app --close zen-browser"
     echo "  niri-app --close thunderbird"
-    echo "  niri-app --close kate"
     echo "  niri-app --close flatpak run org.mozilla.Thunderbird"
+    echo "  niri-app --match mullvad-browser /path/to/start-mullvad-browser"
     exit 0
     ;;
-
-  -c | --close)
-    close_when_focused=true
-    shift
-    ;;
   esac
+
+  local -a explicit_apps=()
+  while (("$#" > 0)); do
+    case "$1" in
+      -c | --close)
+        close_when_focused=true
+        shift
+        ;;
+      --match)
+        if (("$#" < 2)); then
+          echo "--match requires an app-id or alias" >&2
+          exit 1
+        fi
+        explicit_apps+=("$2")
+        shift 2
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
 
   if (("$#" == 0)); then
     echo "Missing command" >&2
@@ -183,12 +203,13 @@ main() {
   log_file="$log_dir/niri-app.log"
   mkdir -p "$log_dir"
 
-  apps_json="$(
-    make_candidates "${cmd[@]}" |
-      awk 'NF && !seen[$0]++' |
-      jq -R . |
-      jq -s .
-  )"
+  apps_json="$({
+    make_candidates "${cmd[@]}"
+    printf '%s\n' "${explicit_apps[@]}"
+  } |
+    awk 'NF && !seen[$0]++' |
+    jq -R . |
+    jq -s .)"
 
   windows="$(niri msg -j windows)"
   match="$(find_matching_window "$apps_json" <<<"$windows")"

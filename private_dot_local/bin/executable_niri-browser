@@ -1,0 +1,685 @@
+#!/usr/bin/env python3
+"""Pick a browser and focus or launch the selected browser in niri.
+
+Browsers are discovered from XDG desktop entries, including Flatpak exports.
+The selected desktop-entry ID is stored in XDG state, so the niri config does
+not need to be rewritten when the selection changes.
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable
+
+
+FIELD_CODE_RE = re.compile(r"%(?:[fFuUdDnNickvm])")
+# A bare "browser" match is intentionally excluded here: applications such as
+# Journald Browser and Syncthing Web UI are not browsers. Standard browser
+# desktop files normally advertise the WebBrowser category; this regex covers
+# entries that only have a browser-like name or Flatpak ID.
+BROWSER_NAME_RE = re.compile(
+    r"(?:\bbrave\b|\bchrome\b|\bchromium\b|\bedge\b|\bepiphany\b|"
+    r"\bfirefox\b|\bfiredragon\b|\bfloorp\b|\blibrewolf\b|\bmidori\b|"
+    r"\bmullvad\b|\bnyxt\b|\bopera\b|\bqutebrowser\b|\bseamonkey\b|"
+    r"\btor(?:[ -]?browser)?\b|\bvivaldi\b|\bwaterfox\b|\bzen\b)",
+    re.IGNORECASE,
+)
+
+
+@dataclass(frozen=True)
+class Browser:
+    key: str
+    name: str
+    desktop_id: str
+    flatpak_id: str | None
+    launch_argv: tuple[str, ...]
+    startup_wm_class: str
+    hints: tuple[str, ...]
+
+    @property
+    def is_flatpak(self) -> bool:
+        return self.flatpak_id is not None
+
+
+@dataclass(frozen=True)
+class DesktopEntry:
+    path: Path
+    desktop_id: str
+    name: str
+    exec_value: str
+    categories: tuple[str, ...]
+    mime_types: tuple[str, ...]
+    flatpak_id: str | None
+    startup_wm_class: str
+    hidden: bool
+    no_display: bool
+
+
+
+def state_file() -> Path:
+    state_home = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
+    return state_home / "niri" / "selected-browser"
+
+
+
+def find_program(program: str) -> str | None:
+    """Resolve a command, accepting either a name or an absolute path."""
+    if "/" in program:
+        path = Path(program).expanduser()
+        return str(path) if path.is_file() and os.access(path, os.X_OK) else None
+    resolved = shutil.which(program)
+    if resolved:
+        return resolved
+    if program == "flatpak":
+        for candidate in (
+            "/usr/bin/flatpak",
+            "/usr/local/bin/flatpak",
+            "/usr/sbin/flatpak",
+            "/bin/flatpak",
+        ):
+            if Path(candidate).is_file() and os.access(candidate, os.X_OK):
+                return candidate
+    return None
+
+
+
+def desktop_unescape(value: str) -> str:
+    # These are the escapes used by ordinary desktop-entry string values.
+    return (
+        value.replace(r"\n", "\n")
+        .replace(r"\s", " ")
+        .replace(r"\t", "\t")
+        .replace(r"\r", "\r")
+        .replace(r"\\", "\\")
+    )
+
+
+
+def parse_bool(value: str) -> bool:
+    return value.strip().lower() == "true"
+
+
+
+def parse_desktop_entry(path: Path) -> DesktopEntry | None:
+    values: dict[str, str] = {}
+    section = ""
+
+    try:
+        with path.open("r", encoding="utf-8", errors="replace") as stream:
+            for raw_line in stream:
+                line = raw_line.rstrip("\r\n")
+                if line.startswith("[") and line.endswith("]"):
+                    section = line[1:-1]
+                    continue
+                if section != "Desktop Entry" or not line or line.startswith("#"):
+                    continue
+                if "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                if "[" in key or key in values:
+                    continue
+                values[key] = value
+    except OSError:
+        return None
+
+    if values.get("Type", "Application").strip() != "Application":
+        return None
+
+    desktop_id = path.name
+    name = desktop_unescape(values.get("Name", "").strip()) or path.stem
+    categories = tuple(
+        item.strip().lower()
+        for item in values.get("Categories", "").split(";")
+        if item.strip()
+    )
+    mime_types = tuple(
+        item.strip().lower()
+        for item in values.get("MimeType", "").split(";")
+        if item.strip()
+    )
+
+    return DesktopEntry(
+        path=path,
+        desktop_id=desktop_id,
+        name=name,
+        exec_value=values.get("Exec", "").strip(),
+        categories=categories,
+        mime_types=mime_types,
+        flatpak_id=desktop_unescape(values.get("X-Flatpak", "").strip()) or None,
+        startup_wm_class=desktop_unescape(values.get("StartupWMClass", "").strip()),
+        hidden=parse_bool(values.get("Hidden", "false")),
+        no_display=parse_bool(values.get("NoDisplay", "false")),
+    )
+
+
+
+def data_directories() -> list[Path]:
+    home = Path.home()
+    xdg_data_home = Path(os.environ.get("XDG_DATA_HOME", home / ".local/share"))
+    xdg_data_dirs = os.environ.get("XDG_DATA_DIRS", "/usr/local/share:/usr/share")
+
+    # Flatpak exports are not present in XDG_DATA_DIRS on every distribution.
+    candidates = [
+        xdg_data_home,
+        home / ".local/share/flatpak/exports/share",
+        Path("/var/lib/flatpak/exports/share"),
+    ]
+    candidates.extend(Path(item) for item in xdg_data_dirs.split(":") if item)
+
+    result: list[Path] = []
+    seen: set[Path] = set()
+    for item in candidates:
+        item = item.expanduser()
+        if item not in seen:
+            seen.add(item)
+            result.append(item)
+    return result
+
+
+
+def desktop_entries() -> list[DesktopEntry]:
+    """Read desktop entries with user entries taking precedence by filename."""
+    result: list[DesktopEntry] = []
+    seen_ids: set[str] = set()
+
+    for data_dir in data_directories():
+        applications = data_dir / "applications"
+        if not applications.is_dir():
+            continue
+        try:
+            paths = sorted(applications.glob("*.desktop"), key=lambda item: item.name)
+        except OSError:
+            continue
+        for path in paths:
+            if path.name in seen_ids:
+                continue
+            seen_ids.add(path.name)
+            entry = parse_desktop_entry(path)
+            if entry is not None:
+                result.append(entry)
+    return result
+
+
+
+def parse_exec(exec_value: str) -> list[str]:
+    """Convert a desktop Exec value into argv without URI/file placeholders."""
+    if not exec_value:
+        return []
+    try:
+        argv = shlex.split(exec_value, posix=True)
+    except ValueError:
+        return []
+
+    result: list[str] = []
+    for argument in argv:
+        # Flatpak's file-forwarding markers are only meaningful when a URI is
+        # supplied. They must not be passed when launching an empty browser.
+        if argument == "--file-forwarding" or argument.startswith("@@"):
+            continue
+        if argument.startswith("%"):
+            continue
+        argument = FIELD_CODE_RE.sub("", argument)
+        if argument:
+            result.append(argument)
+    return result
+
+
+
+def is_browser_entry(entry: DesktopEntry) -> bool:
+    if "webbrowser" in entry.categories:
+        return True
+
+    haystack = " ".join(
+        (
+            entry.name,
+            entry.desktop_id,
+            entry.flatpak_id or "",
+            entry.startup_wm_class,
+            entry.exec_value,
+        )
+    )
+    if BROWSER_NAME_RE.search(haystack):
+        return True
+
+    # MIME handlers are useful for browsers that use an unusual name, but
+    # many helper applications also claim HTTP URLs. Only accept an explicitly
+    # generic browser name in this fallback case.
+    has_web_mime = any(
+        mime in {"x-scheme-handler/http", "x-scheme-handler/https", "text/html"}
+        for mime in entry.mime_types
+    )
+    return has_web_mime and entry.name.strip().lower() in {
+        "browser",
+        "web browser",
+        "internet browser",
+    }
+
+
+
+def executable_available(argv: list[str]) -> bool:
+    if not argv:
+        return False
+    first = argv[0]
+    if first in {"env", "/usr/bin/env", "/bin/env"}:
+        for argument in argv[1:]:
+            if "=" in argument and not argument.startswith("/"):
+                continue
+            first = argument
+            break
+    return find_program(first) is not None
+
+
+
+def browserish(value: str) -> bool:
+    return bool(BROWSER_NAME_RE.search(value))
+
+
+
+def normalized(value: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", value.lower())
+
+
+
+def hint_variants(value: str) -> Iterable[str]:
+    value = value.strip()
+    if not value:
+        return
+    lower = value.lower()
+    yield lower
+    yield normalized(lower)
+    if "." in lower:
+        last = lower.rsplit(".", 1)[-1]
+        if last != "browser":
+            yield last
+    for suffix in ("-stable", "-browser", "-bin"):
+        if lower.endswith(suffix):
+            yield lower[: -len(suffix)]
+
+
+
+def browser_hints(
+    entry: DesktopEntry,
+    launch_argv: list[str],
+    flatpak_id: str | None,
+) -> tuple[str, ...]:
+    values: list[str] = []
+
+    def add(value: str) -> None:
+        for variant in hint_variants(value):
+            if variant and variant not in values:
+                values.append(variant)
+
+    add(entry.desktop_id.removesuffix(".desktop"))
+    desktop_stem = entry.path.stem
+    if desktop_stem.startswith("local-applications-"):
+        add(desktop_stem.removeprefix("local-applications-"))
+    add(entry.name)
+    add(entry.startup_wm_class)
+    add(flatpak_id or "")
+
+    if flatpak_id is None:
+        for index, argument in enumerate(launch_argv):
+            if argument.startswith("-") or argument in {"env", "/usr/bin/env", "/bin/env"}:
+                continue
+            path = Path(argument)
+            if index == 0 or browserish(argument):
+                add(path.name)
+            if path.parent.name and browserish(path.parent.name):
+                add(path.parent.name)
+            for part in path.parts:
+                if browserish(part):
+                    add(part)
+
+    # Keep this bounded even for unusual desktop files with long commands.
+    return tuple(values[:48])
+
+
+
+def make_browser(
+    entry: DesktopEntry,
+    flatpak_path: str | None,
+) -> Browser | None:
+    if entry.hidden or entry.no_display or not is_browser_entry(entry):
+        return None
+
+    if entry.flatpak_id:
+        if not flatpak_path:
+            return None
+        flatpak_id = entry.flatpak_id
+        launch_argv = [flatpak_path, "run", flatpak_id]
+    else:
+        flatpak_id = None
+        launch_argv = parse_exec(entry.exec_value)
+        if not executable_available(launch_argv):
+            return None
+
+    return Browser(
+        key=f"desktop:{entry.desktop_id}",
+        name=entry.name,
+        desktop_id=entry.desktop_id,
+        flatpak_id=flatpak_id,
+        launch_argv=tuple(launch_argv),
+        startup_wm_class=entry.startup_wm_class,
+        hints=browser_hints(entry, launch_argv, flatpak_id),
+    )
+
+
+
+def flatpak_fallbacks(
+    browsers: list[Browser],
+    flatpak_path: str | None,
+) -> list[Browser]:
+    if not flatpak_path:
+        return []
+
+    known_ids = {browser.flatpak_id for browser in browsers if browser.flatpak_id}
+    try:
+        completed = subprocess.run(
+            [flatpak_path, "list", "--app", "--columns=application,name"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return []
+
+    result: list[Browser] = []
+    for line in completed.stdout.splitlines():
+        if "\t" in line:
+            app_id, name = line.split("\t", 1)
+        else:
+            fields = line.split(None, 1)
+            if len(fields) != 2:
+                continue
+            app_id, name = fields
+        app_id = app_id.strip()
+        name = name.strip() or app_id
+        if not app_id or app_id in known_ids or not browserish(f"{app_id} {name}"):
+            continue
+
+        launch_argv = [flatpak_path, "run", app_id]
+        entry = DesktopEntry(
+            path=Path("/dev/null"),
+            desktop_id=f"flatpak-{app_id}",
+            name=name,
+            exec_value="",
+            categories=(),
+            mime_types=(),
+            flatpak_id=app_id,
+            startup_wm_class="",
+            hidden=False,
+            no_display=False,
+        )
+        result.append(
+            Browser(
+                key=f"flatpak:{app_id}",
+                name=name,
+                desktop_id=entry.desktop_id,
+                flatpak_id=app_id,
+                launch_argv=tuple(launch_argv),
+                startup_wm_class="",
+                hints=browser_hints(entry, launch_argv, app_id),
+            )
+        )
+    return result
+
+
+
+def discover_browsers() -> list[Browser]:
+    flatpak_path = find_program("flatpak")
+    browsers: list[Browser] = []
+    seen_keys: set[str] = set()
+
+    for entry in desktop_entries():
+        browser = make_browser(entry, flatpak_path)
+        if browser is not None and browser.key not in seen_keys:
+            seen_keys.add(browser.key)
+            browsers.append(browser)
+
+    for browser in flatpak_fallbacks(browsers, flatpak_path):
+        if browser.key not in seen_keys:
+            seen_keys.add(browser.key)
+            browsers.append(browser)
+
+    browsers.sort(key=lambda item: (item.name.casefold(), item.key.casefold()))
+    return browsers
+
+
+
+def browser_labels(browsers: list[Browser]) -> list[str]:
+    base_labels = [
+        f"{browser.name} [Flatpak]" if browser.is_flatpak else browser.name
+        for browser in browsers
+    ]
+    counts: dict[str, int] = {}
+    for label in base_labels:
+        counts[label.casefold()] = counts.get(label.casefold(), 0) + 1
+
+    labels: list[str] = []
+    for browser, base in zip(browsers, base_labels):
+        if counts[base.casefold()] == 1:
+            labels.append(base)
+            continue
+        suffix = browser.desktop_id.removesuffix(".desktop")
+        labels.append(f"{base} — {suffix}")
+    return labels
+
+
+
+def read_selected_key() -> str:
+    try:
+        return state_file().read_text(encoding="utf-8").splitlines()[0].strip()
+    except (FileNotFoundError, IndexError, OSError):
+        return ""
+
+
+
+def write_selected_key(key: str) -> None:
+    destination = state_file()
+    destination.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    temporary = destination.with_name(f".{destination.name}.{os.getpid()}.tmp")
+    temporary.write_text(f"{key}\n", encoding="utf-8")
+    os.chmod(temporary, 0o600)
+    os.replace(temporary, destination)
+
+
+
+def notify(summary: str, body: str) -> None:
+    notifier = find_program("notify-send")
+    if notifier:
+        try:
+            subprocess.run([notifier, summary, body], check=False, timeout=3)
+        except (OSError, subprocess.SubprocessError):
+            pass
+
+
+
+def choose_with_menu(browsers: list[Browser]) -> Browser | None:
+    if not browsers:
+        notify("Browser picker", "No browsers were found in the desktop application menus.")
+        return None
+
+    labels = browser_labels(browsers)
+    input_text = "\n".join(labels) + "\n"
+    selected_key = read_selected_key()
+    selected_index = next(
+        (index for index, browser in enumerate(browsers) if browser.key == selected_key),
+        None,
+    )
+
+    fuzzel = find_program("fuzzel")
+    if fuzzel:
+        command = [
+            fuzzel,
+            "--dmenu",
+            "--index",
+            "--no-sort",
+            "--only-match",
+            "--prompt=Browser: ",
+        ]
+        if selected_index is not None:
+            command.append(f"--select-index={selected_index}")
+        try:
+            completed = subprocess.run(
+                command,
+                input=input_text,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError) as error:
+            notify("Browser picker", f"Could not start fuzzel: {error}")
+            return None
+        if completed.returncode != 0:
+            return None
+        try:
+            index = int(completed.stdout.strip())
+        except ValueError:
+            return None
+        return browsers[index] if 0 <= index < len(browsers) else None
+
+    menu_commands = [
+        ("wofi", ["--dmenu", "--prompt", "Browser: "]),
+        ("rofi", ["-dmenu", "-p", "Browser: "]),
+        ("bemenu", ["-p", "Browser: "]),
+        ("tofi", ["--prompt-text", "Browser: "]),
+    ]
+    for program, options in menu_commands:
+        executable = find_program(program)
+        if not executable:
+            continue
+        try:
+            completed = subprocess.run(
+                [executable, *options],
+                input=input_text,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError):
+            continue
+        if completed.returncode != 0:
+            return None
+        choice = completed.stdout.strip()
+        for browser, label in zip(browsers, labels):
+            if choice == label:
+                return browser
+        return None
+
+    notify(
+        "Browser picker",
+        "Install or enable fuzzel, wofi, rofi, bemenu, or tofi to choose a browser.",
+    )
+    return None
+
+
+
+def pick_browser(browsers: list[Browser]) -> Browser | None:
+    browser = choose_with_menu(browsers)
+    if browser is None:
+        return None
+    write_selected_key(browser.key)
+    notify("Browser selected", browser.name + (" [Flatpak]" if browser.is_flatpak else ""))
+    return browser
+
+
+
+def focus_or_launch(browser: Browser) -> int:
+    niri_app = Path(__file__).with_name("niri-app")
+    if not niri_app.is_file() or not os.access(niri_app, os.X_OK):
+        niri_app_string = find_program("niri-app")
+        if not niri_app_string:
+            notify("Browser focus", "niri-app was not found.")
+            return 1
+        niri_app = Path(niri_app_string)
+
+    command = [str(niri_app)]
+    for hint in browser.hints:
+        command.extend(("--match", hint))
+    command.extend(browser.launch_argv)
+
+    try:
+        completed = subprocess.run(command, check=False)
+    except OSError as error:
+        notify("Browser focus", str(error))
+        return 1
+    if completed.returncode != 0:
+        notify("Browser focus", f"Could not focus or launch {browser.name}.")
+    return completed.returncode
+
+
+
+def focus_browser() -> int:
+    browsers = discover_browsers()
+    selected_key = read_selected_key()
+    browser = next((item for item in browsers if item.key == selected_key), None)
+
+    if browser is None:
+        browser = pick_browser(browsers)
+        if browser is None:
+            return 0
+
+    return focus_or_launch(browser)
+
+
+
+def list_browsers(browsers: list[Browser]) -> int:
+    labels = browser_labels(browsers)
+    selected_key = read_selected_key()
+    for browser, label in zip(browsers, labels):
+        marker = "*" if browser.key == selected_key else " "
+        print(f"{marker} {label}\t{browser.key}\t{shlex.join(browser.launch_argv)}")
+    return 0
+
+
+
+def clear_selection() -> int:
+    try:
+        state_file().unlink()
+    except FileNotFoundError:
+        pass
+    except OSError as error:
+        print(f"Could not clear {state_file()}: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Pick a browser, then focus or launch it from niri."
+    )
+    parser.add_argument(
+        "action",
+        nargs="?",
+        choices=("pick", "focus", "list", "clear"),
+        default="focus",
+        help="pick a browser, focus the selected browser, list browsers, or clear selection",
+    )
+    args = parser.parse_args()
+
+    browsers = discover_browsers()
+    if args.action == "list":
+        return list_browsers(browsers)
+    if args.action == "clear":
+        return clear_selection()
+    if args.action == "pick":
+        browser = pick_browser(browsers)
+        return 1 if browser is None else focus_or_launch(browser)
+    return focus_browser()
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except BrokenPipeError:
+        raise SystemExit(0)

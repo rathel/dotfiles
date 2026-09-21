@@ -560,7 +560,8 @@ binds {
 	Mod+S hotkey-overlay-title="Steam Launcher" { spawn "fish" "-c" "infisical-env steam -- $HOME/git/fuzzel-steam-launcher/tofi-steam.sh"; }
 	Mod+Shift+S hotkey-overlay-title="SSH Host Picker" { spawn-sh "$HOME/.local/bin/host-picker"; }
 	Super+Shift+T { spawn-sh "niri-app -c thunderbird"; }
-	Mod+B { spawn-sh "niri-app $HOME/Applications/Utilities/zen/zen"; }
+	Mod+B hotkey-overlay-title="Focus Selected Browser" { spawn-sh "$HOME/.local/bin/niri-browser focus"; }
+	Mod+Ctrl+B hotkey-overlay-title="Choose Browser" { spawn-sh "$HOME/.local/bin/niri-browser pick"; }
 	Mod+Shift+B { spawn-sh "niri-app -c $HOME/Applications/Communication/beeper.AppImage"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "192324"; }
 
