@@ -10,6 +10,16 @@
 (when (file-readable-p custom-file)
   (load custom-file nil 'nomessage))
 
+;; Keep backups and auto-save files in one directory instead of beside the
+;; files being edited.
+(defvar my-emacs-backup-directory
+  (expand-file-name "backups/" user-emacs-directory))
+(make-directory my-emacs-backup-directory t)
+(setq backup-directory-alist
+      `(("." . ,my-emacs-backup-directory))
+      auto-save-file-name-transforms
+      `((".*" ,my-emacs-backup-directory t)))
+
 ;; Keep Emacs focused on the buffer by hiding the traditional chrome.
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -31,21 +41,25 @@
 ;; Increase the default text size from Emacs's 10-point default to 12 points.
 (set-face-attribute 'default nil :height 120)
 
-;; Install Evil and Markdown support from NonGNU ELPA when they are not available.
+;; Install Evil, Markdown, CSV, which-key, and Treemacs from GNU, NonGNU,
+;; and MELPA
+;; when they are not available.
 (require 'package)
 (setq package-archives
       '(("gnu" . "https://elpa.gnu.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-      package-archive-priorities '(("gnu" . 10) ("nongnu" . 5))
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+        ("melpa" . "https://melpa.org/packages/"))
+      package-archive-priorities '(("gnu" . 10) ("nongnu" . 5) ("melpa" . 5))
       package-pinned-packages '((evil . "nongnu"))
-      package-selected-packages '(evil markdown-mode))
+      package-selected-packages
+      '(evil markdown-mode csv-mode which-key treemacs))
 (package-initialize)
 
-(dolist (package '(evil markdown-mode))
+(dolist (package '(evil markdown-mode csv-mode which-key treemacs))
   (unless (package-installed-p package)
     (condition-case err
         (progn
-          (unless package-archive-contents
+          (unless (assq package package-archive-contents)
             (package-refresh-contents))
           (package-install package))
       (error
@@ -56,10 +70,65 @@
 (when (require 'evil nil t)
   (evil-mode 1))
 
+;; Show available keybindings after entering a prefix key.
+(when (require 'which-key nil t)
+  (which-key-mode 1))
+
+;; Tree-style project file browser (toggle with C-c t or F8).
+(global-set-key (kbd "C-c t") #'treemacs)
+(global-set-key (kbd "<f8>") #'treemacs)
+
+(with-eval-after-load 'treemacs
+  (setq treemacs-width 32
+        treemacs-position 'left
+        treemacs-is-never-other-window t
+        treemacs-follow-after-init t)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+
+  ;; Keep tree navigation comfortable when using Evil.
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal treemacs-mode-map
+      (kbd "h") #'treemacs-collapse-parent-node
+      (kbd "j") #'treemacs-next-line
+      (kbd "k") #'treemacs-previous-line
+      (kbd "l") #'treemacs-TAB-action
+      (kbd "RET") #'treemacs-RET-action
+      (kbd "q") #'treemacs-quit)))
+
 ;; Edit Markdown files with syntax highlighting and Markdown commands.
 (when (require 'markdown-mode nil t)
   (add-to-list 'auto-mode-alist
                '("\\.\\(?:md\\|markdown\\)\\'" . markdown-mode)))
+
+;; Better CSV/TSV editing: detect separators, align columns on screen, and
+;; keep the first row visible as a header while scrolling.
+(defun my-csv-mode-setup ()
+  "Set up a CSV or TSV buffer for interactive editing."
+  (csv-guess-set-separator)
+  (csv-align-mode 1)
+  (csv-header-line))
+
+(when (require 'csv-mode nil t)
+  (setq csv-align-style 'auto
+        csv-align-padding 2
+        csv-align-max-width 50)
+  (add-hook 'csv-mode-hook #'my-csv-mode-setup)
+  (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+  (add-to-list 'auto-mode-alist '("\\.[Tt][Ss][Vv]\\'" . tsv-mode))
+
+  ;; Commands not included in csv-mode's default C-c prefix map.
+  (define-key csv-mode-map (kbd "C-c C-g") #'csv-guess-set-separator)
+  (define-key csv-mode-map (kbd "C-c C-h") #'csv-header-line)
+  (define-key csv-mode-map (kbd "C-c C-i") #'csv-insert-column)
+
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal csv-mode-map
+      (kbd "TAB") #'csv-tab-command
+      (kbd "S-TAB") #'csv-backtab-command
+      (kbd "C-c C-g") #'csv-guess-set-separator
+      (kbd "C-c C-h") #'csv-header-line
+      (kbd "C-c C-i") #'csv-insert-column)))
 
 ;; Built-in Eshell with persistent, deduplicated history.
 (defvar eshell-history-size)

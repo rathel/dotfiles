@@ -661,6 +661,21 @@ Scope {
                         text: root.volumeText
                         textColor: root.blue
                         visible: root.volumeText.length > 0
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onWheel: wheel => {
+                                if (wheel.angleDelta.y === 0)
+                                    return
+
+                                Quickshell.execDetached([
+                                    "wpctl", "set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@",
+                                    wheel.angleDelta.y > 0 ? "5%+" : "5%-"
+                                ])
+                                volumeProc.running = true
+                                wheel.accepted = true
+                            }
+                        }
                     }
 
                     StatusTab {

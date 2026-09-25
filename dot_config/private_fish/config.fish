@@ -1,9 +1,12 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
     set -g fish_key_bindings fish_vi_key_bindings
-    set -gx EDITOR "zed --wait"
-    set -gx VISUAL "zed --wait"
-    set -gx GIT_EDITOR "zed --wait"
+    # Use the running Emacs daemon for terminal editing.
+    # The empty alternate editor starts a daemon if the user service is not up.
+    set -gx EDITOR "emacsclient --tty --alternate-editor="
+    set -gx VISUAL "emacsclient --tty --alternate-editor="
+    set -gx GIT_EDITOR "emacsclient --tty --alternate-editor="
+    set -gx SUDO_EDITOR "emacsclient --tty --alternate-editor="
     fish_add_path $HOME/.local/bin
     fish_add_path $HOME/.local/state/nix/profiles/profile/bin
     if test -d "$HOME/.local/state/nix/profiles/profile/share"
