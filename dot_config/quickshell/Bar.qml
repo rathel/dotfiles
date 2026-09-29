@@ -32,6 +32,7 @@ Scope {
 
         implicitWidth: label.implicitWidth + 30
         implicitHeight: 24
+        clip: true
 
         Shape {
             anchors.fill: parent
@@ -53,8 +54,11 @@ Scope {
             id: label
             anchors.left: parent.left
             anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             color: statusTab.textColor
+            elide: Text.ElideRight
             font.family: "Monaspace Neon NF"
             font.pixelSize: root.fontSize
         }
@@ -117,14 +121,14 @@ Scope {
         const value = Math.max(0, bytesPerSecond)
 
         if (value >= 1024 * 1024) {
-            return `${(value / (1024 * 1024)).toFixed(value >= 10 * 1024 * 1024 ? 0 : 1)} MiB/s`
+            return `${(value / (1024 * 1024)).toFixed(value >= 10 * 1024 * 1024 ? 0 : 1)}M`
         }
 
         if (value >= 1024) {
-            return `${(value / 1024).toFixed(value >= 10 * 1024 ? 0 : 1)} KiB/s`
+            return `${(value / 1024).toFixed(value >= 10 * 1024 ? 0 : 1)}K`
         }
 
-        return `${Math.round(value)} B/s`
+        return `${Math.round(value)}B`
     }
 
     function setNetwork(output) {
@@ -579,12 +583,16 @@ Scope {
 
             Item {
                 anchors.fill: parent
-                anchors.margins: 8
+                anchors.margins: 10
 
                 RowLayout {
+                    id: leftStatus
                     anchors.left: parent.left
+                    anchors.right: clockSlot.left
+                    anchors.rightMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
+                    clip: true
+                    spacing: 8
 
                     StatusTab {
                         text: root.brightnessText
@@ -596,6 +604,8 @@ Scope {
                         text: root.networkText
                         textColor: root.green
                         visible: root.networkText.length > 0
+                        Layout.minimumWidth: 0
+                        Layout.maximumWidth: 340
                     }
 
                     StatusTab {
@@ -623,19 +633,34 @@ Scope {
                     }
                 }
 
-                Text {
+                Rectangle {
+                    id: clockSlot
                     anchors.centerIn: parent
-                    text: Qt.formatDateTime(clock.date, "ddd MMM d HH:mm")
-                    color: root.text
-                    font.family: "Monaspace Neon NF"
-                    font.pixelSize: root.fontSize
-                    font.bold: true
+                    width: clockLabel.implicitWidth + 24
+                    height: 24
+                    color: root.panel
+                    radius: 4
+                    z: 1
+
+                    Text {
+                        id: clockLabel
+                        anchors.centerIn: parent
+                        text: Qt.formatDateTime(clock.date, "ddd MMM d HH:mm")
+                        color: root.text
+                        font.family: "Monaspace Neon NF"
+                        font.pixelSize: root.fontSize
+                        font.bold: true
+                    }
                 }
 
                 RowLayout {
+                    id: rightStatus
+                    anchors.left: clockSlot.right
+                    anchors.leftMargin: 10
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 4
+                    clip: true
+                    spacing: 8
 
                     StatusTab {
                         text: root.rebootText
