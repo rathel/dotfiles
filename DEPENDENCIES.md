@@ -126,6 +126,7 @@ The following are the non-obvious dependencies of the scripts under
 | PDF launcher | `fd`, `sk` or `fzf`, `zathura`, `notify-send` |
 | Streaming-service launcher | `fuzzel`, `xdg-open` (`xdg-utils`), and optionally `notify-send` |
 | Wallpaper launcher | `awww` **or** `swaybg` |
+| Niri polkit prompts | An installed graphical authentication agent (KDE, GNOME, Hyprland, LXQt, MATE, Xfce, or Pantheon); Plasma's user service is used when available |
 | Stream recording helper | `yt-dlp` and `awk` |
 | Tailscale SSH helper | `tailscale`, `hostnamectl`, `ssh`, and a terminal; `tmux` enables persistent sessions and `wezterm` enables its tab/pane integration |
 | SSH host picker | `fuzzel`, a terminal (defaults to `foot`), `ssh`, `python3`, `herdr`, and optional `tmux` for the special host |

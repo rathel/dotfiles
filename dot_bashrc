@@ -11,6 +11,26 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 fi
 export PATH
 
+# Make the active local Wayland/Xwayland displays available to shells started
+# outside the graphical niri session (for example, SSH and coding agents).
+if [[ -z "${WAYLAND_DISPLAY:-}" && -n "${XDG_RUNTIME_DIR:-}" ]]; then
+    for _wayland_socket in "$XDG_RUNTIME_DIR"/wayland-[0-9]*; do
+        if [[ -S "$_wayland_socket" ]]; then
+            export WAYLAND_DISPLAY="${_wayland_socket##*/}"
+            break
+        fi
+    done
+fi
+if [[ -z "${DISPLAY:-}" ]]; then
+    for _x_socket in /tmp/.X11-unix/X*; do
+        if [[ -S "$_x_socket" ]]; then
+            export DISPLAY=":${_x_socket##*X}"
+            break
+        fi
+    done
+fi
+unset _wayland_socket _x_socket
+
 # Use the running Emacs daemon for commands that need the default editor.
 # The empty alternate editor starts a daemon if the user service is not up.
 export EDITOR="emacsclient --tty --alternate-editor="
@@ -42,7 +62,7 @@ if [[ $- == *i* ]] && [[ -t 0 && -t 1 ]] && command -v fish >/dev/null 2>&1; the
     fi
     unset _bashrc_parent_shell
 fi
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # QODER_DISPATCHER_PATH v1
 _qoder_dispatcher_entry="$HOME/.qoder/entry"
@@ -65,4 +85,4 @@ unset _qoder_dispatcher_entry _qoder_dispatcher_rest _qoder_dispatcher_tail _qod
 
 
 # Added by Antigravity CLI installer
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bun/bin:$HOME/.local/bin:$PATH"

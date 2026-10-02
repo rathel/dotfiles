@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Prefer Plasma's user service when available, then launch an installed agent.
+if command -v systemctl >/dev/null 2>&1 \
+    && systemctl --user start plasma-polkit-agent.service >/dev/null 2>&1; then
+    exit 0
+fi
+
+# Search commands first, then common libexec locations used by distro packages.
+for agent in \
+    hyprpolkitagent \
+    polkit-kde-authentication-agent-1 \
+    polkit-gnome-authentication-agent-1 \
+    lxqt-policykit-agent \
+    polkit-mate-authentication-agent-1 \
+    mate-polkit \
+    xfce-polkit \
+    lxpolkit
+do
+    if command -v "$agent" >/dev/null 2>&1; then
+        exec "$(command -v "$agent")"
+    fi
+done
+
+for agent in \
+    /usr/lib/hyprpolkitagent/hyprpolkitagent \
+    /usr/lib/polkit-kde-authentication-agent-1 \
+    /usr/libexec/polkit-kde-authentication-agent-1 \
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 \
+    /usr/libexec/polkit-gnome-authentication-agent-1 \
+    /usr/lib/mate-polkit/polkit-mate-authentication-agent-1 \
+    /usr/libexec/polkit-mate-authentication-agent-1 \
+    /usr/lib/xfce-polkit/xfce-polkit \
+    /usr/lib/policykit-1-pantheon/io.elementary.desktop.agent-polkit
+ do
+    if [ -x "$agent" ]; then
+        exec "$agent"
+    fi
+done
+
+printf '%s\n' 'start-polkit-agent: no supported graphical polkit authentication agent found' >&2
+exit 1

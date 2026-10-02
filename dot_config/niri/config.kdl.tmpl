@@ -293,6 +293,7 @@ xwayland-satellite {
 {{ end }}
 spawn-sh-at-startup "command -v kdeconnect-indicator >/dev/null 2>&1 && exec kdeconnect-indicator || true"
 spawn-sh-at-startup "command -v nm-applet >/dev/null 2>&1 && exec nm-applet || true"
+spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-polkit-agent"
 spawn-sh-at-startup "command -v udiskie >/dev/null 2>&1 && exec udiskie -t || true"
 spawn-sh-at-startup "test -x \"$HOME/.local/bin/wallpaper.sh\" && exec \"$HOME/.local/bin/wallpaper.sh\" || true"
 
