@@ -22,7 +22,7 @@ Scope {
     readonly property color greenDim: theme.greenDim
     readonly property color yellow: theme.yellow
     readonly property color red: theme.red
-    readonly property int fontSize: 18
+    readonly property int fontSize: 16
 
     component StatusTab: Item {
         id: statusTab
@@ -30,8 +30,8 @@ Scope {
         property alias text: label.text
         property color textColor: root.text
 
-        implicitWidth: label.implicitWidth + 30
-        implicitHeight: 24
+        implicitWidth: label.implicitWidth + 24
+        implicitHeight: 22
         clip: true
 
         Shape {
@@ -40,22 +40,23 @@ Scope {
             ShapePath {
                 fillColor: root.panel
                 strokeWidth: 0
-                startX: 0
+                startX: 10
                 startY: 0
                 PathLine { x: statusTab.width - 10; y: 0 }
                 PathLine { x: statusTab.width; y: statusTab.height / 2 }
                 PathLine { x: statusTab.width - 10; y: statusTab.height }
-                PathLine { x: 0; y: statusTab.height }
-                PathLine { x: 0; y: 0 }
+                PathLine { x: 10; y: statusTab.height }
+                PathLine { x: 0; y: statusTab.height / 2 }
+                PathLine { x: 10; y: 0 }
             }
         }
 
         Text {
             id: label
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: 6
             anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.rightMargin: 6
             anchors.verticalCenter: parent.verticalCenter
             color: statusTab.textColor
             elide: Text.ElideRight
@@ -577,22 +578,22 @@ Scope {
                 right: true
             }
 
-            implicitHeight: 36
+            implicitHeight: 32
             color: root.bg
             focusable: false
 
             Item {
                 anchors.fill: parent
-                anchors.margins: 10
+                anchors.margins: 6
 
-                RowLayout {
+                Row {
                     id: leftStatus
                     anchors.left: parent.left
                     anchors.right: clockSlot.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: 6
                     anchors.verticalCenter: parent.verticalCenter
                     clip: true
-                    spacing: 8
+                    spacing: -10
 
                     StatusTab {
                         text: root.brightnessText
@@ -604,8 +605,6 @@ Scope {
                         text: root.networkText
                         textColor: root.green
                         visible: root.networkText.length > 0
-                        Layout.minimumWidth: 0
-                        Layout.maximumWidth: 340
                     }
 
                     StatusTab {
@@ -636,8 +635,8 @@ Scope {
                 Rectangle {
                     id: clockSlot
                     anchors.centerIn: parent
-                    width: clockLabel.implicitWidth + 24
-                    height: 24
+                    width: clockLabel.implicitWidth + 16
+                    height: 22
                     color: root.panel
                     radius: 4
                     z: 1
@@ -653,60 +652,63 @@ Scope {
                     }
                 }
 
-                RowLayout {
+                Row {
                     id: rightStatus
-                    anchors.left: clockSlot.right
-                    anchors.leftMargin: 10
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     clip: true
                     spacing: 8
 
-                    StatusTab {
-                        text: root.rebootText
-                        textColor: root.rebootNeeded ? root.red : root.green
-                        visible: root.rebootText.length > 0
-                    }
+                    Row {
+                        id: rightWidgets
+                        spacing: -10
 
-                    StatusTab {
-                        text: root.weatherText
-                        textColor: root.blue
-                        visible: root.weatherText.length > 0
-                    }
+                        StatusTab {
+                            text: root.rebootText
+                            textColor: root.rebootNeeded ? root.red : root.green
+                            visible: root.rebootText.length > 0
+                        }
 
-                    StatusTab {
-                        text: root.codexText
-                        textColor: Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 90
-                            ? root.red
-                            : Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 70 ? root.yellow : root.green
-                        visible: root.codexText.length > 0
-                    }
+                        StatusTab {
+                            text: root.weatherText
+                            textColor: root.blue
+                            visible: root.weatherText.length > 0
+                        }
 
-                    StatusTab {
-                        text: root.volumeText
-                        textColor: root.blue
-                        visible: root.volumeText.length > 0
+                        StatusTab {
+                            text: root.codexText
+                            textColor: Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 90
+                                ? root.red
+                                : Math.max(root.codexFiveHourUsage, root.codexWeeklyUsage) >= 70 ? root.yellow : root.green
+                            visible: root.codexText.length > 0
+                        }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onWheel: wheel => {
-                                if (wheel.angleDelta.y === 0)
-                                    return
+                        StatusTab {
+                            text: root.volumeText
+                            textColor: root.blue
+                            visible: root.volumeText.length > 0
 
-                                Quickshell.execDetached([
-                                    "wpctl", "set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@",
-                                    wheel.angleDelta.y > 0 ? "5%+" : "5%-"
-                                ])
-                                volumeProc.running = true
-                                wheel.accepted = true
+                            MouseArea {
+                                anchors.fill: parent
+                                onWheel: wheel => {
+                                    if (wheel.angleDelta.y === 0)
+                                        return
+
+                                    Quickshell.execDetached([
+                                        "wpctl", "set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@",
+                                        wheel.angleDelta.y > 0 ? "5%+" : "5%-"
+                                    ])
+                                    volumeProc.running = true
+                                    wheel.accepted = true
+                                }
                             }
                         }
-                    }
 
-                    StatusTab {
-                        text: root.batteryText
-                        textColor: root.text
-                        visible: root.batteryText.length > 0
+                        StatusTab {
+                            text: root.batteryText
+                            textColor: root.text
+                            visible: root.batteryText.length > 0
+                        }
                     }
 
                     Repeater {
