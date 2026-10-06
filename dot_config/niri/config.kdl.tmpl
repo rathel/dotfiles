@@ -295,7 +295,7 @@ spawn-sh-at-startup "command -v kdeconnect-indicator >/dev/null 2>&1 && exec kde
 spawn-sh-at-startup "command -v nm-applet >/dev/null 2>&1 && exec nm-applet || true"
 spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-polkit-agent"
 spawn-sh-at-startup "command -v udiskie >/dev/null 2>&1 && exec udiskie -t || true"
-spawn-sh-at-startup "test -x \"$HOME/.local/bin/wallpaper.sh\" && exec \"$HOME/.local/bin/wallpaper.sh\" || true"
+spawn-sh-at-startup "test -x \"$HOME/.local/bin/rotate-wallpapers\" && exec \"$HOME/.local/bin/rotate-wallpapers\" || true"
 
 environment {
 	CHROME_USE_OZONE "1"
@@ -541,8 +541,8 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 
 	// Suggested binds for running programs: terminal, app launcher, screen locker.
-	Mod+T { spawn "niri-app" "-c" "foot"; }
-	Mod+P { spawn-sh "foot --title=scratch -e $HOME/.local/bin/cm-edit.sh"; }
+	Mod+T { spawn "niri-app" "kitty"; }
+	Mod+P { spawn-sh "kitty --title=scratch $HOME/.local/bin/cm-edit.sh"; }
 	Mod+Alt+P hotkey-overlay-title="Pi Prompt" { spawn-sh "$HOME/.local/bin/pi-fuzzel.sh"; }
 	Mod+M hotkey-overlay-title="Vivobook Caddy" { spawn "xdg-open" "http://debian-vivobook/"; }
 

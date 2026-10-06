@@ -27,7 +27,7 @@ FIELD_CODE_RE = re.compile(r"%(?:[fFuUdDnNickvm])")
 # entries that only have a browser-like name or Flatpak ID.
 BROWSER_NAME_RE = re.compile(
     r"(?:\bbrave\b|\bchrome\b|\bchromium\b|\bedge\b|\bepiphany\b|"
-    r"\bfirefox\b|\bfiredragon\b|\bfloorp\b|\blibrewolf\b|\bmidori\b|"
+    r"\bfirefox\b|\bfiredragon\b|\bfloorp\b|\bhelium\b|\blibrewolf\b|\bmidori\b|"
     r"\bmullvad\b|\bnyxt\b|\bopera\b|\bqutebrowser\b|\bseamonkey\b|"
     r"\btor(?:[ -]?browser)?\b|\bvivaldi\b|\bwaterfox\b|\bzen\b)",
     re.IGNORECASE,

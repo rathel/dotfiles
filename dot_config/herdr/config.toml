@@ -6,30 +6,8 @@ new_cwd = "home"
 kitty_graphics = true
 
 [theme]
-# TokyoNight Night
-name = "terminal"
-
-[theme.custom]
-panel_bg = "#1a1b26"
-sidebar_bg = "#16161e"
-active_row_bg = "#24283b"
-selection_bg = "#33467c"
-surface0 = "#24283b"
-surface1 = "#414868"
-surface_dim = "#1a1b26"
-# Keep muted and secondary labels readable on the dark surfaces.
-overlay0 = "#9aa5ce"
-overlay1 = "#c0caf5"
-text = "#c0caf5"
-subtext0 = "#a9b1d6"
-mauve = "#bb9af7"
-green = "#9ece6a"
-yellow = "#e0af68"
-red = "#f7768e"
-blue = "#7aa2f7"
-teal = "#7dcfff"
-peach = "#ff9e64"
-accent = "#7aa2f7"
+# Herdr's built-in Catppuccin theme uses Mocha.
+name = "catppuccin"
 
 [keys]
 # Vim-style pane movement in Navigate mode; workspace movement stays on arrows.
