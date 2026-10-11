@@ -1,0 +1,98 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita-dark/gtk.css");
+
+@define-color ctp_crust #11111b;
+@define-color ctp_mantle #181825;
+@define-color ctp_base #1e1e2e;
+@define-color ctp_surface0 #313244;
+@define-color ctp_surface1 #45475a;
+@define-color ctp_surface2 #585b70;
+@define-color ctp_overlay0 #6c7086;
+@define-color ctp_subtext0 #a6adc8;
+@define-color ctp_subtext1 #bac2de;
+@define-color ctp_text #cdd6f4;
+@define-color ctp_mauve #cba6f7;
+@define-color ctp_red #f38ba8;
+@define-color ctp_peach #fab387;
+@define-color ctp_yellow #f9e2af;
+@define-color ctp_green #a6e3a1;
+@define-color ctp_sky #89dceb;
+@define-color ctp_sapphire #74c7ec;
+@define-color ctp_blue #89b4fa;
+@define-color ctp_lavender #b4befe;
+
+.background,
+window {
+  background-color: @ctp_base;
+  color: @ctp_text;
+}
+
+headerbar,
+.titlebar {
+  background-color: @ctp_mantle;
+  color: @ctp_text;
+}
+
+button {
+  background-color: @ctp_surface0;
+  color: @ctp_text;
+  border-color: @ctp_surface1;
+  box-shadow: none;
+}
+
+button:hover {
+  background-color: @ctp_surface1;
+  color: @ctp_text;
+}
+
+button:active,
+button:checked {
+  background-color: @ctp_mauve;
+  color: @ctp_base;
+}
+
+entry,
+textview,
+textview text,
+view,
+listview,
+columnview {
+  background-color: @ctp_base;
+  color: @ctp_text;
+}
+
+entry:focus {
+  border-color: @ctp_mauve;
+  box-shadow: 0 0 0 1px @ctp_mauve;
+}
+
+popover,
+popover.background,
+menu,
+tooltip {
+  background-color: @ctp_surface0;
+  color: @ctp_text;
+}
+
+row:hover,
+modelbutton:hover {
+  background-color: @ctp_surface1;
+  color: @ctp_text;
+}
+
+selection {
+  background-color: @ctp_mauve;
+  color: @ctp_base;
+}
+
+scale highlight,
+progressbar progress {
+  background-color: @ctp_mauve;
+}
+
+scrollbar slider {
+  background-color: @ctp_surface1;
+}
+
+*:disabled {
+  color: @ctp_overlay0;
+}

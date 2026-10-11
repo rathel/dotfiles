@@ -28,28 +28,28 @@ progress_bar_frame_width = 1
 separator_height = 2
 ignore_dbusclose = false
 force_xwayland = false
-# TokyoNight Night
-frame_color = "#7AA2F7"
-highlight = "#7AA2F7"
-separator_color = "#33467C"
+# Catppuccin Mocha
+frame_color = "#89B4FA"
+highlight = "#89B4FA"
+separator_color = "#45475A"
 
 [experimental]
 per_monitor_dpi = false
 
 [urgency_low]
 timeout = 2
-background = "#1A1B26EE"
-foreground = "#C0CAF5"
-frame_color = "#414868"
+background = "#1E1E2EEE"
+foreground = "#CDD6F4"
+frame_color = "#585b70"
 
 [urgency_normal]
 timeout = 3
-background = "#1A1B2680"
-foreground = "#C0CAF5"
-frame_color = "#7AA2F7"
+background = "#1E1E2E80"
+foreground = "#CDD6F4"
+frame_color = "#89B4FA"
 
 [urgency_critical]
 timeout = 4
-background = "#1A1B26EE"
-foreground = "#E0E6FF"
-frame_color = "#F7768E"
+background = "#1E1E2EEE"
+foreground = "#BAC2DE"
+frame_color = "#F38BA8"

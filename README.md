@@ -16,8 +16,8 @@ This repository manages the following parts of `$HOME`:
 - **Applications:** mpv, Zathura, Thunderbird, Vivaldi/Edge settings, QEMU,
   and Dropbox integration through rclone.
 - **Utilities:** custom commands and launchers under `~/.local/bin`, systemd
-  user units, desktop entries, Nord-Breeze icons, and the TokyoNight theme.
-- **Pi:** a TokyoNight-themed Pi coding-agent configuration and extensions.
+  user units, desktop entries, Papirus icons with Catppuccin Mauve folders, and Catppuccin Mocha GTK colors.
+- **Pi:** a Catppuccin Mocha-themed Pi coding-agent configuration and extensions.
 
 The detailed dependency inventory is in
 [`DEPENDENCIES.md`](DEPENDENCIES.md).

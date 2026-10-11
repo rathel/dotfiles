@@ -28,80 +28,80 @@ config.window_close_confirmation = "AlwaysPrompt"
 config.default_cursor_style = "SteadyBlock"
 config.cursor_blink_rate = 0
 
--- TokyoNight Night
-local tokyo = {
-  background = "#1a1b26",
-  background_alt = "#16161e",
-  surface = "#24283b",
-  selection = "#33467c",
-  border = "#414868",
-  accent = "#7aa2f7",
-  foreground = "#c0caf5",
-  bright = "#e0e6ff",
-  muted = "#565f89",
-  info = "#7dcfff",
-  warning = "#e0af68",
-  error = "#f7768e",
-  green = "#9ece6a",
-  magenta = "#bb9af7",
-  orange = "#ff9e64",
+-- Catppuccin Mocha
+local mocha = {
+  background = "#1e1e2e",
+  background_alt = "#181825",
+  surface = "#313244",
+  selection = "#45475a",
+  border = "#585b70",
+  accent = "#89b4fa",
+  foreground = "#cdd6f4",
+  bright = "#bac2de",
+  muted = "#6c7086",
+  info = "#74c7ec",
+  warning = "#f9e2af",
+  error = "#f38ba8",
+  green = "#a6e3a1",
+  magenta = "#cba6f7",
+  orange = "#fab387",
 }
 
 config.colors = {
-  foreground = tokyo.foreground,
-  background = tokyo.background,
-  cursor_bg = tokyo.accent,
-  cursor_fg = tokyo.background,
-  cursor_border = tokyo.accent,
-  selection_fg = tokyo.bright,
-  selection_bg = tokyo.selection,
-  scrollbar_thumb = tokyo.border,
-  split = tokyo.border,
+  foreground = mocha.foreground,
+  background = mocha.background,
+  cursor_bg = mocha.accent,
+  cursor_fg = mocha.background,
+  cursor_border = mocha.accent,
+  selection_fg = mocha.bright,
+  selection_bg = mocha.selection,
+  scrollbar_thumb = mocha.border,
+  split = mocha.border,
   ansi = {
-    tokyo.background_alt,
-    tokyo.error,
-    tokyo.green,
-    tokyo.warning,
-    tokyo.accent,
-    tokyo.magenta,
-    tokyo.info,
-    tokyo.foreground,
+    mocha.background_alt,
+    mocha.error,
+    mocha.green,
+    mocha.warning,
+    mocha.accent,
+    mocha.magenta,
+    mocha.info,
+    mocha.foreground,
   },
   brights = {
-    tokyo.border,
-    tokyo.error,
-    tokyo.green,
-    tokyo.orange,
-    tokyo.accent,
-    tokyo.magenta,
-    tokyo.info,
-    tokyo.bright,
+    mocha.border,
+    mocha.error,
+    mocha.green,
+    mocha.orange,
+    mocha.accent,
+    mocha.magenta,
+    mocha.info,
+    mocha.bright,
   },
   indexed = {
-    [16] = tokyo.warning,
-    [17] = tokyo.error,
+    [16] = mocha.warning,
+    [17] = mocha.error,
   },
   tab_bar = {
-    background = tokyo.background,
+    background = mocha.background,
     active_tab = {
-      bg_color = tokyo.accent,
-      fg_color = tokyo.background,
+      bg_color = mocha.accent,
+      fg_color = mocha.background,
     },
     inactive_tab = {
-      bg_color = tokyo.surface,
-      fg_color = tokyo.foreground,
+      bg_color = mocha.surface,
+      fg_color = mocha.foreground,
     },
     inactive_tab_hover = {
-      bg_color = tokyo.selection,
-      fg_color = tokyo.bright,
+      bg_color = mocha.selection,
+      fg_color = mocha.bright,
     },
     new_tab = {
-      bg_color = tokyo.surface,
-      fg_color = tokyo.foreground,
+      bg_color = mocha.surface,
+      fg_color = mocha.foreground,
     },
     new_tab_hover = {
-      bg_color = tokyo.selection,
-      fg_color = tokyo.bright,
+      bg_color = mocha.selection,
+      fg_color = mocha.bright,
     },
   },
 }
@@ -115,15 +115,15 @@ config.show_new_tab_button_in_tab_bar = false
 local left_arrow = wezterm.nerdfonts.pl_right_hard_divider
 local right_arrow = wezterm.nerdfonts.pl_left_hard_divider
 wezterm.on("format-tab-title", function(tab, _, _, _, hover)
-  local background = tokyo.surface
-  local foreground = tokyo.foreground
+  local background = mocha.surface
+  local foreground = mocha.foreground
 
   if tab.is_active then
-    background = tokyo.accent
-    foreground = tokyo.background
+    background = mocha.accent
+    foreground = mocha.background
   elseif hover then
-    background = tokyo.selection
-    foreground = tokyo.bright
+    background = mocha.selection
+    foreground = mocha.bright
   end
 
   local title = tab.tab_title
@@ -132,13 +132,13 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover)
   end
 
   return {
-    { Background = { Color = tokyo.background } },
+    { Background = { Color = mocha.background } },
     { Foreground = { Color = background } },
     { Text = left_arrow },
     { Background = { Color = background } },
     { Foreground = { Color = foreground } },
     { Text = " " .. title .. " " },
-    { Background = { Color = tokyo.background } },
+    { Background = { Color = mocha.background } },
     { Foreground = { Color = background } },
     { Text = right_arrow },
   }

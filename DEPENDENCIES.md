@@ -47,8 +47,9 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
 - **General tools**: `curl` and `python3`.
 - **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
   config initializes them only when they are present.
-- **Fonts and cursors**: Monaspace Neon NF and the bundled `TokyoNight-Breeze` cursor theme, a TokyoNight recolor of Breeze.
-- **Quickshell icons**: the bundled `Nord-Breeze` icon theme is selected by the shell.
+- **Fonts and cursors**: Monaspace Neon NF and the Catppuccin Mocha Mauve cursor theme (`catppuccin-mocha-mauve-cursors`). Install the cursor assets from the Catppuccin cursors releases before selecting the theme.
+- **Icons**: Papirus-Dark, with the Catppuccin Papirus folders integration applied using the Mauve accent. Install Papirus and the folder-color assets before selecting the theme.
+- **GTK colors**: a local Catppuccin Mocha GTK3/GTK4 stylesheet is managed under `~/.local/share/themes/Catppuccin-Mocha`.
 
 ## Configured terminal emulators
 
@@ -166,5 +167,5 @@ to apply the core dotfiles:
   script uses `awww` with a `swaybg` fallback.
 - No specific package manager is a runtime dependency of this repository.
   Flatpak, Distrobox, and Linuxbrew are optional environment choices.
-- TokyoNight colors are embedded in the managed configurations, and Herdr plus
-  native tmux styling do not require an external theme package.
+- Catppuccin Mocha colors are embedded in the managed configurations, and Herdr
+  plus native tmux styling do not require an external theme package.

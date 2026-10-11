@@ -1,0 +1,67 @@
+# Catppuccin Mocha shared terminal palette.
+
+[colors.primary]
+background = "#1e1e2e"
+foreground = "#cdd6f4"
+dim_foreground = "#6c7086"
+bright_foreground = "#bac2de"
+
+[colors.cursor]
+text = "#1e1e2e"
+cursor = "#89b4fa"
+
+[colors.vi_mode_cursor]
+text = "#1e1e2e"
+cursor = "#89b4fa"
+
+[colors.search.matches]
+foreground = "#bac2de"
+background = "#45475a"
+
+[colors.search.focused_match]
+foreground = "#1e1e2e"
+background = "#89b4fa"
+
+[colors.footer_bar]
+foreground = "#cdd6f4"
+background = "#313244"
+
+[colors.hints.start]
+foreground = "#1e1e2e"
+background = "#f9e2af"
+
+[colors.hints.end]
+foreground = "#1e1e2e"
+background = "#74c7ec"
+
+[colors.selection]
+text = "#bac2de"
+background = "#45475a"
+
+[colors.normal]
+black = "#11111b"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#cba6f7"
+cyan = "#74c7ec"
+white = "#bac2de"
+
+[colors.bright]
+black = "#585b70"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#cba6f7"
+cyan = "#74c7ec"
+white = "#cdd6f4"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#fab387"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#f38ba8"

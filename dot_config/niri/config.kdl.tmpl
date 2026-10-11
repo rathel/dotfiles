@@ -162,10 +162,10 @@ layout {
 		// - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
 		// Color of the ring on the active monitor.
-		active-color "#7aa2f7"
+		active-color "#89b4fa"
 
 		// Color of the ring on inactive monitors.
-		inactive-color "#414868"
+		inactive-color "#585b70"
 
 		// You can also use gradients. They take precedence over solid colors.
 		// Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -174,13 +174,13 @@ layout {
 		// You can use any CSS linear-gradient tool on the web to set these up.
 		// Changing the color space is also supported, check the wiki for more info.
 		//
-		// active-gradient from="#7dcfff" to="#7aa2f7" angle=45
+		// active-gradient from="#89dceb" to="#89b4fa" angle=45
 
 		// You can also color the gradient relative to the entire view
 		// of the workspace, rather than relative to just the window itself.
 		// To do that, set relative-to="workspace-view".
 		//
-		// inactive-gradient from="#16161e" to="#414868" angle=45 relative-to="workspace-view"
+		// inactive-gradient from="#181825" to="#585b70" angle=45 relative-to="workspace-view"
 	}
 
 	// You can also add a border. It's similar to the focus ring, but always visible.
@@ -189,21 +189,21 @@ layout {
 		// If you enable the border, you probably want to disable the focus ring.
 		// off
 
-		// TokyoNight.
+		// Catppuccin Mocha.
 		width 2
-		active-color "#7aa2f7"
-		inactive-color "#414868"
+		active-color "#89b4fa"
+		inactive-color "#585b70"
 
 		// Color of the border around windows that request your attention.
-		urgent-color "#f7768e"
+		urgent-color "#f38ba8"
 
 		// Gradients can use a few different interpolation color spaces.
-		// For example, this is a TokyoNight gradient via in="oklch longer hue".
+		// For example, use Catppuccin Mocha colors with in="oklch longer hue".
 		//
-		// active-gradient from="#7dcfff" to="#414868" angle=45 relative-to="workspace-view" in="oklch longer hue"
+		// active-gradient from="#89dceb" to="#585b70" angle=45 relative-to="workspace-view" in="oklch longer hue"
 
-		// active-gradient from="#7dcfff" to="#7aa2f7" angle=45 relative-to="workspace-view"
-		// inactive-gradient from="#16161e" to="#414868" angle=45 relative-to="workspace-view"
+		// active-gradient from="#89dceb" to="#89b4fa" angle=45 relative-to="workspace-view"
+		// inactive-gradient from="#181825" to="#585b70" angle=45 relative-to="workspace-view"
 	}
 
 	// You can enable drop shadows for windows.
@@ -240,7 +240,7 @@ layout {
 		offset x=0 y=5
 
 		// You can also change the shadow color and opacity.
-		color "#1a1b26cc"
+		color "#1e1e2ecc"
 	}
 
 	// Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -280,8 +280,6 @@ spawn-sh-at-startup "test -x \"$HOME/git/niri-shadow-guard-gui-src/target/releas
 
 // Use whichever command name the installed Quickshell package provides.
 spawn-sh-at-startup "if command -v quickshell >/dev/null 2>&1; then exec quickshell --no-duplicate; elif command -v qs >/dev/null 2>&1; then exec qs --no-duplicate; fi"
-// Ferdium reads startMinimized=true from ~/.config/Ferdium/config/settings.json.
-spawn-at-startup "{{ .chezmoi.homeDir }}/Applications/Communication/Ferdium-linux-Portable-7.2.3-x86_64.AppImage"
 // Start native Steam when available, otherwise use the installed Flatpak.
 spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-steam"
 spawn-sh-at-startup "command -v wlsunset >/dev/null 2>&1 && exec wlsunset -l 34 -L -104 || true"
@@ -310,13 +308,13 @@ environment {
 	QT_QPA_PLATFORMTHEME "lxqt"
 	SDL_VIDEODRIVER "wayland,x11"
 	WARP_ENABLE_WAYLAND "1"
-	XCURSOR_THEME "TokyoNight-Breeze"
+	XCURSOR_THEME "catppuccin-mocha-mauve-cursors"
 	XCURSOR_SIZE "24"
 	XDG_SESSION_TYPE "wayland"
 }
 
 cursor {
-	xcursor-theme "TokyoNight-Breeze"
+	xcursor-theme "catppuccin-mocha-mauve-cursors"
 	xcursor-size 24
 }
 
@@ -548,7 +546,6 @@ binds {
 
 	Mod+Z hotkey-overlay-title="Zed" { spawn "/home/rathel/.local/opt/zed.app/bin/zed" "--new"; }
 	Mod+Shift+Z hotkey-overlay-title="Obsidian" { spawn-sh "niri-app -c $HOME/Applications/Productivity/Obsidian.AppImage"; }
-	Mod+Grave { spawn "foot" "--title=scratch" "-e" "sh"; }
 	Alt+Tab { spawn-sh "$HOME/.local/bin/niri-focus-windows.sh"; }
 	Mod+D { spawn "fuzzel"; }
 	Mod+Shift+D { spawn-sh "niri-app -c ~/Applications/Communication/Discord/discord"; }
@@ -563,7 +560,7 @@ binds {
 
 	// You can also use a shell. Do this if you need pipes, multiple commands, etc.
 	// Note: the entire command goes as a single argument in the end.
-	// Mod+T { spawn "bash" "-c" "notify-send hello && exec foot"; }
+	// Mod+T { spawn "bash" "-c" "notify-send hello && exec kitty"; }
 
 	// Example volume keys mappings for PipeWire & WirePlumber.
 	// The allow-when-locked=true property makes them work even when the session is locked.

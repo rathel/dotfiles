@@ -1,7 +1,7 @@
 # ~/.config/alacritty/alacritty.toml
 
 [general]
-import = ["tokyonight.toml"]
+import = ["catppuccin-mocha.toml"]
 
 [window]
 opacity = 1.0

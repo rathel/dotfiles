@@ -1,21 +1,21 @@
-# TokyoNight Night theme for Tofi
+# Catppuccin Mocha theme for Tofi
 font = "Monaspace Neon NF"
 font-size = 14
 
-background-color = #1a1b26
-text-color = #c0caf5
+background-color = #1e1e2e
+text-color = #cdd6f4
 prompt-text = "apps: "
-prompt-color = #e0e6ff
-input-color = #c0caf5
-placeholder-color = #565f89
-default-result-color = #c0caf5
-selection-color = #e0e6ff
-selection-background = #33467c
-selection-match-color = #7dcfff
+prompt-color = #bac2de
+input-color = #cdd6f4
+placeholder-color = #6c7086
+default-result-color = #cdd6f4
+selection-color = #bac2de
+selection-background = #45475a
+selection-match-color = #74c7ec
 
 outline-width = 0
 border-width = 1
-border-color = #7aa2f7
+border-color = #89b4fa
 corner-radius = 0
 
 width = 30%

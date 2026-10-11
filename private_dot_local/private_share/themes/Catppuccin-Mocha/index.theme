@@ -1,0 +1,9 @@
+[X-GNOME-Metatheme]
+Name=Catppuccin Mocha
+Type=X-GNOME-Metatheme
+Comment=Catppuccin Mocha GTK colors with Mauve accents
+Encoding=UTF-8
+GtkTheme=Catppuccin-Mocha
+IconTheme=Papirus-Dark
+CursorTheme=catppuccin-mocha-mauve-cursors
+CursorSize=24

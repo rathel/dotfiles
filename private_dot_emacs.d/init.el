@@ -1,7 +1,7 @@
 ;;; init.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Minimal TokyoNight-themed Emacs setup with Evil and Eshell.
+;; Minimal Catppuccin Mocha-themed Emacs setup with Evil and Eshell.
 
 ;;; Code:
 
@@ -33,10 +33,10 @@
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
 
-;; Load the shared TokyoNight theme from ~/.emacs.d/themes.
+;; Load the shared Catppuccin Mocha theme from ~/.emacs.d/themes.
 (add-to-list 'custom-theme-load-path
              (expand-file-name "themes" user-emacs-directory))
-(load-theme 'tokyonight t)
+(load-theme 'catppuccin-mocha t)
 
 ;; Increase the default text size from Emacs's 10-point default to 12 points.
 (set-face-attribute 'default nil :height 120)

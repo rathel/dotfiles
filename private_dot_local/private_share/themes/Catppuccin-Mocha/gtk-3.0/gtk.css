@@ -1,0 +1,169 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+
+@define-color ctp_crust #11111b;
+@define-color ctp_mantle #181825;
+@define-color ctp_base #1e1e2e;
+@define-color ctp_surface0 #313244;
+@define-color ctp_surface1 #45475a;
+@define-color ctp_surface2 #585b70;
+@define-color ctp_overlay0 #6c7086;
+@define-color ctp_subtext0 #a6adc8;
+@define-color ctp_subtext1 #bac2de;
+@define-color ctp_text #cdd6f4;
+@define-color ctp_mauve #cba6f7;
+@define-color ctp_red #f38ba8;
+@define-color ctp_peach #fab387;
+@define-color ctp_yellow #f9e2af;
+@define-color ctp_green #a6e3a1;
+@define-color ctp_sky #89dceb;
+@define-color ctp_sapphire #74c7ec;
+@define-color ctp_blue #89b4fa;
+@define-color ctp_lavender #b4befe;
+
+@define-color theme_fg_color @ctp_text;
+@define-color theme_text_color @ctp_text;
+@define-color theme_bg_color @ctp_base;
+@define-color theme_base_color @ctp_base;
+@define-color theme_selected_bg_color @ctp_mauve;
+@define-color theme_selected_fg_color @ctp_base;
+@define-color insensitive_fg_color @ctp_overlay0;
+@define-color insensitive_bg_color @ctp_mantle;
+@define-color borders @ctp_surface1;
+@define-color unfocused_borders @ctp_surface0;
+@define-color link_color @ctp_blue;
+@define-color warning_color @ctp_yellow;
+@define-color error_color @ctp_red;
+@define-color success_color @ctp_green;
+@define-color content_view_bg @ctp_base;
+@define-color theme_unfocused_fg_color @ctp_subtext1;
+@define-color theme_unfocused_text_color @ctp_subtext1;
+@define-color theme_unfocused_bg_color @ctp_base;
+
+.background,
+window,
+dialog {
+  background-color: @ctp_base;
+  color: @ctp_text;
+}
+
+headerbar,
+.titlebar {
+  background-color: @ctp_mantle;
+  background-image: none;
+  color: @ctp_text;
+  box-shadow: none;
+}
+
+button,
+combobox button,
+spinbutton button {
+  background-color: @ctp_surface0;
+  background-image: none;
+  color: @ctp_text;
+  border: 1px solid @ctp_surface1;
+  box-shadow: none;
+}
+
+button:hover,
+combobox button:hover,
+spinbutton button:hover {
+  background-color: @ctp_surface1;
+  color: @ctp_text;
+}
+
+button:active,
+button:checked,
+button:selected {
+  background-color: @ctp_mauve;
+  color: @ctp_base;
+}
+
+entry,
+spinbutton,
+textview,
+textview text,
+view,
+treeview.view,
+iconview {
+  background-color: @ctp_base;
+  color: @ctp_text;
+  border-color: @ctp_surface1;
+}
+
+entry:focus,
+spinbutton:focus,
+view:focus,
+treeview.view:focus {
+  border-color: @ctp_mauve;
+  box-shadow: 0 0 0 1px @ctp_mauve;
+}
+
+selection,
+*:selected {
+  background-color: @ctp_mauve;
+  color: @ctp_base;
+}
+
+menu,
+.menu,
+popover,
+.popover,
+tooltip {
+  background-color: @ctp_surface0;
+  color: @ctp_text;
+  border: 1px solid @ctp_surface1;
+}
+
+menu menuitem,
+.menu menuitem,
+popover modelbutton {
+  color: @ctp_text;
+}
+
+menu menuitem:hover,
+.menu menuitem:hover,
+popover modelbutton:hover {
+  background-color: @ctp_surface1;
+  color: @ctp_text;
+}
+
+scale trough,
+progressbar trough {
+  background-color: @ctp_mantle;
+}
+
+scale highlight,
+progressbar progress {
+  background-color: @ctp_mauve;
+}
+
+scrollbar trough {
+  background-color: @ctp_base;
+}
+
+scrollbar slider {
+  background-color: @ctp_surface1;
+}
+
+checkbutton check,
+radiobutton radio,
+switch {
+  background-color: @ctp_surface0;
+  border-color: @ctp_surface1;
+}
+
+checkbutton check:checked,
+radiobutton radio:checked,
+switch:checked {
+  background-color: @ctp_mauve;
+  border-color: @ctp_mauve;
+}
+
+*:disabled {
+  color: @ctp_overlay0;
+}
+
+.link,
+*:link {
+  color: @ctp_blue;
+}

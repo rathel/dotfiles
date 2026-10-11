@@ -1,5 +1,5 @@
 //@ pragma UseQApplication
-//@ pragma IconTheme Nord-Breeze
+//@ pragma IconTheme Papirus-Dark
 import Quickshell
 
 Scope {

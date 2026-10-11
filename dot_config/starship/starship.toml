@@ -1,6 +1,6 @@
 # Opinionated, subtle defaults. Safe to keep or delete if you just want the palette.
 add_newline = true
-palette = "tokyonight"
+palette = "catppuccin_mocha"
 
 format = """
 [](fg:dim_bg)$username$directory$git_branch$git_status$cmd_duration$nodejs$rust$python$time[](fg:dim_bg)
@@ -60,11 +60,11 @@ disabled = false
 threshold = 30
 style = 'bold err'
 
-[palettes.tokyonight]
-fg = "#c0caf5"
-dim_fg = "#565f89"
-dim_bg = "#16161e"
-accent = "#7aa2f7"
-err = "#f7768e"
-warn = "#e0af68"
-good = "#9ece6a"
+[palettes.catppuccin_mocha]
+fg = "#cdd6f4"
+dim_fg = "#6c7086"
+dim_bg = "#181825"
+accent = "#89b4fa"
+err = "#f38ba8"
+warn = "#f9e2af"
+good = "#a6e3a1"

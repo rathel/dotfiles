@@ -1,15 +1,15 @@
 [General]
-Name=Foot TokyoNight
+Name=Foot Catppuccin Mocha
 Icon=utilities-terminal
 
 [Appearance]
-ColorScheme=TokyoNight
+ColorScheme=CatppuccinMocha
 Font=Monaspace Neon NF,12,-1,5,50,0,0,0,0,0
 
 [Cursor Options]
 UseCustomCursorColor=true
-CustomCursorColor=122,162,247
-CustomCursorTextColor=26,27,38
+CustomCursorColor=203,166,247
+CustomCursorTextColor=30,30,46
 CursorShape=0
 
 [Scrolling]
