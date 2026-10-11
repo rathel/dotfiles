@@ -12,11 +12,11 @@ target system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, optional `tofi`,
-  `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
-  `kdeconnect-indicator`, `udiskie`, and `awww` or `swaybg`
-- **Terminals and CLI:** `foot`, optional `tmux`, `ssh`, `fd`, `sk` or `fzf`,
-  `jq`, `bat`, `eza`, `nvim`, `curl`, and `python3`
+- **Desktop session:** `niri`, `quickshell` (`qs`), and `fuzzel`; optional
+  `tofi`, `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
+  `kdeconnect-indicator`, `udiskie`, and the wallpaper backend `awww` or `swaybg`.
+- **Terminals and CLI:** `foot`, `kitty`, optional `tmux`, `ssh`, `fd`, `sk`
+  or `fzf`, `jq`, `bat`, `eza`, `nvim`, `curl`, and `python3`.
 - **Desktop services:** PipeWire/WirePlumber (`pipewire`, `wireplumber`,
   `wpctl`), NetworkManager (`nmcli`, `nm-applet`), BlueZ (`bluetoothctl`),
   XDG desktop portals (`xdg-desktop-portal`, `xdg-desktop-portal-gtk`, and
@@ -47,20 +47,22 @@ These are the dependencies for the normal shell, Niri, Quickshell, and helper-sc
 - **General tools**: `curl` and `python3`.
 - **Optional Fish enhancements**: `zoxide`, `direnv`, and `carapace`; the Fish
   config initializes them only when they are present.
-- **Fonts and cursors**: Monaspace Neon NF and the Catppuccin Mocha Mauve cursor theme (`catppuccin-mocha-mauve-cursors`). Install the cursor assets from the Catppuccin cursors releases before selecting the theme.
-- **Icons**: Papirus-Dark, with the Catppuccin Papirus folders integration applied using the Mauve accent. Install Papirus and the folder-color assets before selecting the theme.
+- **Fonts and cursors**: Monaspace Neon NF and the Catppuccin Mocha Mauve cursor theme (`catppuccin-mocha-mauve-cursors`). Install the cursor assets from the Catppuccin cursors releases before selecting the theme; the release archive requires `unzip`.
+- **Icons**: Papirus-Dark, with Catppuccin Papirus folders applied using the `cat-mocha-mauve` variant. Install Papirus and the folder assets, then use the Papirus `papirus-folders` helper before selecting the theme.
 - **GTK colors**: a local Catppuccin Mocha GTK3/GTK4 stylesheet is managed under `~/.local/share/themes/Catppuccin-Mocha`.
 
 ## Configured terminal emulators
 
 The repository configures several terminals, but they are alternatives rather
-than all being required. The current keybindings and scripts use `foot` most
-often; `alacritty` is the editor helper's preferred terminal. `ghostty` and
-`wezterm` are configured fallbacks/integrations.
+than all being required. `foot` is used most often; Niri's default terminal
+binding launches `kitty`, and the editor helper prefers `alacritty`. `ghostty`,
+`konsole`, and `wezterm` are additional configured options.
 
 - `alacritty`
 - `foot`
 - `ghostty`
+- `kitty`
+- `konsole`
 - `wezterm`
 
 ## Niri and Quickshell session services
@@ -78,7 +80,7 @@ The Niri template attempts to start these programs when available:
 The Quickshell bar calls these tools for status data:
 
 - `wpctl` from WirePlumber/PipeWire.
-- `brightnessctl`.
+- `brightnessctl` (optional; the bar checks for it before showing brightness).
 - `nmcli` from NetworkManager and `bluetoothctl` from BlueZ.
 - `curl` for the weather widget.
 
@@ -107,7 +109,6 @@ Install these only when using the corresponding configuration or helper:
   `dot_config/systemd/user/rclone-dropbox.service`; configure the `dropbox:`
   remote separately.
 - **Virtual machines**: `qemu-system-x86_64` and `qemu-img`.
-- **System upgrades**: `topgrade` for `dot_config/topgrade.toml`.
 
 Browser launchers can use any of the following, depending on the selected
 entry: Firefox, Zen, Vivaldi, Brave, Chromium/Chrome,
