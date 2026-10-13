@@ -11,6 +11,11 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 fi
 export PATH
 
+# Activate mise for Bash shells.
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate bash)"
+fi
+
 # Make the active local Wayland/Xwayland displays available to shells started
 # outside the graphical niri session (for example, SSH and coding agents).
 if [[ -z "${WAYLAND_DISPLAY:-}" && -n "${XDG_RUNTIME_DIR:-}" ]]; then

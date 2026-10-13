@@ -1,11 +1,12 @@
 {
   "defaultModel": "gpt-6-luna",
   "defaultProvider": "openai-codex",
-  "lastChangelogVersion": "1.0.4",
+  "lastChangelogVersion": "1.2.0",
   "packages": [
     "npm:@ollama/pi-web-search",
     "npm:pi-interactive-shell",
-    "npm:@firstpick/pi-extension-brave-search"
+    "npm:@firstpick/pi-extension-brave-search",
+    "npm:@burneikis/pi-plan"
   ],
   "theme": "catppuccin-mocha",
   "defaultThinkingLevel": "high",

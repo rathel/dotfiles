@@ -8,7 +8,9 @@ if status is-interactive
     set -gx GIT_EDITOR "emacsclient --tty --alternate-editor="
     set -gx SUDO_EDITOR "emacsclient --tty --alternate-editor="
     fish_add_path $HOME/.local/bin
-    fish_add_path $HOME/.local/state/nix/profiles/profile/bin
+    if test -d "$HOME/.local/state/nix/profiles/profile/bin"
+        fish_add_path $HOME/.local/state/nix/profiles/profile/bin
+    end
     if test -d "$HOME/.local/state/nix/profiles/profile/share"
         set -gx XDG_DATA_DIRS "$HOME/.local/state/nix/profiles/profile/share:"$XDG_DATA_DIRS
     end
@@ -39,13 +41,13 @@ if status is-interactive
     end
 end
 
-# Load the system-wide Nix environment in Fish shells.
+# Load the system-wide Nix environment in Fish shells, when installed.
 if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
     source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
 end
 
-# Load Guix profiles in Fish shells. Guix's generated `etc/profile` files
-# contain Bash syntax, so initialize their search paths with Fish commands.
+# Load Guix profiles in Fish shells when those profiles exist. Guix's generated
+# `etc/profile` files contain Bash syntax, so initialize their search paths with Fish commands.
 function __guix_prepend_path --argument-names variable value
     set -l current $$variable
     if not contains -- "$value" $current
@@ -98,6 +100,11 @@ if test -z "$brew_command"
 end
 if test -n "$brew_command"
     eval "$($brew_command shellenv fish)"
+end
+
+# Activate mise for Fish shells.
+if type -q mise
+    mise activate fish | source
 end
 
 # Initialize Starship after Homebrew is loaded so it is available even when
