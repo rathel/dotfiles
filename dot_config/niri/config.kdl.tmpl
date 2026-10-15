@@ -554,6 +554,7 @@ binds {
 	Mod+Shift+T hotkey-overlay-title="Thunderbird Nightly" { spawn "niri-app" "-c" "/home/rathel/Applications/Communication/thunderbird-nightly/thunderbird"; }
 	Mod+B hotkey-overlay-title="Focus Selected Browser" { spawn-sh "$HOME/.local/bin/niri-browser focus"; }
 	Mod+Ctrl+B hotkey-overlay-title="Choose Browser" { spawn-sh "$HOME/.local/bin/niri-browser pick"; }
+	Mod+Alt+B hotkey-overlay-title="Set System Default Browser" { spawn-sh "$HOME/.local/bin/niri-browser default"; }
 	Mod+Shift+B { spawn-sh "niri-app -c $HOME/Applications/Communication/beeper.AppImage"; }
 	Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock" "-c" "192324"; }
 
