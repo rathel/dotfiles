@@ -12,7 +12,7 @@ target system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), and `fuzzel`; optional
+- **Desktop session:** `niri`, `noctalia` (native v5), and `fuzzel`; optional
   `tofi`, `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
   `kdeconnect-indicator`, `udiskie`, and the wallpaper backend `awww` or `swaybg`.
 - **Terminals and CLI:** `foot`, `kitty`, optional `tmux`, `ssh`, `fd`, `sk`
@@ -31,15 +31,16 @@ with `command -v` before applying the configuration.
 
 ## Core setup
 
-These are the dependencies for the normal shell, Niri, Quickshell, and helper-script setup:
+These are the dependencies for the normal shell, Niri, Noctalia, and helper-script setup:
 
 - **Dotfiles and source control**: `chezmoi`, `git`.
   Chezmoi has built-in age support; restore the age identity at
   `~/.config/chezmoi/key.txt` before applying encrypted files. A separate `age`
   executable is not required by default.
 - **Shell and prompt**: `fish`, `bash`, `starship`.
-- **Niri desktop**: `niri`, `quickshell` (the session accepts `quickshell` or
-  `qs`), and `fuzzel`; `tofi` is an optional preferred picker.
+- **Niri desktop**: `niri`, native `noctalia` v5, and `fuzzel`; `tofi` is an
+  optional preferred picker. The local Codex plugin requires Noctalia plugin
+  API 24 or newer.
 - **Interactive CLI helpers**: `fd`, `jq`, `bat`, `eza`, and a fuzzy finder
   (`skim`/`sk` or `fzf`); `neovim` (`nvim`) is optional.
 - **Terminal workflow**: optional `tmux` plus an OpenSSH-compatible `ssh`
@@ -65,7 +66,7 @@ binding launches `kitty`, and the editor helper prefers `alacritty`. `ghostty`,
 - `konsole`
 - `wezterm`
 
-## Niri and Quickshell session services
+## Niri and Noctalia session services
 
 The Niri template attempts to start these programs when available:
 
@@ -77,15 +78,25 @@ The Niri template attempts to start these programs when available:
   other than `archlinux-beelink`.
 - `awww` is the preferred wallpaper backend; `swaybg` is the fallback.
 
-The Quickshell bar calls these tools for status data:
-
-- `wpctl` from WirePlumber/PipeWire.
-- `brightnessctl` (optional; the bar checks for it before showing brightness).
-- `nmcli` from NetworkManager and `bluetoothctl` from BlueZ.
-- `curl` for the weather widget.
-
-The Quickshell notification server replaces the legacy notification daemons.
+Noctalia provides the active bar and notification server, using the session's
+PipeWire/WirePlumber, NetworkManager, BlueZ, and other desktop services.
 `libnotify` (`notify-send`) is still used by several helper scripts.
+
+The managed local Codex usage plugin additionally requires:
+
+- `python3` for `~/.local/bin/codex-usage`.
+- The OpenAI Codex CLI (`codex`), installed and signed in separately. The
+  helper queries its app-server for subscription usage without storing keys
+  in this repository.
+- Optional `luajit` to run `~/git/noctalia-local-plugins/tests/codex-usage.lua`
+  from the plugin source root. Noctalia's Luau runtime runs the actual plugin.
+
+Plugin code is managed under `~/git/noctalia-local-plugins/`, while its enable
+state, path source registration, and widget placement are declared under
+`~/.config/noctalia/`. Noctalia histories, caches, and credentials are omitted.
+The retained legacy Quickshell bar is not started; if used manually, its
+status widgets also call `wpctl`, optional `brightnessctl`, `nmcli`,
+`bluetoothctl`, and `curl`.
 
 The portal configuration expects `xdg-desktop-portal`, the GTK backend, and
 `xdg-desktop-portal-wlr` plus `slurp` for Niri/Wayland screenshots. It also
@@ -162,8 +173,9 @@ to apply the core dotfiles:
 
 ## Legacy and deliberately omitted dependencies
 
-- Quickshell provides the bar and notifications in the active configuration;
-  no separate bar or notification daemon is required.
+- Noctalia provides the bar and notifications in the active configuration;
+  no separate bar or notification daemon is required. Quickshell is only
+  needed if manually using the retained legacy configuration.
 - `swww` and `wallust` are not used by the active configuration. The wallpaper
   script uses `awww` with a `swaybg` fallback.
 - No specific package manager is a runtime dependency of this repository.

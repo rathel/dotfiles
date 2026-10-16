@@ -1,0 +1,16 @@
+id = "rathel/codex-usage"
+name = "Codex Usage"
+version = "1.0.0"
+plugin_api = 24
+author = "rathel"
+icon = "robot"
+description = "Codex five-hour and weekly subscription usage from the existing local helper."
+dependencies = ["codex", "python3"]
+
+[[service]]
+id = "poller"
+entry = "service.luau"
+
+[[widget]]
+id = "usage"
+entry = "widget.luau"

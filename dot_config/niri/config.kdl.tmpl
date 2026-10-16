@@ -268,18 +268,15 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+// Start Noctalia, which provides the bar and notifications.
+spawn-at-startup "noctalia"
 
-// This line starts quickshell, which provides the bar and notifications.
-// spawn-at-startup "qs" --no-duplicate
+// Start the optional idle and shadow helpers when installed.
 {{- if not (eq .chezmoi.hostname "archlinux-beelink") }}
 spawn-sh-at-startup "test -x \"$HOME/.local/bin/shadow-aware-swayidle\" && exec \"$HOME/.local/bin/shadow-aware-swayidle\" || true"
 spawn-sh-at-startup "test -x \"$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard\" && exec \"$HOME/git/niri-shadow-guard-gui-src/target/release/niri-shadow-guard\" || true"
 {{- end }}
 
-// Use whichever command name the installed Quickshell package provides.
-spawn-sh-at-startup "if command -v quickshell >/dev/null 2>&1; then exec quickshell --no-duplicate; elif command -v qs >/dev/null 2>&1; then exec qs --no-duplicate; fi"
 // Start native Steam when available, otherwise use the installed Flatpak.
 spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-steam"
 spawn-sh-at-startup "command -v wlsunset >/dev/null 2>&1 && exec wlsunset -l 34 -L -104 || true"

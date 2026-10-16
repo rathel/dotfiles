@@ -1,0 +1,34 @@
+# Persistent preferences copied from Noctalia's GUI settings.
+# Runtime history, caches, and monitor-specific widget positions stay local.
+[lockscreen_widgets]
+enabled = false
+
+[shell]
+telemetry_enabled = true
+
+[theme]
+builtin = "Catppuccin"
+
+[wallpaper.default]
+path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+
+[plugins]
+enabled = ["rathel/codex-usage"]
+
+[[plugins.source]]
+name = "official"
+kind = "git"
+location = "https://github.com/noctalia-dev/official-plugins"
+enabled = true
+
+[[plugins.source]]
+name = "community"
+kind = "git"
+location = "https://github.com/noctalia-dev/community-plugins"
+enabled = true
+
+[[plugins.source]]
+name = "rathel-local"
+kind = "path"
+location = "{{ .chezmoi.homeDir }}/git/noctalia-local-plugins"
+enabled = true

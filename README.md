@@ -7,7 +7,7 @@ Personal Linux desktop configuration managed with
 
 This repository manages the following parts of `$HOME`:
 
-- **Desktop session:** Niri, Quickshell, Tofi, Fuzzel, XDG portals, GTK/Qt settings,
+- **Desktop session:** Niri, Noctalia, Tofi, Fuzzel, XDG portals, GTK/Qt settings,
   wallpapers, idle/lock helpers, and desktop services.
 - **Shell and terminal:** Fish, Bash, Starship, tmux, Foot, Kitty, Konsole,
   Alacritty, Ghostty, and WezTerm.
@@ -22,6 +22,22 @@ This repository manages the following parts of `$HOME`:
 The detailed dependency inventory is in
 [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
+## Noctalia
+
+Niri starts native Noctalia v5 for the bar and notifications. Managed
+preferences and the Codex bar layout live in `~/.config/noctalia/`.
+The local Codex plugin is restored to `~/git/noctalia-local-plugins/` and
+registered through the preferences file using a portable home-directory path.
+It reuses the managed `~/.local/bin/codex-usage` helper; install and sign in
+to the Codex CLI separately. No Codex credentials are stored in this repo.
+
+The meter shows five-hour and weekly percentages **used**, refreshes every
+minute, and supports click-to-refresh. Noctalia's app-owned settings under
+`~/.local/state/noctalia/` override the managed preferences; runtime state,
+monitor-specific lockscreen positions, histories, and caches are not tracked.
+The older Quickshell configuration is retained for reference but is not
+started by Niri.
+
 ## Fresh install
 
 The setup is distribution and package-manager agnostic. Install the native
@@ -31,7 +47,7 @@ system:
 
 - **Bootstrap:** `git`, `chezmoi`
 - **Shell:** `bash`, `fish`, `starship`
-- **Desktop session:** `niri`, `quickshell` (`qs`), `fuzzel`, optional `tofi`,
+- **Desktop session:** `niri`, `noctalia` (v5), `fuzzel`, optional `tofi`,
   `swayidle`, `swaylock`, `wlsunset`, `xwayland-satellite`,
   `kdeconnect-indicator`, `udiskie`, and `awww` or `swaybg`
 - **Terminals and CLI:** `foot`, optional `tmux`, `ssh`, `fd`, `sk` or `fzf`,

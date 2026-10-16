@@ -1,0 +1,20 @@
+# The local plugin reuses ~/.local/bin/codex-usage without changing it.
+# Source: ~/git/noctalia-local-plugins/codex-usage/
+[widget.codex-usage]
+type = "rathel/codex-usage:usage"
+
+[bar.default]
+end = [
+    "codex-usage",
+    "media",
+    "tray",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session",
+]
