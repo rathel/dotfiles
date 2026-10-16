@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+wallpaper_dir="$HOME/Wallpapers"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/wallpaper-rotation"
+state_file="$state_dir/last-pair"
+mkdir -p "$state_dir"
+mapfile -d '' images < <(fd -0 -t f -e jpg -e jpeg -e png -e webp -e bmp . "$wallpaper_dir" | sort -z)
+((${#images[@]} >= 2)) || { echo "Need at least two images in $wallpaper_dir" >&2; exit 1; }
+
+last_dp2=''
+last_dp1=''
+if [[ -r "$state_file" ]]; then
+  read -r last_dp2 last_dp1 < "$state_file" || true
+fi
+
+pick() {
+  local avoid="$1" candidate
+  local -a choices=()
+  mapfile -d '' choices < <(printf '%s\0' "${images[@]}" | shuf -z)
+  for candidate in "${choices[@]}"; do
+    [[ "$candidate" != "$avoid" ]] && { printf '%s' "$candidate"; return; }
+  done
+  printf '%s' "${choices[0]}"
+}
+
+# Set SINGLE_MONITOR=1 to use one rotating image on all connected outputs.
+if [[ "${SINGLE_MONITOR:-0}" == 1 ]]; then
+  image="$(pick "$last_dp1")"
+  printf '%s %s\n' "$image" "$image" > "$state_file"
+
+  pkill -x swaybg 2>/dev/null || true
+  sleep 0.2
+  "$HOME/.local/bin/swaybg" -m fill -i "$image" >/dev/null 2>&1 &
+  exit 0
+fi
+
+dp2="$(pick "$last_dp2")"
+dp1="$(pick "$last_dp1")"
+[[ "$dp1" != "$dp2" ]] || dp1="$(pick "$dp1")"
+printf '%s %s\n' "$dp2" "$dp1" > "$state_file"
+
+# Replace the pair installed by the previous run.
+pkill -x swaybg 2>/dev/null || true
+sleep 0.2
+"$HOME/.local/bin/swaybg" -m fill -o DP-2 -i "$dp2" >/dev/null 2>&1 &
+"$HOME/.local/bin/swaybg" -m fill -o DP-1 -i "$dp1" >/dev/null 2>&1 &
