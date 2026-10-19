@@ -290,7 +290,8 @@ spawn-sh-at-startup "command -v kdeconnect-indicator >/dev/null 2>&1 && exec kde
 spawn-sh-at-startup "command -v nm-applet >/dev/null 2>&1 && exec nm-applet || true"
 spawn-at-startup "{{ .chezmoi.homeDir }}/.local/bin/start-polkit-agent"
 spawn-sh-at-startup "command -v udiskie >/dev/null 2>&1 && exec udiskie -t || true"
-spawn-sh-at-startup "test -x \"$HOME/.local/bin/rotate-wallpapers\" && exec \"$HOME/.local/bin/rotate-wallpapers\" || true"
+// Give Noctalia time to initialize before applying the startup wallpaper.
+spawn-sh-at-startup "sleep 10; systemctl --user start --no-block wallpaper-rotate.service"
 
 environment {
 	CHROME_USE_OZONE "1"
